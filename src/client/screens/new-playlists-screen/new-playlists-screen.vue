@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import {NewPlaylistsScreenVm} from '~/client/screens/new-playlists/new-playlists-screen.vm';
+import {NewPlaylistsScreenVm} from '~/client/screens/new-playlists-screen/new-playlists-screen.vm';
 import ContentBlock from '~/client/shared/components/content-block/content-block.vue';
 import Navigation from '~/client/shared/components/navigation/navigation.vue';
 import PlaylistCard from '~/client/shared/components/playlist-card/playlist-card.vue';
