@@ -1,14 +1,26 @@
 <template>
 	<section :class="cnContentBlock()">
-		<h2 :class="cnContentBlock('title')">
-			{{ title }}
-		</h2>
-		<p
-			v-if="subtitle"
-			:class="cnContentBlock('subtitle')"
-		>
-			{{ subtitle }}
-		</p>
+		<header :class="cnContentBlock('header')">
+			<div :class="cnContentBlock('info')">
+				<h2 :class="cnContentBlock('title')">
+					{{ title }}
+				</h2>
+				<p
+					v-if="subtitle"
+					:class="cnContentBlock('subtitle')"
+				>
+					{{ subtitle }}
+				</p>
+			</div>
+			<NuxtLink
+				v-if="to"
+				:to="to"
+				:class="cnContentBlock('link')"
+			>
+				{{ toText }}
+			</NuxtLink>
+		</header>
+
 		<div :class="cnContentBlock('body')">
 			<slot/>
 		</div>
@@ -16,23 +28,52 @@
 </template>
 
 <script setup lang="ts">
+import {RouteLocationRaw} from '#vue-router';
 import {cnContentBlock} from './content-block.const';
 
-defineProps<{
+withDefaults(defineProps<{
 	title: string;
 	subtitle?: string;
-}>();
+	to?: RouteLocationRaw;
+	toText?: string;
+}>(), {
+	toText: 'Смотреть всё'
+});
 </script>
 
 <style lang="scss">
 .content-block {
 	display: flex;
 	flex-direction: column;
+	gap: 20px;
+
+	&__header {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+
+	&__info {
+		display: flex;
+		flex-direction: column;
+	}
 
 	&__title {
 		font-weight: 500;
 		font-size: 31.25px;
 		line-height: 32px;
+	}
+
+	&__link {
+		font-size: 14px;
+		line-height: 16px;
+		margin-left: auto;
+		transition: 200ms;
+
+		&:hover {
+			transition: 200ms;
+			color: var(--primary);
+		}
 	}
 
 	&__subtitle {
@@ -44,15 +85,10 @@ defineProps<{
 	}
 
 	&__body {
-		margin-top: 20px;
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(254px, 1fr));
 		grid-template-rows: 1fr;
 		gap: 7px;
-
-		.user-playlist:nth-child(n + 7) {
-			display: none;
-		}
 	}
 }
 </style>

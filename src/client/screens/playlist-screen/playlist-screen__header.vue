@@ -7,6 +7,7 @@
 			width="160"
 			height="160"
 			crop="200x200"
+			type="playlist"
 		/>
 		<div :class="cnPlaylistScreen('header-info')">
 			<p :class="cnPlaylistScreen('header-type')">
@@ -30,7 +31,7 @@
 			</p>
 
 			<div :class="cnPlaylistScreen('header-controls')">
-				<Button>
+				<Button @click="globalEmitter.emit('tracks-table-play-shuffle')">
 					<Icon
 						size="1.6em"
 						name="ic:round-play-arrow"
@@ -59,6 +60,7 @@
 import {PlaylistScreenVm} from '~/client/screens/playlist-screen/playlist-screen.vm';
 import Button from '~/client/shared/components/button/button.vue';
 import Image from '~/client/shared/components/image.vue';
+import {globalEmitter} from '~/client/shared/emitters/global-emitter';
 import {tracksCountHuman} from '~/client/shared/helpers/tracks-count-human';
 import {cnPlaylistScreen} from './playlist-screen.const';
 

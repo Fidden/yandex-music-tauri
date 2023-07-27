@@ -1,9 +1,7 @@
 <template>
 	<main :class="cnTracksScreen()">
 		<ContentBlock title="Мои треки">
-			<TracksTable
-				:tracks="vm.tracksLists"
-			/>
+			<TracksTable :tracks="vm.tracksLists"/>
 		</ContentBlock>
 	</main>
 </template>

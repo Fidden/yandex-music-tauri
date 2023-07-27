@@ -1,5 +1,6 @@
-import {CacheService} from '#imports';
 import {injectable} from 'tsyringe';
+import {pending} from '~/client/shared/decorators/pending.decorator';
+import {PendingService} from '~/client/shared/services/pending.service';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
 import {
 	IAlbum,
@@ -13,20 +14,26 @@ import {
 } from '~/client/shared/types/api';
 import {IInitializable} from '~/client/shared/types/initializable';
 
+type PendingKeys = 'index-screen';
+
 @injectable()
 export class IndexScreenVm extends BaseVm implements IInitializable {
 	public userPlaylists: IPlaylist[];
+	public userPlaylistsChunks: IPlaylist[][];
 	private landingBlocks?: ILandingResult;
 
 	constructor(
-		@injectDep(CacheService) private readonly cache: CacheService
+		@injectDep(PendingService) public readonly pending: PendingService<PendingKeys>
 	) {
 		super();
 		this.userPlaylists = [];
 		this.landingBlocks = undefined;
+		this.userPlaylistsChunks = [];
 	}
 
+	@pending<PendingKeys>('index-screen')
 	public async init() {
+		const favortiePlaylist = await this.userModel.playlist.one(3, this.userStore.status!.account!.uid);
 		this.userPlaylists = await this.userModel.playlist.list();
 		this.landingBlocks = await this.userModel.landing.blocks([
 			LandingBlockEnum.NEW_PLAYLISTS,
@@ -35,6 +42,13 @@ export class IndexScreenVm extends BaseVm implements IInitializable {
 			LandingBlockEnum.PLAY_CONTEXTS,
 			LandingBlockEnum.PERSONAL_PLAYLISTS
 		]);
+
+		this.userPlaylists.unshift(favortiePlaylist);
+
+		for (let i = 0; i < this.userPlaylists.length; i += 6) {
+			const chunk = this.userPlaylists.slice(i, i + 6);
+			this.userPlaylistsChunks.push(chunk);
+		}
 	}
 
 	public get personalPlaylists(): ILandingBlock<ILandingBlockItem<IGeneratedPlaylistLandingBlock>> | undefined {

@@ -1,27 +1,27 @@
 <template>
-	<NuxtImg
-		v-bind="$props"
+	<img
 		:src="croppedSrc"
-		:placeholder="placeholderImage"
-	/>
+		:alt="alt"
+		:width="width"
+		:height="height"
+		loading="lazy"
+	>
 </template>
 
 <script setup lang="ts">
+import {cropImage} from '~/client/shared/helpers/crop-image';
+
 const props = defineProps<{
-	src: string;
+	src: string | undefined;
+	alt: string;
 	width?: string | number;
 	height?: string | number;
-	placeholder?: string;
-	sizes?: string;
-	densities?: string;
-	fit?: 'cover' | 'contain' | 'fill' | 'scale-down' | 'none';
-	preset?: string;
 	preload?: boolean;
 	crop: string;
 	type?: 'track' | 'album' | 'artist' | 'playlist';
 }>();
 
-const [width, height] = props.crop.split('x');
+const [_width, _height] = props.crop.split('x');
 const placeholderImage = computed(() => {
 	switch (props.type) {
 		case 'track':
@@ -34,5 +34,5 @@ const placeholderImage = computed(() => {
 			return '/img/placeholders/album-placeholder.svg';
 	}
 });
-const croppedSrc = computed(() => props.src.length ? `https://${props.src?.replace('%%', `${width}x${height}`)}` : placeholderImage.value);
+const croppedSrc = computed(() => props.src?.length ? cropImage(props.src, _width, _height) : placeholderImage.value);
 </script>

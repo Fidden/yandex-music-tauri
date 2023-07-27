@@ -9,8 +9,10 @@ export function convertDuration(milliseconds: number, lettersDelimiter = false) 
 			return `${date.getSeconds()} сек`;
 		}
 	} else {
-		return `${date.getMinutes()}:${date.getSeconds() < 10
-			? `0${date.getSeconds()}`
-			: date.getSeconds()}`;
+		if (date.getHours() > 0) {
+			return `${date.getHours()}:${date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()}:${date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds()}`;
+		}
+
+		return `${date.getMinutes()}:${date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds()}`;
 	}
-};
+}

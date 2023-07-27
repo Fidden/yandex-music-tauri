@@ -2,6 +2,10 @@
   "extends": "./.nuxt/tsconfig.json",
   "compilerOptions": {
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "typeRoots": [
+      "./node_modules/@types",
+      "./@types"
+    ]
   }
 }

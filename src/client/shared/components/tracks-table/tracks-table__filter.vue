@@ -2,6 +2,7 @@
 	<div :class="cnTracksTable('filter')">
 		<div :class="cnTracksTable('filter-input')">
 			<input
+				v-debounce:400ms="val => vm.filter.name = val"
 				:class="cnTracksTable('filter-input-el')"
 				type="text"
 				placeholder="Поиск"
@@ -12,28 +13,31 @@
 			/>
 		</div>
 
-		<select :class="cnTracksTable('filter-select')">
+		<select
+			v-model="vm.filter.order"
+			:class="cnTracksTable('filter-select')"
+		>
 			<option
 				:class="cnTracksTable('filter-select-option')"
-				value="-1"
+				:value="OrderValues.DEFAULT"
 			>
 				По стандарту
 			</option>
 			<option
 				:class="cnTracksTable('filter-select-option')"
-				value="0"
+				:value="OrderValues.BY_NAME"
 			>
 				Название
 			</option>
 			<option
 				:class="cnTracksTable('filter-select-option')"
-				value="1"
+				:value="OrderValues.BY_ARTIST"
 			>
 				Артист
 			</option>
 			<option
 				:class="cnTracksTable('filter-select-option')"
-				value="2"
+				:value="OrderValues.BY_DURATION"
 			>
 				Длительность
 			</option>
@@ -42,7 +46,10 @@
 </template>
 
 <script setup lang="ts">
+import {OrderValues, TracksTableVm} from '~/client/shared/components/tracks-table/tracks-table.vm';
 import {cnTracksTable} from './tracks-table.const';
+
+const vm = useVm(TracksTableVm, true);
 </script>
 
 <style lang="scss">

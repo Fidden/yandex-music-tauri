@@ -8,6 +8,7 @@
 				:src="personalPlaylist.data.cover?.uri"
 				:alt="personalPlaylist.data.title"
 				crop="200x200"
+				type="playlist"
 			/>
 		</div>
 		<h3 :class="cnPersonalPlaylistCard('title')">
@@ -37,11 +38,11 @@ defineProps<{
 .personal-playlist-card {
 	display: flex;
 	flex-direction: column;
-	max-width: 168px;
+	width: 168px;
 	padding: 10px;
 	background: rgba(41, 44, 59, 0.8);
 	border-radius: 6px;
-	height: 100%;
+	height: 253px;
 	user-select: none;
 
 	&__title {

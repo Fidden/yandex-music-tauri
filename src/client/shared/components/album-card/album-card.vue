@@ -7,9 +7,10 @@
 			<Image
 				:src="album?.ogImage"
 				:alt="album?.title"
-				:width="200"
-				:height="200"
+				width="148"
+				height="148"
 				crop="200x200"
+				type="album"
 			/>
 		</div>
 
@@ -35,10 +36,11 @@
 import ArtistsLinks from '~/client/shared/components/artists-links/artists-links.vue';
 import Image from '~/client/shared/components/image.vue';
 import type {IAlbum} from '~/client/shared/types/api';
+import {ILastRelease} from '~/client/shared/types/api';
 import {cnAlbumCard} from './album-card.const';
 
 defineProps<{
-	album: IAlbum;
+	album: IAlbum | ILastRelease;
 }>();
 </script>
 
@@ -46,12 +48,13 @@ defineProps<{
 .album-card {
 	display: flex;
 	flex-direction: column;
-	max-width: 168px;
+	width: 168px;
 	padding: 10px;
 	background: rgba(41, 44, 59, 0.8);
 	border-radius: 6px;
-	height: 100%;
+	height: 253px;
 	user-select: none;
+	flex: 1;
 
 	&__title {
 		font-weight: 500;
@@ -75,6 +78,7 @@ defineProps<{
 			height: 100%;
 			left: 0;
 			top: 0;
+			position: absolute;
 		}
 	}
 

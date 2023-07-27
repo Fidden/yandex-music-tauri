@@ -1,18 +1,19 @@
 <template>
 	<LayoutPage>
 		<slot/>
+		<Player/>
 	</LayoutPage>
 </template>
 
 <script lang="ts" setup>
-
+import Player from '~/client/shared/components/player/player.vue';
 import LayoutPage from '~/client/shared/layouts/layout-page/layout-page.vue';
 </script>
 
 <style lang="scss">
 @import url("~/assets/css/reset.css");
-@import url("~/assets/css/fonts.css");
 @import 'vue-tauri-draggable/style.css';
+@import 'vue-loading-skeleton/dist/style.css';
 
 :root {
 	--primary: #FCCA00;

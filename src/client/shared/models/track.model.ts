@@ -1,7 +1,8 @@
+import md5 from 'crypto-js/md5';
 import {singleton} from 'tsyringe';
 import {PlaylistModel} from '~/client/shared/models/playlist.model';
 import {BaseModel} from '~/client/shared/types/abstract/base.model';
-import {ITrack} from '~/client/shared/types/api';
+import {IStorageLocation, ITrack, ITrackDownloadInfo} from '~/client/shared/types/api';
 
 @singleton()
 export class TrackModel extends BaseModel {
@@ -31,6 +32,36 @@ export class TrackModel extends BaseModel {
 		const trackIds = tracks.map(item => item.id);
 
 		return this.byIds(trackIds);
+	}
+
+	public async downloadInfo(trackId: number) {
+		return this.request.get<ITrackDownloadInfo[]>(`tracks/${trackId}/download-info`);
+	}
+
+	public async storageLocations(downloadInfoUrl: string) {
+		return this.request.get<IStorageLocation>(`${downloadInfoUrl}&format=json`, {
+			unwrapper: null
+		});
+	}
+
+	public async link(trackId: number) {
+		const downloadInfo = await this.downloadInfo(trackId);
+
+		const heightQuality = downloadInfo.sort((a, b) => {
+			if (a.bitrateInKbps < b.bitrateInKbps) {
+				return 1;
+			}
+			if (a.bitrateInKbps > b.bitrateInKbps) {
+				return -1;
+			}
+			return 0;
+		})[0];
+
+		const storageLocations = await this.storageLocations(heightQuality?.downloadInfoUrl);
+
+		const sign = md5('XGRlBW9FXlekgbPrRHuSiA${storageLocations.path.slice(1)}${storageLocations.s}');
+
+		return `https://${storageLocations.host}/get-mp3/${sign}/${storageLocations.ts}${storageLocations.path}`;
 	}
 
 	private get playlistModel() {

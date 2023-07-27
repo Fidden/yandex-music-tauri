@@ -28,7 +28,7 @@ type States<T extends Record<string, any>> = Omit<{
 
 type PiniaStore<G extends Record<string, any>> = Store<string, States<G>, Getters<G>, Actions<G>>
 
-export function useVm<T extends (new (...args: any) => any), G extends InstanceType<T> = InstanceType<T>>(Module0: T, child = false, id?: string)
+export function useVm<T extends (new (...args: any) => any), G extends InstanceType<T> = InstanceType<T>>(Module0: T, child = false, disposeOnly: boolean = false, id?: string)
 	: G & Omit<PiniaStore<G>, keyof G> {
 	const pinia = getActivePinia();
 	const {$container, payload} = useNuxtApp();
@@ -112,7 +112,10 @@ export function useVm<T extends (new (...args: any) => any), G extends InstanceT
 			return;
 		}
 
-		delete pinia.state.value[id];
+		if (!disposeOnly) {
+			delete pinia.state.value[id];
+		}
+
 		store.$dispose();
 	});
 

@@ -12,6 +12,10 @@ export class PlaylistsScreenVm extends BaseVm {
 	}
 
 	public async init() {
+		if (this.playlists && this.playlistsLiked) {
+			return;
+		}
+
 		this.playlists = await this.userModel.playlist.list();
 		this.playlistsLiked = await this.userModel.playlist.liked();
 	}

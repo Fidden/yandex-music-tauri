@@ -16,10 +16,11 @@ export class AlbumScreenVm extends BaseVm implements IInitializable {
 
 	public async init(args: InitArgs) {
 		this.album = await this.userModel.album.withTracks(args.id);
+		console.log(this.album);
 	}
 
 	public get tracks() {
-		return this.album?.volumes?.at(0);
+		return this.album?.volumes?.flat();
 	}
 
 	public get isSingle() {

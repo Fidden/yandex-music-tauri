@@ -15,6 +15,7 @@ interface RequestOptions {
 	timeout?: number;
 	responseType?: ResponseType;
 	method: RequestMethods;
+	unwrapper?: string | null;
 }
 
 class RequestError<T = any> extends Error {
@@ -64,11 +65,17 @@ export class RequestService {
 	}
 
 	private async requestFactory<T>(url: string, options: RequestOptions) {
+		if (options.unwrapper === undefined) {
+			options.unwrapper = 'result';
+		}
 
 		// @ts-ignore
 		const res = await fetch<T>(this.buildUrl(url), this.buildOptions(options));
+
+		const unwrappedResult = this.unwrapResult(options.unwrapper, res.data);
+
 		// @ts-ignore
-		if (!res.ok || !res.data?.result) {
+		if (!res.ok || !unwrappedResult) {
 			console.error('[ERROR]:', res, options);
 			throw new RequestError(res);
 		}
@@ -76,7 +83,7 @@ export class RequestService {
 		console.log('[RESPONSE]:', res);
 
 		// @ts-ignore
-		return res.data.result as Promise<T>;
+		return unwrappedResult as Promise<T>;
 	}
 
 	private sanitizeUrl(url: string) {
@@ -93,6 +100,10 @@ export class RequestService {
 	}
 
 	private buildUrl(url: string) {
+		if (url.startsWith('http')) {
+			return url;
+		}
+
 		return `${this.baseUrl}/${this.sanitizeUrl(url)}`;
 	}
 
@@ -106,14 +117,25 @@ export class RequestService {
 			method: options?.method || 'GET'
 		};
 
-		if (options.body) {
-			newOptions.body = Body.form(options.body);
-		}
-
-		if (options.formData) {
-			newOptions.body = Body.form(options.formData);
+		if (options.body || options.formData) {
+			newOptions.body = Body.form(options.body || options.formData);
 		}
 
 		return newOptions;
+	}
+
+	private unwrapResult(path: string | null, result: any) {
+		if (path === null) {
+			return result;
+		}
+
+		const pathArray = path.split('.');
+		let unwrappedResult = result;
+
+		for (const item of pathArray) {
+			unwrappedResult = unwrappedResult[item];
+		}
+
+		return unwrappedResult;
 	}
 }

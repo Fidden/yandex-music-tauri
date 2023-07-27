@@ -93,12 +93,14 @@ export interface IAlbum {
 
 	'prerolls': Array<object>;
 
+	description?: string;
+
 	'volumes': Array<Array<ITrack>> | null;
 }
 
 export enum AlbumTypeEnum {
 	SINGLE = 'single',
-	PODCAST = 'podcast'
+	PODCAST = 'podcast',
 }
 
 export enum AlbumMetaTypeEnum {
@@ -177,12 +179,22 @@ export interface IArtist {
 
 	'regions'?: Array<string> | null;
 
+	likesCount?: number;
+
 	counts?: {
 		alsoAlbums?: number;
 		alsoTracks?: number;
 		directAlbums?: number;
 		tracks?: number;
 	};
+
+	ratings?: {
+		day?: number;
+		week?: number;
+		month?: number;
+	};
+
+	links?: ILink[];
 }
 
 export interface IArtistBrief {
@@ -200,6 +212,42 @@ export interface IArtistBrief {
 	lastReleases: ILastRelease[];
 	playlistIds: IPlaylistId[];
 	playlists: IPlaylist[];
+	stats?: IArtistStats;
+}
+
+export interface ILink {
+	title: string;
+	href: string;
+	type: string;
+	socialNetwork: string;
+}
+
+export interface IArtistStats {
+	lastMonthListeners?: number;
+}
+
+export interface IConcert {
+	artist: IArtist;
+	id: string;
+	concertTitle: string;
+	afishaUrl: string;
+	city: string;
+	place: string;
+	address: string;
+	datetime: string;
+	coordinates: number[];
+	map: string;
+	mapUrl: string;
+	hash: string;
+	images: string[];
+	contentRating: string;
+	'data-session-id': string;
+	'metro-stations'?: IMetroStation[];
+}
+
+export interface IMetroStation {
+	title: string;
+	'line-color': string;
 }
 
 export interface ICounts {
@@ -600,6 +648,13 @@ export interface IInvocationInfo {
 	'req-id': string;
 
 	'app-name'?: string;
+}
+
+export interface IStorageLocation {
+	path: string,
+	s: string,
+	ts: string,
+	host: string,
 }
 
 export interface ILandingBlock<EntityT extends LandingBlockEntitiesInner<any>> {
@@ -1259,7 +1314,9 @@ export enum SearchType {
 	ALBUM = 'album',
 	TRACK = 'track',
 	PODCAST = 'podcast',
-	ALL = 'all'
+	ALL = 'all',
+	PERSONAL_PLAYLIST = 'personal-playlist',
+	PLAYLIST = 'playlist'
 }
 
 export interface ISearchVideos {

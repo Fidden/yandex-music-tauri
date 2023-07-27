@@ -27,6 +27,11 @@ withDefaults(defineProps<{
 	align-items: center;
 	gap: 4px;
 
+	&:disabled {
+		opacity: 0.5;
+		pointer-events: none;
+	}
+
 	&--primary {
 		border: 1px solid var(--primary);
 		background: none;

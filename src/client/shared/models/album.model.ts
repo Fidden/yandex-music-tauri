@@ -11,9 +11,13 @@ export class AlbumModel extends BaseModel {
 	}
 
 	public async albums(ids: number[]) {
-		return this.request.get<IAlbum[]>('/albums', {
-			query: {
-				albumIds: ids.toString()
+		const formData = new FormData();
+		formData.append('albumIds', ids.toString());
+
+		return this.request.post<IAlbum[]>('/albums', {
+			formData,
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded'
 			}
 		});
 	}

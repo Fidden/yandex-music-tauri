@@ -24,4 +24,6 @@ dist-ssr
 *.sw?
 .nuxt
 .env.*
+.output
+src-tauri/target
 

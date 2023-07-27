@@ -7,9 +7,10 @@
 			:class="cnUserPlaylist('image')"
 			:src="playlist.ogImage"
 			:alt="playlist.title"
-			width="100"
-			height="100"
+			width="40"
+			height="40"
 			crop="100x100"
+			type="playlist"
 		/>
 		<p :class="cnUserPlaylist('title')">
 			{{ playlist.title }}
@@ -40,6 +41,7 @@ defineProps<{
 	&__image {
 		width: 46px;
 		height: 46px;
+		border-radius: 4px;
 	}
 
 	&__title {

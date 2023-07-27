@@ -1,6 +1,12 @@
-import {addPlugin, createResolver} from '@nuxt/kit';
+import {createResolver} from '@nuxt/kit';
+import {googleFonts} from '~~/@configs/googleFonts';
+import {headlessui} from '~~/@configs/headlessui';
+import {hooks} from '~~/@configs/hooks';
+import {imports} from '~~/@configs/imports';
+import {runtimeConfig} from '~~/@configs/runtimeConfig';
+import {vue} from '~~/@configs/vue';
 
-const resolver = createResolver(import.meta.url);
+export const resolver = createResolver(import.meta.url);
 
 export default defineNuxtConfig({
 	app: {
@@ -21,41 +27,22 @@ export default defineNuxtConfig({
 		}
 	},
 	modules: [
-		'@nuxt/image',
 		'nuxt-icon',
 		'@nuxtjs/eslint-module',
-		'nuxt-swiper'
+		'nuxt-swiper',
+		'@nuxtjs/google-fonts',
+		'nuxt-headlessui'
 	],
-	vue: {
-		defineModel: false,
-		propsDestructure: false
-	},
-	hooks: {
-		'modules:done': () => {
-			addPlugin(resolver.resolve('./src/plugins-manual/pinia.plugin'));
-		},
-		'nitro:build:before': (nitro) => {
-			nitro.options.moduleSideEffects.push('reflect-metadata');
-		}
-	},
-	imports: {
-		dirs: [
-			'client/shared/composables',
-			'client/shared/stores',
-			'client/shared/services',
-			'client/shared/decorators',
-			'client/shared/helpers'
-		]
-	},
 	ssr: false,
 	srcDir: 'src',
 	devServer: {
 		host: 'localhost',
 		port: 1420
 	},
-	image: {
-		domains: [
-			'avatars.yandex.net'
-		]
-	}
+	vue,
+	hooks,
+	imports,
+	runtimeConfig,
+	googleFonts,
+	headlessui
 });

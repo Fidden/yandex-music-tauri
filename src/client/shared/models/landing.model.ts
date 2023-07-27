@@ -11,4 +11,16 @@ export class LandingModel extends BaseModel {
 	public async blocks(blocks: LandingBlockEnum[]) {
 		return this.request.get<ILandingResult>(`landing3?blocks=${blocks.toString()}`);
 	}
+
+	public async newReleasesIds() {
+		return this.request.get<number[]>('/landing3/new-releases', {
+			unwrapper: 'result.newReleases'
+		});
+	}
+
+	public async newPlaylistsIds() {
+		return this.request.get<{ uid: string; kind: string }[]>('/landing3/new-playlists', {
+			unwrapper: 'result.newPlaylists'
+		});
+	}
 }

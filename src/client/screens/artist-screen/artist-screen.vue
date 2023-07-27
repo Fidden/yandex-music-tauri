@@ -1,6 +1,25 @@
 <template>
+	<Navigation/>
 	<main :class="cnArtistScreen()">
 		<ArtistScreenHeader/>
+		<ContentBlock
+			v-if="vm.briefInfo?.lastReleases?.length"
+			:class="cnArtistScreen('last-releases')"
+			title="Недавние релизы"
+		>
+			<Swiper
+				:slides-per-view="'auto'"
+				:space-between="6"
+			>
+				<SwiperSlide
+					v-for="lastRelease in vm.briefInfo.lastReleases"
+					:key="lastRelease?.id"
+				>
+					<AlbumCard :album="lastRelease"/>
+				</SwiperSlide>
+			</Swiper>
+		</ContentBlock>
+
 		<ContentBlock
 			v-if="vm.briefInfo?.popularTracks?.length"
 			:class="cnArtistScreen('popular-tracks')"
@@ -71,6 +90,46 @@
 				</SwiperSlide>
 			</Swiper>
 		</ContentBlock>
+
+		<ContentBlock
+			v-if="vm.briefInfo?.concerts?.length"
+			:class="cnArtistScreen('concerts')"
+			title="Концерты"
+		>
+			<Swiper
+				:slides-per-view="'auto'"
+				:space-between="6"
+			>
+				<SwiperSlide
+					v-for="concert in vm.briefInfo.concerts"
+					:key="concert?.id"
+				>
+					<ConcertCard
+						:concert="concert"
+					/>
+				</SwiperSlide>
+			</Swiper>
+		</ContentBlock>
+
+		<ContentBlock
+			v-if="vm.briefInfo?.artist?.links?.length"
+			:class="cnArtistScreen('socials')"
+			title="Соц. сети"
+		>
+			<Swiper
+				:slides-per-view="'auto'"
+				:space-between="6"
+			>
+				<SwiperSlide
+					v-for="link in vm.briefInfo?.artist?.links"
+					:key="link.title"
+				>
+					<SocialCard
+						:link="link"
+					/>
+				</SwiperSlide>
+			</Swiper>
+		</ContentBlock>
 	</main>
 </template>
 
@@ -79,7 +138,10 @@ import {Swiper, SwiperSlide} from 'swiper/vue';
 import {ArtistScreenVm} from '~/client/screens/artist-screen/artist-screen.vm';
 import AlbumCard from '~/client/shared/components/album-card/album-card.vue';
 import ArtistCard from '~/client/shared/components/artist-card/artist-card.vue';
+import ConcertCard from '~/client/shared/components/concert-card/concert-card.vue';
 import ContentBlock from '~/client/shared/components/content-block/content-block.vue';
+import Navigation from '~/client/shared/components/navigation/navigation.vue';
+import SocialCard from '~/client/shared/components/social-card/social-card.vue';
 import TracksTable from '~/client/shared/components/tracks-table/tracks-table.vue';
 import {cnArtistScreen} from './artist-screen.const';
 import ArtistScreenHeader from './artist-screen__header.vue';
@@ -94,7 +156,7 @@ const vm = useVm(ArtistScreenVm, true);
 	gap: 45px;
 
 
-	&__popular-albums, &__popular-collections, &__similar-artists {
+	&__popular-albums, &__popular-collections, &__similar-artists, &__concerts, &__socials {
 		.content-block__body {
 			display: flex;
 		}
@@ -108,6 +170,12 @@ const vm = useVm(ArtistScreenVm, true);
 
 	.swiper-slide {
 		width: fit-content
+	}
+
+	&__concerts {
+		.swiper-slide {
+			max-width: 250px;
+		}
 	}
 
 	.swiper {

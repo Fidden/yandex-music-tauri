@@ -6,6 +6,8 @@
 			hide-images
 			:hide-filter="vm.isSingle"
 			:tracks="vm.tracks"
+			:track-count="vm.album?.trackCount"
+			:type="vm.album?.type"
 		/>
 	</main>
 </template>

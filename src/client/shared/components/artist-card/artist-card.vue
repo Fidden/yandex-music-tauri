@@ -8,6 +8,7 @@
 				:src="artist.cover?.uri"
 				:alt="artist.name"
 				crop="200x200"
+				type="artist"
 			/>
 		</div>
 		<h4 :class="cnArtistCard('title')">

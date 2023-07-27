@@ -38,4 +38,14 @@ export class PlaylistModel extends BaseModel {
 			}
 		});
 	}
+
+	public async byPlaylistIds(playlistIds: string[]) {
+		const formData = new FormData();
+		formData.append('playlistIds', playlistIds.toString());
+
+		return this.request.post<IPlaylist[]>('/playlists/list/', {
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			formData
+		});
+	}
 }

@@ -1,12 +1,12 @@
 <template>
 	<div :class="cnHeader('logo')">
-		<NuxtImg
+		<img
 			:class="cnHeader('logo-img')"
+			src="/img/logo.svg"
 			alt="logo"
 			height="15"
-			src="/img/logo.svg"
 			width="15"
-		/>
+		>
 		<h1 :class="cnHeader('logo-title')">
 			Яндекс.Музыка
 		</h1>

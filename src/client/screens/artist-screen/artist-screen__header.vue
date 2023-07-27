@@ -6,7 +6,8 @@
 			:alt="vm.briefInfo?.artist.name"
 			width="160"
 			height="160"
-			crop="200x200"
+			crop="300x300"
+			type="artist"
 		/>
 		<div :class="cnArtistScreen('header-info')">
 			<p :class="cnArtistScreen('header-type')">
@@ -15,6 +16,20 @@
 			<p :class="cnArtistScreen('header-title')">
 				{{ vm.briefInfo.artist.name }}
 			</p>
+
+			<div :class="cnArtistScreen('header-additional')">
+				<p v-if="vm.briefInfo?.stats?.lastMonthListeners ">
+					<span>Слушателей:</span>
+					{{
+						vm.briefInfo.stats.lastMonthListeners.toLocaleString('ru')
+					}} в месяц
+				</p>
+
+				<p v-if="vm.briefInfo?.artist?.likesCount">
+					{{ vm.briefInfo.artist.likesCount.toLocaleString('ru') }}
+					<span>лайков</span>
+				</p>
+			</div>
 
 			<div :class="cnArtistScreen('header-controls')">
 				<Button>
@@ -79,6 +94,40 @@ const vm = useVm(ArtistScreenVm, true);
 		font-size: 42px;
 		line-height: 42px;
 		font-weight: 500;
+	}
+
+	&-additional {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		font-size: 12.8px;
+
+		p {
+			color: #FFF;
+			font-weight: 500;
+			line-height: 16px;
+
+			&:after {
+				display: inline-block;
+				width: 3px;
+				height: 3px;
+				border-radius: 1000px;
+				background: #FFF;
+				content: ' ';
+				margin: 2px 10px;
+			}
+
+			&:last-child {
+				&:after {
+					display: none;
+				}
+			}
+		}
+
+		span {
+			color: #8E929C;
+			font-weight: 400;
+		}
 	}
 
 	&-controls {

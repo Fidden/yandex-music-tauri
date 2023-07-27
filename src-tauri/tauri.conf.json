@@ -1,7 +1,7 @@
 {
   "build": {
     "beforeDevCommand": "pnpm dev",
-    "beforeBuildCommand": "pnpm build",
+    "beforeBuildCommand": "pnpm generate",
     "devPath": "http://localhost:1420",
     "distDir": "../dist",
     "withGlobalTauri": false
@@ -17,14 +17,15 @@
         "all": true,
         "request": true,
         "scope": [
-          "https://api.music.yandex.net/*"
+          "https://api.music.yandex.net/*",
+          "https://storage.mds.yandex.net/*"
         ]
       }
     },
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "com.tauri.dev",
+      "identifier": "com.yandex-music.dev",
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
