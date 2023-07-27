@@ -1,10 +1,10 @@
 import {createResolver} from '@nuxt/kit';
-import {googleFonts} from '~~/@configs/googleFonts';
-import {headlessui} from '~~/@configs/headlessui';
-import {hooks} from '~~/@configs/hooks';
-import {imports} from '~~/@configs/imports';
-import {runtimeConfig} from '~~/@configs/runtimeConfig';
-import {vue} from '~~/@configs/vue';
+import {googleFonts} from './@configs/googleFonts';
+import {headlessui} from './@configs/headlessui';
+import {hooks} from './@configs/hooks';
+import {imports} from './@configs/imports';
+import {runtimeConfig} from './@configs/runtimeConfig';
+import {vue} from './@configs/vue';
 
 export const resolver = createResolver(import.meta.url);
 

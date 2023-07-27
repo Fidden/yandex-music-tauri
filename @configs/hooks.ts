@@ -1,6 +1,6 @@
 import {addPlugin} from '@nuxt/kit';
 import {NuxtConfig} from '@nuxt/schema';
-import {resolver} from '~~/nuxt.config';
+import {resolver} from '../nuxt.config';
 
 export const hooks: NuxtConfig['hooks'] = {
 	'modules:done': () => {
