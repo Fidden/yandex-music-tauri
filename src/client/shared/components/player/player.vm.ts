@@ -54,6 +54,7 @@ export class PlayerVm extends BaseVm {
 		this.audioRef.currentTime = 0;
 		this.audioRef.pause();
 		this.audioRef.src = trackLink;
+		this.playing = true;
 
 		this.setMetaData();
 	}
