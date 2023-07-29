@@ -66,5 +66,10 @@ const vm = useVm(IndexScreenVm, true);
 		grid-template-rows: 1fr;
 		gap: 7px;
 	}
+
+	.swiper {
+		margin-right: 0;
+		flex: 1;
+	}
 }
 </style>
