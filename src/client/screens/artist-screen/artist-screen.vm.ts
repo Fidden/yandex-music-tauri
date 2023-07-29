@@ -1,3 +1,4 @@
+import {UserModel} from '~/client/shared/models/user.model';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
 import {IArtistBrief} from '~/client/shared/types/api';
 import {IInitializable} from '~/client/shared/types/initializable';
@@ -15,6 +16,6 @@ export class ArtistScreenVm extends BaseVm implements IInitializable {
 	}
 
 	public async init(args: InitArgs) {
-		this.briefInfo = await this.userModel.artist.briefInfo(args.id);
+		this.briefInfo = await UserModel.artist.briefInfo(args.id);
 	}
 }

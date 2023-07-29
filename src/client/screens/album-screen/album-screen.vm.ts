@@ -1,3 +1,4 @@
+import {UserModel} from '~/client/shared/models/user.model';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
 import {AlbumTypeEnum, IAlbum} from '~/client/shared/types/api';
 import {IInitializable} from '~/client/shared/types/initializable';
@@ -15,7 +16,7 @@ export class AlbumScreenVm extends BaseVm implements IInitializable {
 	}
 
 	public async init(args: InitArgs) {
-		this.album = await this.userModel.album.withTracks(args.id);
+		this.album = await UserModel.album.withTracks(args.id);
 		console.log(this.album);
 	}
 

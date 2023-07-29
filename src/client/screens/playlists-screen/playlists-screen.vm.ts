@@ -1,3 +1,4 @@
+import {UserModel} from '~/client/shared/models/user.model';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
 import type {ILikedPlaylist, IPlaylist} from '~/client/shared/types/api';
 
@@ -12,11 +13,7 @@ export class PlaylistsScreenVm extends BaseVm {
 	}
 
 	public async init() {
-		if (this.playlists && this.playlistsLiked) {
-			return;
-		}
-
-		this.playlists = await this.userModel.playlist.list();
-		this.playlistsLiked = await this.userModel.playlist.liked();
+		this.playlists = await UserModel.playlist.list();
+		this.playlistsLiked = await UserModel.playlist.liked();
 	}
 }

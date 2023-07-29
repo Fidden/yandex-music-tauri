@@ -1,4 +1,5 @@
 import {injectable} from 'tsyringe';
+import {UserModel} from '~/client/shared/models/user.model';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
 import {ITrack} from '~/client/shared/types/api';
 import {IInitializable} from '~/client/shared/types/initializable';
@@ -13,6 +14,6 @@ export class TracksScreenVm extends BaseVm implements IInitializable {
 	}
 
 	public async init() {
-		this.tracksLists = await this.userModel.track.userList();
+		this.tracksLists = await UserModel.track.userList();
 	}
 }

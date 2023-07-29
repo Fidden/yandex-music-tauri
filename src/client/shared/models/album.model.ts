@@ -6,15 +6,15 @@ export class AlbumModel extends BaseModel {
 		super();
 	}
 
-	public async liked() {
-		return this.request.get<IAlbumShort[]>('/users/${userStore.userId}/likes/albums');
+	public static async liked() {
+		return super.request.get<IAlbumShort[]>('/users/${userStore.userId}/likes/albums');
 	}
 
-	public async albums(ids: number[]) {
+	public static async albums(ids: number[]) {
 		const formData = new FormData();
 		formData.append('albumIds', ids.toString());
 
-		return this.request.post<IAlbum[]>('/albums', {
+		return super.request.post<IAlbum[]>('/albums', {
 			formData,
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded'
@@ -22,7 +22,7 @@ export class AlbumModel extends BaseModel {
 		});
 	}
 
-	public async withTracks(id: number) {
-		return this.request.get<IAlbum>(`/albums/${id}/with-tracks`);
+	public static async withTracks(id: number) {
+		return super.request.get<IAlbum>(`/albums/${id}/with-tracks`);
 	}
 }

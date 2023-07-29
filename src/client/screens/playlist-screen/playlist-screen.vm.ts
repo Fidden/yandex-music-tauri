@@ -1,3 +1,4 @@
+import {UserModel} from '~/client/shared/models/user.model';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
 import type {IPlaylist, ITrack} from '~/client/shared/types/api';
 import {IInitializable} from '~/client/shared/types/initializable';
@@ -16,7 +17,7 @@ export class PlaylistScreenVm extends BaseVm implements IInitializable {
 	}
 
 	public async init(args: InitArgs) {
-		this.playlist = await this.userModel.playlist.one(args.kind, args.uid);
+		this.playlist = await UserModel.playlist.one(args.kind, args.uid);
 	}
 
 	public get tracks() {

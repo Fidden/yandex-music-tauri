@@ -29,6 +29,7 @@ defineProps<{
 	text-overflow: ellipsis;
 	max-width: 100%;
 	color: #8E929C;
+	line-height: 16px;
 
 	&__link {
 		font-weight: 400;

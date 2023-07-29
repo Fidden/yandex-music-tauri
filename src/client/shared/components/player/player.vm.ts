@@ -1,5 +1,6 @@
 import {singleton} from 'tsyringe';
 import {cropImage} from '~/client/shared/helpers/crop-image';
+import {UserModel} from '~/client/shared/models/user.model';
 import {PendingService} from '~/client/shared/services/pending.service';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
 import {IPopularTrack, ITrack} from '~/client/shared/types/api';
@@ -150,7 +151,7 @@ export class PlayerVm extends BaseVm {
 	}
 
 	public async getTrackLink(trackId: number) {
-		return await this.userModel.track.link(trackId);
+		return await UserModel.track.link(trackId);
 	}
 
 	public setQueue(tracks: Array<ITrack | IPopularTrack>) {

@@ -22,8 +22,11 @@ defineProps<{
 <style lang="scss">
 .concert-card__image {
 	width: 100%;
+	overflow: hidden;
+	transition: 200ms;
 
 	img {
+		transition: 200ms;
 		object-fit: cover;
 	}
 }

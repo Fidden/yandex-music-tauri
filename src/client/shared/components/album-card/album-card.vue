@@ -6,7 +6,7 @@
 		<div :class="cnAlbumCard('image')">
 			<Image
 				:src="album?.ogImage"
-				:alt="album?.title"
+				:alt="album?.title!"
 				width="148"
 				height="148"
 				crop="200x200"
@@ -55,6 +55,12 @@ defineProps<{
 	height: 253px;
 	user-select: none;
 	flex: 1;
+	transition: 200ms;
+
+	&:hover {
+		transition: 200ms;
+		background: rgba(41, 44, 59, 1);
+	}
 
 	&__title {
 		font-weight: 500;

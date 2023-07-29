@@ -7,7 +7,7 @@
 					'albums',
 					'artists',
 					'playlists',
-					'station',
+					'stations',
 					'tracks'
 				]"
 			>

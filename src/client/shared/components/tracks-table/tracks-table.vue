@@ -174,9 +174,9 @@ globalEmitter.on('tracks-table-play-shuffle', () => {
 .tracks-table {
 	&__before {
 		display: grid;
-		grid-template-rows: 1fr;
 		gap: 8px;
 		grid-template-columns: 40px 40px 40fr 16fr 45px 45px;
+		grid-template-rows: 42px;
 
 		&-index,
 		&-name,

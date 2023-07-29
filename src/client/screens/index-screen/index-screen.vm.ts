@@ -1,5 +1,6 @@
 import {injectable} from 'tsyringe';
 import {pending} from '~/client/shared/decorators/pending.decorator';
+import {UserModel} from '~/client/shared/models/user.model';
 import {PendingService} from '~/client/shared/services/pending.service';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
 import {
@@ -33,9 +34,9 @@ export class IndexScreenVm extends BaseVm implements IInitializable {
 
 	@pending<PendingKeys>('index-screen')
 	public async init() {
-		const favortiePlaylist = await this.userModel.playlist.one(3, this.userStore.status!.account!.uid);
-		this.userPlaylists = await this.userModel.playlist.list();
-		this.landingBlocks = await this.userModel.landing.blocks([
+		const favoritePlaylist = await UserModel.playlist.one(3, this.userStore.status!.account!.uid);
+		this.userPlaylists = await UserModel.playlist.list();
+		this.landingBlocks = await UserModel.landing.blocks([
 			LandingBlockEnum.NEW_PLAYLISTS,
 			LandingBlockEnum.NEW_RELEASES,
 			LandingBlockEnum.CHART,
@@ -43,7 +44,7 @@ export class IndexScreenVm extends BaseVm implements IInitializable {
 			LandingBlockEnum.PERSONAL_PLAYLISTS
 		]);
 
-		this.userPlaylists.unshift(favortiePlaylist);
+		this.userPlaylists.unshift(favoritePlaylist);
 
 		for (let i = 0; i < this.userPlaylists.length; i += 6) {
 			const chunk = this.userPlaylists.slice(i, i + 6);

@@ -1,4 +1,4 @@
-import {Body, fetch, Response, ResponseType} from '@tauri-apps/api/http';
+import {Body, fetch, Part, Response, ResponseType} from '@tauri-apps/api/http';
 
 type RequestMethods = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD' | 'OPTIONS' | 'CONNECT' | 'TRACE';
 
@@ -118,7 +118,7 @@ export class RequestService {
 		};
 
 		if (options.body || options.formData) {
-			newOptions.body = Body.form(options.body || options.formData);
+			newOptions.body = Body.form((options.body || options.formData) as FormData | Record<string, Part>);
 		}
 
 		return newOptions;

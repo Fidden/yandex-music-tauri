@@ -1,3 +1,4 @@
+import {UserModel} from '~/client/shared/models/user.model';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
 import type {IArtist} from '~/client/shared/types/api';
 
@@ -10,6 +11,6 @@ export class ArtistsScreenVm extends BaseVm {
 	}
 
 	public async init() {
-		this.artists = await this.userModel.artist.liked();
+		this.artists = await UserModel.artist.liked();
 	}
 }

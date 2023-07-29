@@ -29,7 +29,7 @@ const routes = [
 		icon: 'fas fa-home-alt'
 	},
 	{
-		to: {name: 'station'},
+		to: {name: 'stations'},
 		icon: 'fal fa-broadcast-tower'
 	},
 	{

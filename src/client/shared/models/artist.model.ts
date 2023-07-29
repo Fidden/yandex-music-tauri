@@ -1,24 +1,18 @@
 import {BaseModel} from '~/client/shared/types/abstract/base.model';
-import IArtistBrief from '~/client/shared/types/api';
-import IArtistBriefInterface, {IArtist} from '~/client/shared/types/api';
+import {IArtist, IArtistBrief} from '~/client/shared/types/api';
 
 export class ArtistModel extends BaseModel {
-	private userId: number;
+	private static userId: number = -1;
 
-	constructor() {
-		super();
-		this.userId = -1;
-	}
-
-	public setup(userId: number) {
+	public static setup(userId: number) {
 		this.userId = userId;
 	}
 
-	public async liked() {
-		return this.request.get<IArtist[]>(`/users/${this.userId}/likes/artists`);
+	public static async liked() {
+		return super.request.get<IArtist[]>(`/users/${this.userId}/likes/artists`);
 	}
 
-	public async briefInfo(id: number) {
-		return this.request.get<IArtistBrief>(`/artists/${id}/brief-info`);
+	public static async briefInfo(id: number) {
+		return super.request.get<IArtistBrief>(`/artists/${id}/brief-info`);
 	}
 }

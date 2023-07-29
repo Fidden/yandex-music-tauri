@@ -1,3 +1,4 @@
+import {UserModel} from '~/client/shared/models/user.model';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
 import type {IAlbum} from '~/client/shared/types/api';
 import {IInitializable} from '~/client/shared/types/initializable';
@@ -11,8 +12,8 @@ export class AlbumsScreenVm extends BaseVm implements IInitializable {
 	}
 
 	public async init() {
-		const userAlbums = await this.userModel.album.liked();
+		const userAlbums = await UserModel.album.liked();
 		const userAlbumsIds = userAlbums.map(item => item.id);
-		this.albums = await this.userModel.album.albums(userAlbumsIds);
+		this.albums = await UserModel.album.albums(userAlbumsIds);
 	}
 }
