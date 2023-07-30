@@ -15,10 +15,14 @@ await vm.init({
 });
 
 watch(() => route.params.id, async (id) => {
+	if (!id) {
+		return;
+	}
+
 	await vm.init({
 		id: Number(id)
 	});
 
-	document.querySelector('.layout-page__content')?.scrollTo({ top: 0, behavior: 'smooth' });
+	document.querySelector('.layout-page__content')?.scrollTo({top: 0, behavior: 'smooth'});
 });
 </script>
