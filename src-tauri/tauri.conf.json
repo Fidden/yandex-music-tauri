@@ -18,7 +18,8 @@
         "request": true,
         "scope": [
           "https://api.music.yandex.net/*",
-          "https://storage.mds.yandex.net/*"
+          "https://storage.mds.yandex.net/*",
+          "https://passport.yandex.ru/*"
         ]
       }
     },
