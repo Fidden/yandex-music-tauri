@@ -44,25 +44,22 @@
 						name="ic:round-favorite-border"
 					/>
 				</Button>
-				<HLMenu>
-					<HLMenuButton>
+				<Menu>
+					<MenuButton>
 						<Icon
 							size="1.5rem"
 							name="ic:round-more-horiz"
 						/>
-					</HLMenuButton>
-					<HLMenuItems>
-						<HLMenuItem>
+					</MenuButton>
+					<MenuItems>
+						<MenuItem @click="globalEmitter.emit('tracks-table-play-shuffle')">
 							Перемешать
-						</HLMenuItem>
-						<HLMenuItem>
-							Поток по плейлисту
-						</HLMenuItem>
-						<HLMenuItem>
+						</MenuItem>
+						<MenuItem @click="vm.copyLink()">
 							Поделиться
-						</HLMenuItem>
-					</HLMenuItems>
-				</HLMenu>
+						</MenuItem>
+					</MenuItems>
+				</Menu>
 			</div>
 		</div>
 	</header>
@@ -75,6 +72,10 @@ import Image from '~/client/shared/components/image.vue';
 import {globalEmitter} from '~/client/shared/emitters/global-emitter';
 import {tracksCountHuman} from '~/client/shared/helpers/tracks-count-human';
 import {cnPlaylistScreen} from './playlist-screen.const';
+import Menu from '~/client/shared/components/menu/menu.vue';
+import MenuButton from '~/client/shared/components/menu/menu__button.vue';
+import MenuItems from '~/client/shared/components/menu/menu__items.vue';
+import MenuItem from '~/client/shared/components/menu/menu__item.vue';
 
 const vm = useVm(PlaylistScreenVm, true);
 </script>

@@ -23,4 +23,13 @@ export class PlaylistScreenVm extends BaseVm implements IInitializable {
 	public get tracks() {
 		return this.playlist?.tracks.map(item => item.track) as ITrack[];
 	}
+
+	public copyLink() {
+		if (!this.playlist) {
+			return;
+		}
+
+		useToastStore().add('Ссылка скопирована');
+		navigator.clipboard.writeText(`https://music.yandex.ru/users/${this.playlist.owner.name}/playlists/${this.playlist.kind}`);
+	}
 }
