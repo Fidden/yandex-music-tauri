@@ -28,7 +28,7 @@ type States<T extends Record<string, any>> = Omit<{
 
 type PiniaStore<G extends Record<string, any>> = Store<string, States<G>, Getters<G>, Actions<G>>
 
-export function useVm<T extends (new (...args: any) => any), G extends InstanceType<T> = InstanceType<T>>(Module0: T, child = false, disposeOnly: boolean = false, id?: string)
+export function useVm<T extends (new (...args: any) => any), G extends InstanceType<T> = InstanceType<T>>(Module0: T, child = false, id?: string)
 	: G & Omit<PiniaStore<G>, keyof G> {
 	const pinia = getActivePinia();
 	const {$container, payload} = useNuxtApp();
@@ -73,19 +73,6 @@ export function useVm<T extends (new (...args: any) => any), G extends InstanceT
 		Module._storeOptions = option;
 	}
 
-	/**
-	 * Update data with injected classes on server side
-	 */
-	if (process.server && Module._storeOptions && !child) {
-		for (const key of Object.keys(instance)) {
-			if (instance.hasOwnProperty(key)) {
-				if (instance[key]?.constructor?.$injected) {
-					Module._storeOptions.initialState[key] = instance[key];
-				}
-			}
-		}
-	}
-
 	if (!Module._storeOptions) {
 		throw new Error('Module can not be found. It seems like you forgot to call general modal with "child: false"');
 	}
@@ -100,9 +87,7 @@ export function useVm<T extends (new (...args: any) => any), G extends InstanceT
 		state: () => initialState,
 		getters,
 		actions
-	})() as Store & {
-		$initialState: any
-	};
+	})() as Store;
 
 	/**
 	 * Automatic model dispose on view onMount
@@ -112,10 +97,7 @@ export function useVm<T extends (new (...args: any) => any), G extends InstanceT
 			return;
 		}
 
-		if (!disposeOnly) {
-			delete pinia.state.value[id];
-		}
-
+		delete pinia.state.value[id];
 		store.$dispose();
 	});
 
