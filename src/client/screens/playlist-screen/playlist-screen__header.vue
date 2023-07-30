@@ -2,8 +2,8 @@
 	<header :class="cnPlaylistScreen('header')">
 		<Image
 			:class="cnPlaylistScreen('header-image')"
-			:src="vm.playlist?.ogImage"
-			:alt="vm.playlist?.title"
+			:src="vm.playlist!.ogImage"
+			:alt="vm.playlist!.title"
 			width="160"
 			height="160"
 			crop="200x200"
@@ -44,13 +44,25 @@
 						name="ic:round-favorite-border"
 					/>
 				</Button>
-
-				<Button variant="text">
-					<Icon
-						size="1.5rem"
-						name="ic:round-more-horiz"
-					/>
-				</Button>
+				<HLMenu>
+					<HLMenuButton>
+						<Icon
+							size="1.5rem"
+							name="ic:round-more-horiz"
+						/>
+					</HLMenuButton>
+					<HLMenuItems>
+						<HLMenuItem>
+							Перемешать
+						</HLMenuItem>
+						<HLMenuItem>
+							Поток по плейлисту
+						</HLMenuItem>
+						<HLMenuItem>
+							Поделиться
+						</HLMenuItem>
+					</HLMenuItems>
+				</HLMenu>
 			</div>
 		</div>
 	</header>
