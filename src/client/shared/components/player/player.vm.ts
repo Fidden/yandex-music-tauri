@@ -181,7 +181,7 @@ export class PlayerVm extends BaseVm {
 			return;
 		}
 
-		const playedTrack = this.playedQueue.shift() as ITrack | IPopularTrack;
+		const playedTrack = this.playedQueue.pop() as ITrack | IPopularTrack;
 		this.queue.unshift(playedTrack);
 	}
 
