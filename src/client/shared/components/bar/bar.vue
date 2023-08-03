@@ -1,7 +1,7 @@
 <template>
 	<aside :class="cnBar()">
 		<NuxtLink
-			v-for="(item, index) in routes"
+			v-for="(item, index) in vm.routes"
 			:key="index"
 			:class="cnBar('link', {
 				active: $route.name === item.to.name
@@ -11,58 +11,21 @@
 			<i :class="item.icon"/>
 		</NuxtLink>
 		<div
-			:style="{top: lineTopPosition}"
+			:style="{top: vm.linePosition}"
 			:class="cnBar('line')"
 		/>
 	</aside>
 </template>
 
 <script lang="ts" setup>
-import {cnBar} from './bar.const';
 import {useRoute} from 'vue-router';
+import {BarVm} from '~/client/shared/components/bar/bar.vm';
+import {cnBar} from './bar.const';
 
 const route = useRoute();
+const vm = useVm(BarVm);
 
-const routes = [
-	{
-		to: {name: 'index'},
-		icon: 'fas fa-home-alt'
-	},
-	{
-		to: {name: 'stations'},
-		icon: 'fal fa-broadcast-tower'
-	},
-	{
-		to: {name: 'tracks'},
-		icon: 'fal fa-music'
-	},
-	{
-		to: {name: 'artists'},
-		icon: 'fal fa-user-music'
-	},
-	{
-		to: {name: 'albums'},
-		icon: 'fal fa-album'
-	},
-	{
-		to: {name: 'playlists'},
-		icon: 'fal fa-list-music'
-	}
-];
-
-const cachedIndex = ref(0);
-
-const routeIndex = computed(() => routes.findIndex(item => item.to.name === String(route.name)));
-
-const lineTopPosition = computed(() => {
-	if (routeIndex.value < 0) {
-		return `${cachedIndex.value * 50 + 25}px`;
-	}
-
-	cachedIndex.value = routeIndex.value;
-
-	return `${routeIndex.value * 50 + 25}px`;
-});
+watch(() => route.name, () => vm.updateCurrenRoute(route), {immediate: true});
 </script>
 
 <style lang="scss">
