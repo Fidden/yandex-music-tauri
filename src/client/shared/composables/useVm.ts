@@ -3,6 +3,7 @@
  inspired by WayZer/pinia-class-store
  */
 import {defineStore, getActivePinia, Store} from 'pinia';
+import {onDeactivated, onUnmounted} from 'vue';
 
 interface ModuleExt {
 	_storeOptions?: {
