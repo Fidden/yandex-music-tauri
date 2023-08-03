@@ -41,7 +41,7 @@
 		            hideImages,
 		            isPodcast
 		        })"
-				@click="vm.addToQueue(index)"
+				@click="vm.addToQueue(index, item.id)"
 			>
 				<div :class="cnTracksTable('index')">
 					<Icon

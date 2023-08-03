@@ -38,7 +38,12 @@ export class TracksTableVm extends BaseVm implements IInitializable {
 		this.tracks = args.tracks;
 	}
 
-	public addToQueue(index: number) {
+	public addToQueue(index: number, trackId?: string | number) {
+		if (trackId === this.playerVm.track?.id) {
+			this.playerVm.toggle();
+			return;
+		}
+
 		const startSlice = this.filteredTracks.slice(index, this.filteredTracks.length);
 		const endSlice = this.filteredTracks.slice(0, index);
 
