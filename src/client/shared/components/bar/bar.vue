@@ -50,13 +50,18 @@ const routes = [
 	}
 ];
 
+const cachedIndex = ref(0);
+
+const routeIndex = computed(() => routes.findIndex(item => item.to.name === String(route.name)));
+
 const lineTopPosition = computed(() => {
-	const routeId: number = routes.findIndex(item => item.to.name === String(route.name));
-	if (routeId < 0) {
-		return '25px';
+	if (routeIndex.value < 0) {
+		return `${cachedIndex.value * 50 + 25}px`;
 	}
 
-	return `${routeId * 50 + 25}px`;
+	cachedIndex.value = routeIndex.value;
+
+	return `${routeIndex.value * 50 + 25}px`;
 });
 </script>
 
