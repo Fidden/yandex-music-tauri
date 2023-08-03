@@ -1,4 +1,5 @@
 <template>
+	<Navigation/>
 	<main :class="cnPlayContextScreen()">
 		<ContentBlock title="Вы недавно слушали">
 			<Fragment
@@ -37,6 +38,7 @@ import AlbumCard from '~/client/shared/components/album-card/album-card.vue';
 import ArtistCard from '~/client/shared/components/artist-card/artist-card.vue';
 import ContentBlock from '~/client/shared/components/content-block/content-block.vue';
 import Fragment from '~/client/shared/components/fragment.vue';
+import Navigation from '~/client/shared/components/navigation/navigation.vue';
 import PersonalPlaylistCard from '~/client/shared/components/personal-playlist-card/personal-playlist-card.vue';
 import PlaylistCard from '~/client/shared/components/playlist-card/playlist-card.vue';
 import {IAlbum, IArtist, IGeneratedPlaylistLandingBlock, IPlaylist, SearchType} from '~/client/shared/types/api';

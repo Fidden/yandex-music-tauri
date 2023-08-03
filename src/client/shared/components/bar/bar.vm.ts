@@ -21,27 +21,27 @@ export class BarVm extends BaseVm {
 		this.routes = [
 			{
 				to: {name: 'index'},
-				icon: 'fas fa-home-alt'
+				icon: 'home'
 			},
 			{
 				to: {name: 'stations'},
-				icon: 'fal fa-broadcast-tower'
+				icon: 'cell_tower'
 			},
 			{
 				to: {name: 'tracks'},
-				icon: 'fal fa-music'
+				icon: 'queue_music'
 			},
 			{
 				to: {name: 'artists'},
-				icon: 'fal fa-user-music'
+				icon: 'mic_external_on'
 			},
 			{
 				to: {name: 'albums'},
-				icon: 'fal fa-album'
+				icon: 'album'
 			},
 			{
 				to: {name: 'playlists'},
-				icon: 'fal fa-list-music'
+				icon: 'playlist_play'
 			}
 		];
 		this.cachedRouteIndex = 0;

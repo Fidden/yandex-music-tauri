@@ -31,10 +31,11 @@
 			</p>
 
 			<div :class="cnPlaylistScreen('header-controls')">
-				<Button @click="globalEmitter.emit('tracks-table-play-shuffle')">
-					<Icon
-						size="1.6em"
-						name="ic:round-play-arrow"
+				<Button @click="vm.shuffle()">
+					<MatIcon
+						fill
+						size="1.3em"
+						name="play_arrow"
 					/>
 					Перемешать
 				</Button>
@@ -72,11 +73,13 @@
 import {PlaylistScreenVm} from '~/client/screens/playlist-screen/playlist-screen.vm';
 import Button from '~/client/shared/components/button/button.vue';
 import Image from '~/client/shared/components/image.vue';
-import {globalEmitter} from '~/client/shared/emitters/global-emitter';
+import MatIcon from '~/client/shared/components/mat-icon.vue';
+import {PlayerVm} from '~/client/shared/components/player/player.vm';
 import {tracksCountHuman} from '~/client/shared/helpers/tracks-count-human';
 import {cnPlaylistScreen} from './playlist-screen.const';
 
 const vm = useVm(PlaylistScreenVm, true);
+const playerVm = useVm(PlayerVm, true);
 </script>
 
 <style lang="scss">
@@ -84,7 +87,7 @@ const vm = useVm(PlaylistScreenVm, true);
 	display: flex;
 	flex-direction: row;
 	gap: 20px;
-  height: 160px;
+	height: 160px;
 
 	&-image {
 		border-radius: 6px;

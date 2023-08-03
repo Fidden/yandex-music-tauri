@@ -6,9 +6,7 @@
 			:loading="vm.pending.get('init')"
 		>
 			<template #default>
-				<TracksTable
-					:tracks="vm.tracksLists"
-				/>
+				<TracksTable :tracks="vm.tracksLists"/>
 			</template>
 			<template #fallback>
 				<TracksTableSkeleton

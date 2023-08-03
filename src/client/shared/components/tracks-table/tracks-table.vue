@@ -162,7 +162,7 @@ const isPodcast = props.type === AlbumTypeEnum.PODCAST;
 
 watch(() => props.tracks, tracks => vm.init({tracks}), {immediate: true});
 
-globalEmitter.on('tracks-table-play-shuffle', () => {
+globalEmitter.on('tracks-table:play-shuffle', () => {
 	const randomStartIndex = Math.floor(Math.random() * vm.filteredTracks.length);
 	vm.addToQueue(randomStartIndex);
 });

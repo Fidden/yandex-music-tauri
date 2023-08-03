@@ -1,15 +1,18 @@
 <template>
 	<aside :class="cnBar()">
-		<NuxtLink
+		<button
 			v-for="(item, index) in vm.routes"
 			:key="index"
 			:class="cnBar('link', {
 				active: $route.name === item.to.name
 			})"
-			:to="item.to"
+			@click="() => {
+				layoutVm.scrollCache.delete(item.to.name);
+				router.push(item.to)
+			}"
 		>
-			<i :class="item.icon"/>
-		</NuxtLink>
+			<MatIcon :name="item.icon"/>
+		</button>
 		<div
 			:style="{top: vm.linePosition}"
 			:class="cnBar('line')"
@@ -20,10 +23,15 @@
 <script lang="ts" setup>
 import {useRoute} from 'vue-router';
 import {BarVm} from '~/client/shared/components/bar/bar.vm';
+import MatIcon from '~/client/shared/components/mat-icon.vue';
+import {LayoutPageVm} from '~/client/shared/layouts/layout-page/layout-page.vm';
 import {cnBar} from './bar.const';
 
 const route = useRoute();
+const router = useRouter();
+
 const vm = useVm(BarVm);
+const layoutVm = useVm(LayoutPageVm, true);
 
 watch(() => route.name, () => vm.updateCurrenRoute(route), {immediate: true});
 </script>
@@ -71,12 +79,34 @@ watch(() => route.name, () => vm.updateCurrenRoute(route), {immediate: true});
 			background: var(--primary-transperent);
 			border-radius: 4px;
 			color: var(--primary);
+
+			.mat-icon {
+				font-variation-settings: 'FILL' 1,
+				'wght' 300,
+				'GRAD' 200,
+				'opsz' 48 !important;
+				color: var(--primary);
+			}
 		}
 
 		&:hover {
 			transition: 0.2s;
-			color: var(--primary);
+
+			.mat-icon {
+				font-variation-settings: 'FILL' 0,
+				'wght' 200,
+				'GRAD' 200,
+				'opsz' 48;
+			}
 		}
+	}
+
+	.mat-icon {
+		font-variation-settings: 'FILL' 0,
+		'wght' 100,
+		'GRAD' 200,
+		'opsz' 36;
+		transition: 200ms;
 	}
 }
 </style>

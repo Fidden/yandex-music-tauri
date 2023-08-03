@@ -1,9 +1,9 @@
+import {PendingService} from '#imports';
+import {injectable} from 'tsyringe';
 import {UserModel} from '~/client/shared/models/user.model';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
 import type {IPlaylist, ITrack} from '~/client/shared/types/api';
 import {IInitializable} from '~/client/shared/types/initializable';
-import {injectable} from 'tsyringe';
-import {PendingService} from '#imports';
 
 interface InitArgs {
 	kind: number;
@@ -30,5 +30,9 @@ export class PlaylistScreenVm extends BaseVm implements IInitializable {
 
 	public get tracks() {
 		return this.playlist?.tracks.map(item => item.track) as ITrack[];
+	}
+
+	public shuffle() {
+		this.globalEmitter.emit('tracks-table:play-shuffle');
 	}
 }

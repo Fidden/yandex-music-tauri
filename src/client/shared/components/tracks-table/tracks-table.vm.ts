@@ -21,9 +21,15 @@ interface IFilter {
 	order: OrderValues;
 }
 
+interface IFilterOption {
+	key: OrderValues,
+	value: string
+}
+
 export class TracksTableVm extends BaseVm implements IInitializable {
 	public tracks: TrackType[];
 	public filter: IFilter;
+	public filterOptions: IFilterOption[];
 
 	constructor() {
 		super();
@@ -32,6 +38,12 @@ export class TracksTableVm extends BaseVm implements IInitializable {
 			name: '',
 			order: OrderValues.DEFAULT
 		};
+		this.filterOptions = [
+			{key: OrderValues.DEFAULT, value: 'По стандарту'},
+			{key: OrderValues.BY_NAME, value: 'Название'},
+			{key: OrderValues.BY_ARTIST, value: 'Артист'},
+			{key: OrderValues.BY_DURATION, value: 'Длительность'}
+		];
 	}
 
 	public init(args: InitArgs) {
@@ -125,5 +137,9 @@ export class TracksTableVm extends BaseVm implements IInitializable {
 
 	private get playerVm() {
 		return useVm(PlayerVm, true);
+	}
+
+	public get filterOrderValue() {
+		return this.filterOptions.find(item => item.key === this.filter.order)?.value;
 	}
 }

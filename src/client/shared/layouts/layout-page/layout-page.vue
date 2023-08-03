@@ -2,7 +2,7 @@
 	<div :class="cnLayoutPage()">
 		<Header/>
 		<div
-			ref="layoutContentRef"
+			:ref="el => vm.layoutContentRef = el as HTMLDivElement"
 			:class="cnLayoutPage('content')"
 			@scroll="handleScroll"
 		>
@@ -16,34 +16,39 @@
 import {useRoute} from 'vue-router';
 import Bar from '~/client/shared/components/bar/bar.vue';
 import Header from '~/client/shared/components/header/header.vue';
+import {LayoutPageVm} from '~/client/shared/layouts/layout-page/layout-page.vm';
 import {cnLayoutPage} from './layout-page.const';
 
 const route = useRoute();
-const layoutContentRef = ref<HTMLDivElement | null>(null);
-const scrollCache = ref(new Map<string, number>());
+const vm = useVm(LayoutPageVm);
+
 //TODO: убрать запоминание скрола если переход был сделан по клику на базовую ссылку ( в <Bar/> или на страницах карточек )
 watch(() => route.name, async (value) => {
-	if (!layoutContentRef.value) {
+	if (!vm.layoutContentRef) {
 		return;
 	}
 
-	const offset = scrollCache.value.get(String(value));
-	if (!offset)
+	const routerName = String(value);
+	const offset = vm.scrollCache.get(routerName);
+	if (!offset) {
+		vm.layoutContentRef!.scrollTo(0, 0);
 		return;
+	}
 
 	await nextTick();
 
-	layoutContentRef.value!.scrollTo({
+	vm.layoutContentRef!.scrollTo({
 		top: offset
 	});
 });
 
 function handleScroll() {
-	if (!layoutContentRef.value) {
+	const routeName = String(route.name);
+	if (!vm.layoutContentRef || vm.excludeRoutes.includes(routeName)) {
 		return;
 	}
 
-	scrollCache.value.set(String(route.name), layoutContentRef.value!.scrollTop);
+	vm.scrollCache.set(String(route.name), vm.layoutContentRef!.scrollTop);
 }
 </script>
 

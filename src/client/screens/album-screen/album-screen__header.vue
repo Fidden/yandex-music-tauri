@@ -44,7 +44,7 @@
       </p>
 
       <div :class="cnAlbumScreen('header-controls')">
-        <Button @click="globalEmitter.emit('tracks-table-play-shuffle')">
+        <Button @click="globalEmitter.emit('tracks-table:play-shuffle')">
           <Icon
               size="1.6em"
               name="ic:round-play-arrow"
