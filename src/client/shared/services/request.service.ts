@@ -72,12 +72,6 @@ export class RequestService {
 		// @ts-ignore
 		const res = await fetch<T>(this.buildUrl(url), this.buildOptions(options));
 
-		await new Promise(resolve => {
-			setTimeout(() => {
-				resolve(1);
-			}, 3000);
-		});
-
 		const unwrappedResult = this.unwrapResult(options.unwrapper, res.data);
 
 		// @ts-ignore
