@@ -13,40 +13,29 @@
 			/>
 		</div>
 
-		<select
-			v-model="vm.filter.order"
-			:class="cnTracksTable('filter-select')"
-		>
-			<option
-				:class="cnTracksTable('filter-select-option')"
-				:value="OrderValues.DEFAULT"
-			>
-				По стандарту
-			</option>
-			<option
-				:class="cnTracksTable('filter-select-option')"
-				:value="OrderValues.BY_NAME"
-			>
-				Название
-			</option>
-			<option
-				:class="cnTracksTable('filter-select-option')"
-				:value="OrderValues.BY_ARTIST"
-			>
-				Артист
-			</option>
-			<option
-				:class="cnTracksTable('filter-select-option')"
-				:value="OrderValues.BY_DURATION"
-			>
-				Длительность
-			</option>
-		</select>
+		<Listbox v-model="vm.filter.order">
+			<ListboxButton>
+				{{ vm.filterOrderValue }}
+			</ListboxButton>
+			<ListboxOptions>
+				<ListboxOption
+					v-for="item in vm.filterOptions"
+					:key="item.key"
+					:value="item.key"
+				>
+					{{ item.value }}
+				</ListboxOption>
+			</ListboxOptions>
+		</Listbox>
 	</div>
 </template>
 
 <script setup lang="ts">
-import {OrderValues, TracksTableVm} from '~/client/shared/components/tracks-table/tracks-table.vm';
+import Listbox from '~/client/shared/components/listbox/listbox.vue';
+import ListboxButton from '~/client/shared/components/listbox/listbox__button.vue';
+import ListboxOption from '~/client/shared/components/listbox/listbox__option.vue';
+import ListboxOptions from '~/client/shared/components/listbox/listbox__options.vue';
+import {TracksTableVm} from '~/client/shared/components/tracks-table/tracks-table.vm';
 import {cnTracksTable} from './tracks-table.const';
 
 const vm = useVm(TracksTableVm, true);

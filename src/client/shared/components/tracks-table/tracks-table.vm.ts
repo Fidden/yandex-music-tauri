@@ -21,9 +21,15 @@ interface IFilter {
 	order: OrderValues;
 }
 
+interface IFilterOption {
+	key: OrderValues,
+	value: string
+}
+
 export class TracksTableVm extends BaseVm implements IInitializable {
 	public tracks: TrackType[];
 	public filter: IFilter;
+	public filterOptions: IFilterOption[];
 
 	constructor() {
 		super();
@@ -32,13 +38,24 @@ export class TracksTableVm extends BaseVm implements IInitializable {
 			name: '',
 			order: OrderValues.DEFAULT
 		};
+		this.filterOptions = [
+			{key: OrderValues.DEFAULT, value: 'По стандарту'},
+			{key: OrderValues.BY_NAME, value: 'Название'},
+			{key: OrderValues.BY_ARTIST, value: 'Артист'},
+			{key: OrderValues.BY_DURATION, value: 'Длительность'}
+		];
 	}
 
 	public init(args: InitArgs) {
 		this.tracks = args.tracks;
 	}
 
-	public addToQueue(index: number) {
+	public addToQueue(index: number, trackId?: string | number) {
+		if (trackId === this.playerVm.track?.id) {
+			this.playerVm.toggle();
+			return;
+		}
+
 		const startSlice = this.filteredTracks.slice(index, this.filteredTracks.length);
 		const endSlice = this.filteredTracks.slice(0, index);
 
@@ -120,5 +137,9 @@ export class TracksTableVm extends BaseVm implements IInitializable {
 
 	private get playerVm() {
 		return useVm(PlayerVm, true);
+	}
+
+	public get filterOrderValue() {
+		return this.filterOptions.find(item => item.key === this.filter.order)?.value;
 	}
 }

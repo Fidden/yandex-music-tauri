@@ -14,6 +14,7 @@ import LayoutPage from '~/client/shared/layouts/layout-page/layout-page.vue';
 
 <style lang="scss">
 @import url("~/assets/css/reset.css");
+@import url("~/assets/css/fonts.css");
 @import 'vue-tauri-draggable/style.css';
 @import 'vue-loading-skeleton/dist/style.css';
 

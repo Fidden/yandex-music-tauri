@@ -1,5 +1,4 @@
 import {createResolver} from '@nuxt/kit';
-import {googleFonts} from './@configs/googleFonts';
 import {headlessui} from './@configs/headlessui';
 import {hooks} from './@configs/hooks';
 import {imports} from './@configs/imports';
@@ -28,10 +27,10 @@ export default defineNuxtConfig({
 	},
 	modules: [
 		'nuxt-icon',
-		'@nuxtjs/eslint-module',
 		'nuxt-swiper',
-		'@nuxtjs/google-fonts',
-		'nuxt-headlessui'
+		'nuxt-headlessui',
+		'@nuxtjs/eslint-module',
+		'@nuxtjs/fontaine'
 	],
 	ssr: false,
 	srcDir: 'src',
@@ -43,6 +42,8 @@ export default defineNuxtConfig({
 	hooks,
 	imports,
 	runtimeConfig,
-	googleFonts,
-	headlessui
+	headlessui,
+	fontMetrics: {
+		fonts: ['Roboto']
+	}
 });

@@ -6,7 +6,7 @@
 			:class="cnHeader('controls-button')"
 			@click="control.callback"
 		>
-			<Icon
+			<MatIcon
 				:size="control.size"
 				:name="control.icon"
 			/>
@@ -16,22 +16,23 @@
 
 <script lang="ts" setup>
 import {appWindow} from '@tauri-apps/api/window';
+import MatIcon from '~/client/shared/components/mat-icon.vue';
 import {cnHeader} from './header.const';
 
 const controls = [
 	{
-		icon: 'ic:baseline-minimize',
-		size: '1rem',
+		icon: 'minimize',
+		size: '16px',
 		callback: () => appWindow.minimize()
 	},
 	{
-		icon: 'ic:baseline-crop-square',
-		size: '1rem',
+		icon: 'check_box_outline_blank',
+		size: '16px',
 		callback: () => appWindow.toggleMaximize()
 	},
 	{
-		icon: 'ic:baseline-close',
-		size: '1.1rem',
+		icon: 'close',
+		size: '19px',
 		callback: () => appWindow.close()
 	}
 ];

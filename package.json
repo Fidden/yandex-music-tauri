@@ -30,6 +30,7 @@
     "@nuxt/devtools": "^0.7.1",
     "@nuxt/image": "1.0.0-rc.1",
     "@nuxtjs/eslint-module": "^4.1.0",
+    "@nuxtjs/fontaine": "^0.4.1",
     "@nuxtjs/google-fonts": "^3.0.2",
     "@tauri-apps/cli": "^1.4.0",
     "@types/crypto-js": "^4.1.1",

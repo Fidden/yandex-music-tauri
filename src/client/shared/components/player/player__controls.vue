@@ -1,9 +1,9 @@
 <template>
 	<div :class="cnPlayer('controls')">
 		<Button variant="text">
-			<Icon
-				size="1.4rem"
-				name="ic:round-favorite-border"
+			<MatIcon
+				name="favorite"
+				size="22px"
 			/>
 		</Button>
 		<div :class="cnPlayer('controls-container')">
@@ -12,9 +12,9 @@
 				variant="text"
 				@click="vm.prev()"
 			>
-				<Icon
-					size="1.8rem"
-					name="ic:round-skip-previous"
+				<MatIcon
+					name="skip_previous"
+					fill
 				/>
 			</Button>
 
@@ -24,10 +24,10 @@
 				@click="vm.toggle()"
 			>
 				<LoadingCircle v-if="vm.pending.get('track')"/>
-				<Icon
+				<MatIcon
 					v-else
-					:size="vm.playing ? '1.8rem' : '2rem'"
-					:name="vm.playing ? 'ic:round-pause' : 'ic:round-play-arrow'"
+					:name="vm.playing ? 'pause' : 'play_arrow'"
+					fill
 				/>
 			</Button>
 
@@ -36,16 +36,16 @@
 				variant="text"
 				@click="vm.next()"
 			>
-				<Icon
-					size="1.8rem"
-					name="ic:round-skip-next"
+				<MatIcon
+					name="skip_next"
+					fill
 				/>
 			</Button>
 
 			<Button variant="text">
-				<Icon
-					size="1.2rem"
-					name="ic:round-repeat"
+				<MatIcon
+					name="repeat"
+					size="20px"
 				/>
 			</Button>
 		</div>
@@ -55,6 +55,7 @@
 <script setup lang="ts">
 import Button from '~/client/shared/components/button/button.vue';
 import LoadingCircle from '~/client/shared/components/loading-circle.vue';
+import MatIcon from '~/client/shared/components/mat-icon.vue';
 import {PlayerVm} from '~/client/shared/components/player/player.vm';
 import {cnPlayer} from './player.const';
 

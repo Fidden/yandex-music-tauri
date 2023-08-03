@@ -1,11 +1,22 @@
 <template>
 	<main :class="cnAlbumsScreen()">
-		<ContentBlock title="Альбомы">
-			<AlbumCard
-				v-for="album in vm.albums"
-				:key="album"
-				:album="album"
-			/>
+		<ContentBlock
+			title="Альбомы"
+			:loading="vm.pending.get('init')"
+		>
+			<template #default>
+				<AlbumCard
+					v-for="album in vm.albums"
+					:key="album.id"
+					:album="album"
+				/>
+			</template>
+			<template #fallback>
+				<AlbumCardSkeleton
+					v-for="i in 10"
+					:key="i"
+				/>
+			</template>
 		</ContentBlock>
 	</main>
 </template>
@@ -15,6 +26,7 @@ import AlbumCard from '~/client/shared/components/album-card/album-card.vue';
 import ContentBlock from '~/client/shared/components/content-block/content-block.vue';
 import {cnAlbumsScreen} from './albums-screen.const';
 import {AlbumsScreenVm} from './albums-screen.vm';
+import AlbumCardSkeleton from '~/client/shared/components/album-card-skeleton/album-card-skeleton.vue';
 
 const vm = useVm(AlbumsScreenVm, true);
 </script>

@@ -3,6 +3,7 @@
  inspired by WayZer/pinia-class-store
  */
 import {defineStore, getActivePinia, Store} from 'pinia';
+import {onDeactivated, onUnmounted} from 'vue';
 
 interface ModuleExt {
 	_storeOptions?: {
@@ -98,6 +99,14 @@ export function useVm<T extends (new (...args: any) => any), G extends InstanceT
 		}
 
 		delete pinia.state.value[id];
+		store.$dispose();
+	});
+
+	onDeactivated(() => {
+		if (!pinia || !id || child) {
+			return;
+		}
+
 		store.$dispose();
 	});
 

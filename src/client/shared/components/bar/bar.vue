@@ -1,63 +1,39 @@
 <template>
 	<aside :class="cnBar()">
-		<NuxtLink
-			v-for="(item, index) in routes"
+		<button
+			v-for="(item, index) in vm.routes"
 			:key="index"
 			:class="cnBar('link', {
 				active: $route.name === item.to.name
 			})"
-			:to="item.to"
+			@click="() => {
+				layoutVm.scrollCache.delete(item.to.name);
+				router.push(item.to)
+			}"
 		>
-			<i :class="item.icon"/>
-		</NuxtLink>
+			<MatIcon :name="item.icon"/>
+		</button>
 		<div
-			:style="{top: lineTopPosition}"
+			:style="{top: vm.linePosition}"
 			:class="cnBar('line')"
 		/>
 	</aside>
 </template>
 
 <script lang="ts" setup>
-import {cnBar} from './bar.const';
 import {useRoute} from 'vue-router';
+import {BarVm} from '~/client/shared/components/bar/bar.vm';
+import MatIcon from '~/client/shared/components/mat-icon.vue';
+import {LayoutPageVm} from '~/client/shared/layouts/layout-page/layout-page.vm';
+import {cnBar} from './bar.const';
 
 const route = useRoute();
+const router = useRouter();
 
-const routes = [
-	{
-		to: {name: 'index'},
-		icon: 'fas fa-home-alt'
-	},
-	{
-		to: {name: 'stations'},
-		icon: 'fal fa-broadcast-tower'
-	},
-	{
-		to: {name: 'tracks'},
-		icon: 'fal fa-music'
-	},
-	{
-		to: {name: 'artists'},
-		icon: 'fal fa-user-music'
-	},
-	{
-		to: {name: 'albums'},
-		icon: 'fal fa-album'
-	},
-	{
-		to: {name: 'playlists'},
-		icon: 'fal fa-list-music'
-	}
-];
+const vm = useVm(BarVm);
+const layoutVm = useVm(LayoutPageVm, true);
 
-const lineTopPosition = computed(() => {
-	const routeId: number = routes.findIndex(item => item.to.name === String(route.name));
-	if (routeId < 0) {
-		return '25px';
-	}
-
-	return `${routeId * 50 + 25}px`;
-});
+watch(() => route.name, () => vm.updateCurrenRoute(route), {immediate: true});
 </script>
 
 <style lang="scss">
@@ -103,12 +79,34 @@ const lineTopPosition = computed(() => {
 			background: var(--primary-transperent);
 			border-radius: 4px;
 			color: var(--primary);
+
+			.mat-icon {
+				font-variation-settings: 'FILL' 1,
+				'wght' 300,
+				'GRAD' 200,
+				'opsz' 48 !important;
+				color: var(--primary);
+			}
 		}
 
 		&:hover {
 			transition: 0.2s;
-			color: var(--primary);
+
+			.mat-icon {
+				font-variation-settings: 'FILL' 0,
+				'wght' 200,
+				'GRAD' 200,
+				'opsz' 48;
+			}
 		}
+	}
+
+	.mat-icon {
+		font-variation-settings: 'FILL' 0,
+		'wght' 100,
+		'GRAD' 200,
+		'opsz' 36;
+		transition: 200ms;
 	}
 }
 </style>
