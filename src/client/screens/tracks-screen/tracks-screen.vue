@@ -7,7 +7,6 @@
 		>
 			<template #default>
 				<TracksTable
-					:key="vm.tracksLists.toString()"
 					:tracks="vm.tracksLists"
 				/>
 			</template>

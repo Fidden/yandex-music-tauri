@@ -101,6 +101,14 @@ export function useVm<T extends (new (...args: any) => any), G extends InstanceT
 		store.$dispose();
 	});
 
+	onDeactivated(() => {
+		if (!pinia || !id || child) {
+			return;
+		}
+
+		store.$dispose();
+	});
+
 	Object.setPrototypeOf(store, Module.prototype);
 	return store as G;
 }
