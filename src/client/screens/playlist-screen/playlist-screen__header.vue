@@ -84,6 +84,7 @@ const vm = useVm(PlaylistScreenVm, true);
 	display: flex;
 	flex-direction: row;
 	gap: 20px;
+  height: 160px;
 
 	&-image {
 		border-radius: 6px;

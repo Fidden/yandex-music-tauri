@@ -2,20 +2,28 @@ import {UserModel} from '~/client/shared/models/user.model';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
 import type {IPlaylist, ITrack} from '~/client/shared/types/api';
 import {IInitializable} from '~/client/shared/types/initializable';
+import {injectable} from 'tsyringe';
+import {PendingService} from '#imports';
 
 interface InitArgs {
 	kind: number;
 	uid: number;
 }
 
+type PendingKeys = 'init';
+
+@injectable()
 export class PlaylistScreenVm extends BaseVm implements IInitializable {
 	private playlist?: IPlaylist;
 
-	constructor() {
+	constructor(
+		@injectDep(PendingService) public readonly pending: PendingService<PendingKeys>
+	) {
 		super();
 		this.playlist = undefined;
 	}
 
+	@pending<PendingKeys>('init')
 	public async init(args: InitArgs) {
 		this.playlist = await UserModel.playlist.one(args.kind, args.uid);
 	}

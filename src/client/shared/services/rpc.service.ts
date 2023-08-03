@@ -30,8 +30,8 @@ export class RpcService {
 
 
 		this.client.setActivity({
-			details: `Слушает: ${activity.track.title}`,
-			state: activity.track.artists,
+			details: `Слушает: ${activity.track?.title}`,
+			state: activity.track?.artists.toString(),
 			largeImageKey: activity.track?.ogImage,
 			smallImageKey: 'yandex-rpc'
 		});

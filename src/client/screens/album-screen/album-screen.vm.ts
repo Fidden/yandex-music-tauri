@@ -2,22 +2,29 @@ import {UserModel} from '~/client/shared/models/user.model';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
 import {AlbumTypeEnum, IAlbum} from '~/client/shared/types/api';
 import {IInitializable} from '~/client/shared/types/initializable';
+import {injectable} from 'tsyringe';
+import {PendingService} from '#imports';
 
 interface InitArgs {
 	id: number;
 }
 
+type PendingKeys = 'init';
+
+@injectable()
 export class AlbumScreenVm extends BaseVm implements IInitializable {
 	public album?: IAlbum;
 
-	constructor() {
+	constructor(
+		@injectDep(PendingService) public readonly pending: PendingService<PendingKeys>
+	) {
 		super();
 		this.album = undefined;
 	}
 
+	@pending<PendingKeys>('init')
 	public async init(args: InitArgs) {
 		this.album = await UserModel.album.withTracks(args.id);
-		console.log(this.album);
 	}
 
 	public get tracks() {
