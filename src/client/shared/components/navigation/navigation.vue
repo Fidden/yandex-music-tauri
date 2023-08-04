@@ -42,8 +42,9 @@ import {cnNavigation} from './navigation.const';
 		justify-content: center;
 		background: #161b23;
 		color: white;
-		aspect-ratio: 1/1;
 		transition: 200ms;
+		width: 36px;
+		height: 36px;
 
 		&:hover path {
 			transition: 200ms;
