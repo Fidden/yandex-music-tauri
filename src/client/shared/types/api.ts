@@ -1272,7 +1272,7 @@ export interface ISearchPodcasts {
 
 	'order': number;
 
-	'results': Array<object>;
+	'results': Array<IAlbum>;
 }
 
 export interface ISearchPodcastsAllOf {
