@@ -1,7 +1,7 @@
 <template>
 	<TracksTableFilter v-if="!hideFilter"/>
 	<RecycleScroller
-		page-mode
+		:page-mode="pageMode"
 		:item-size="50"
 		:items="vm.filteredTracks"
 		key-field="id"
@@ -148,13 +148,16 @@ import {AlbumTypeEnum} from '~/client/shared/types/api';
 import {cnTracksTable} from './tracks-table.const';
 import TracksTableFilter from './tracks-table__filter.vue';
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
 	tracks: TrackType[];
 	hideImages?: boolean;
 	hideFilter?: boolean;
 	trackCount?: number;
 	type?: AlbumTypeEnum;
-}>();
+	pageMode?: boolean;
+}>(), {
+	pageMode: true
+});
 
 const vm = useVm(TracksTableVm);
 const playerVm = useVm(PlayerVm, true);
