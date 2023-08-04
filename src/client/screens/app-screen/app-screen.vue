@@ -26,6 +26,11 @@ import LayoutPage from '~/client/shared/layouts/layout-page/layout-page.vue';
 * {
 	color: white;
 	font-family: 'Rubik', sans-serif;
+
+	&::selection {
+		background: var(--primary);
+		color: black;
+	}
 }
 
 body {

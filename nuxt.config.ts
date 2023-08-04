@@ -18,6 +18,13 @@ export default defineNuxtConfig({
 			],
 			link: [
 				{
+					href: '/fonts/Material-Symbols.woff2',
+					as: 'font',
+					rel: 'preload',
+					crossorigin: 'anonymous',
+					type: 'font/woff'
+				},
+				{
 					href: 'https://pro.fontawesome.com/releases/v5.12.0/css/all.css',
 					rel: 'stylesheet',
 					crossorigin: 'anonymous'
@@ -38,12 +45,13 @@ export default defineNuxtConfig({
 		host: 'localhost',
 		port: 1420
 	},
+	spaLoadingTemplate: './loading-template.html',
 	vue,
 	hooks,
 	imports,
 	runtimeConfig,
 	headlessui,
 	fontMetrics: {
-		fonts: ['Roboto']
+		fonts: ['Rubik']
 	}
 });
