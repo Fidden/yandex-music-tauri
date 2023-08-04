@@ -27,6 +27,7 @@
 		>
 			<TracksTable
 				hide-filter
+				:page-mode="false"
 				:tracks="vm.briefInfo.popularTracks"
 			/>
 		</ContentBlock>
