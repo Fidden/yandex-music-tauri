@@ -1,5 +1,8 @@
 <template>
-	<div :class="cnHeader('controls')">
+	<div
+		v-draggable:disable
+		:class="cnHeader('controls')"
+	>
 		<button
 			v-for="control in controls"
 			:key="control.icon"
