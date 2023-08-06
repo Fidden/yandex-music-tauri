@@ -2,12 +2,18 @@ import {BaseModel} from '~/client/shared/types/abstract/base.model';
 import {IAlbum, IAlbumShort} from '~/client/shared/types/api';
 
 export class AlbumModel extends BaseModel {
+	public static userId: number = -1;
+
 	constructor() {
 		super();
 	}
 
+	public static setup(userId: number) {
+		this.userId = userId;
+	}
+
 	public static async liked() {
-		return super.request.get<IAlbumShort[]>('/users/${userStore.userId}/likes/albums');
+		return super.request.get<IAlbumShort[]>(`/users/${this.userId}/likes/albums`);
 	}
 
 	public static async albums(ids: number[]) {

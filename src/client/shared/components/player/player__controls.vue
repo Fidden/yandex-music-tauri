@@ -8,6 +8,20 @@
 		</Button>
 		<div :class="cnPlayer('controls-container')">
 			<Button
+				v-if="vm.isStation"
+				variant="text"
+				:class="cnPlayer('controls-settings', {
+					active: vm.isSettingsOpen
+				})"
+				@click="vm.settingsToggle()"
+			>
+				<MatIcon
+					size="1.5em"
+					name="tune"
+				/>
+			</Button>
+
+			<Button
 				:disabled="!vm.canPrev"
 				variant="text"
 				@click="vm.prev()"
@@ -34,7 +48,7 @@
 			<Button
 				:disabled="!vm.canNext"
 				variant="text"
-				@click="vm.next()"
+				@click="vm.next(true)"
 			>
 				<MatIcon
 					name="skip_next"
@@ -42,9 +56,13 @@
 				/>
 			</Button>
 
-			<Button variant="text">
+			<Button
+				variant="text"
+				:class="cnPlayer('controls-repeat', {active: vm.repeat !== RepeatEnum.NONE})"
+				@click="vm.onRepeat()"
+			>
 				<MatIcon
-					name="repeat"
+					:name="vm.repeat === RepeatEnum.ONCE ? 'repeat_one': 'repeat'"
 					size="20px"
 				/>
 			</Button>
@@ -56,7 +74,7 @@
 import Button from '~/client/shared/components/button/button.vue';
 import LoadingCircle from '~/client/shared/components/loading-circle.vue';
 import MatIcon from '~/client/shared/components/mat-icon.vue';
-import {PlayerVm} from '~/client/shared/components/player/player.vm';
+import {PlayerVm, RepeatEnum} from '~/client/shared/components/player/player.vm';
 import {cnPlayer} from './player.const';
 
 const vm = useVm(PlayerVm, true);
@@ -88,6 +106,10 @@ const vm = useVm(PlayerVm, true);
 		svg {
 			flex-shrink: 0;
 		}
+	}
+
+	&-repeat--active, &-settings--active {
+		color: var(--primary)
 	}
 }
 </style>

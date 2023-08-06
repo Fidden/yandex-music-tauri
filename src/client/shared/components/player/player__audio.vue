@@ -10,7 +10,6 @@
 </template>
 
 <script setup lang="ts">
-import {watch} from '#imports';
 import {watchOnce} from '@vueuse/core';
 import {PlayerVm} from '~/client/shared/components/player/player.vm';
 

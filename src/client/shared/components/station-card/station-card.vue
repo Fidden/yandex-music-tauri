@@ -1,5 +1,8 @@
 <template>
-	<article :class="cnStationCard(null, [size])">
+	<article
+		:class="cnStationCard(null, [size])"
+		@click="playerVm.playStation(station)"
+	>
 		<div
 			:class="cnStationCard('image')"
 			:style="{background: station.icon.backgroundColor}"
@@ -18,6 +21,7 @@
 
 <script setup lang="ts">
 import Image from '~/client/shared/components/image.vue';
+import {PlayerVm} from '~/client/shared/components/player/player.vm';
 import {IStation} from '~/client/shared/types/api';
 import {cnStationCard} from './station-card.const';
 
@@ -25,6 +29,8 @@ defineProps<{
 	station: IStation;
 	size?: 'sm';
 }>();
+
+const playerVm = useVm(PlayerVm, true);
 </script>
 
 <style lang="scss">

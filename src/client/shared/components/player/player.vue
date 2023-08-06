@@ -1,10 +1,11 @@
 <template>
-  <PlayerAudio/>
+	<PlayerAudio/>
 	<Transition>
 		<div
 			v-if="vm.track"
 			:class="cnPlayer()"
 		>
+			<PlayerSettings/>
 			<PlayerSeek/>
 			<PlayerBody>
 				<PlayerTrack/>
@@ -16,12 +17,15 @@
 </template>
 
 <script setup lang="ts">
+import {watch} from '#imports';
+import {UserModel} from '~/client/shared/models/user.model';
 import {cnPlayer} from './player.const';
 import {PlayerVm} from './player.vm';
 import PlayerAudio from './player__audio.vue';
 import PlayerBody from './player__body.vue';
 import PlayerControls from './player__controls.vue';
 import PlayerSeek from './player__seek.vue';
+import PlayerSettings from './player__settings.vue';
 import PlayerTrack from './player__track.vue';
 import PlayerVolume from './player__volume.vue';
 
@@ -34,6 +38,15 @@ navigator.mediaSession.setActionHandler('previoustrack', () => {
 navigator.mediaSession.setActionHandler('nexttrack', () => {
 	vm.next();
 });
+
+watch(() => vm.currentStationResult?.settings2, async value => {
+	if (!vm.playedQueue) {
+		return;
+	}
+
+	await UserModel.rotor.station.settings2(vm.currentStation!, value!.diversity, value!.language, value!.moodEnergy);
+	await vm.stationLoadNextChunk(false, true);
+}, {deep: true});
 </script>
 
 <style lang="scss">

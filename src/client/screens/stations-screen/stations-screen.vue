@@ -1,4 +1,5 @@
 <template>
+	<Navigation/>
 	<main :class="cnStationsScreen()">
 		<ContentBlock
 			:class="cnStationsScreen('dashboard')"
@@ -42,6 +43,7 @@
 import {cnStationsScreen} from '~/client/screens/stations-screen/stations-screen.const';
 import {StationsScreenVm} from '~/client/screens/stations-screen/stations-screen.vm';
 import ContentBlock from '~/client/shared/components/content-block/content-block.vue';
+import Navigation from '~/client/shared/components/navigation/navigation.vue';
 import StationCard from '~/client/shared/components/station-card/station-card.vue';
 
 const vm = useVm(StationsScreenVm, true);
