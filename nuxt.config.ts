@@ -45,7 +45,6 @@ export default defineNuxtConfig({
 		host: 'localhost',
 		port: 1420
 	},
-	spaLoadingTemplate: './loading-template.html',
 	vue,
 	hooks,
 	imports,

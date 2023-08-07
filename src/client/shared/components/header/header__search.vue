@@ -1,19 +1,23 @@
-<script lang="ts" setup>
-import {cnHeader} from './header.const';
-</script>
-
 <template>
 	<div
 		v-draggable:disable
 		:class="cnHeader('search')"
 	>
 		<input
+			v-model="vm.search"
 			:class="cnHeader('search-input')"
 			placeholder="Поиск"
 			type="text"
 		>
 	</div>
 </template>
+
+<script lang="ts" setup>
+import {HeaderVm} from '~/client/shared/components/header/header.vm';
+import {cnHeader} from './header.const';
+
+const vm = useVm(HeaderVm, true);
+</script>
 
 <style lang="scss">
 .header__search {

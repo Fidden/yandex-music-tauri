@@ -11,11 +11,25 @@
 </template>
 
 <script lang="ts" setup>
+import {HeaderVm} from '~/client/shared/components/header/header.vm';
 import {cnHeader} from './header.const';
 import HeaderControls from './header__controls.vue';
 import HeaderLogo from './header__logo.vue';
 import HeaderNodrag from './header__nodrag.vue';
 import HeaderSearch from './header__search.vue';
+
+const router = useRouter();
+const route = useRoute();
+
+const vm = useVm(HeaderVm, true);
+vm.init(route.query?.text as string);
+
+watch(() => vm.search, value => {
+	router.push({
+		name: 'search',
+		query: {text: value}
+	});
+});
 </script>
 
 <style lang="scss">

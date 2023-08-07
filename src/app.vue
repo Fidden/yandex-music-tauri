@@ -8,7 +8,8 @@
 					'artists',
 					'playlists',
 					'stations',
-					'tracks'
+					'tracks',
+					'search'
 				]"
 			>
 				<Component :is="Component"/>
