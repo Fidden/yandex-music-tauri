@@ -1,15 +1,12 @@
+import {UserModel} from '~/client/shared/models/user.model';
 import {BaseModel} from '~/client/shared/types/abstract/base.model';
 import {IAlbum, IAlbumShort} from '~/client/shared/types/api';
 
 export class AlbumModel extends BaseModel {
-	public static userId: number = -1;
+	public static userId?: number = undefined;
 
-	constructor() {
-		super();
-	}
-
-	public static setup(userId: number) {
-		this.userId = userId;
+	public static setup() {
+		this.userId = UserModel.status?.account?.uid;
 	}
 
 	public static async liked() {

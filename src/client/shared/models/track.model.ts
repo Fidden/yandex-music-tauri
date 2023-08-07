@@ -1,9 +1,60 @@
 import md5 from 'crypto-js/md5';
 import {PlaylistModel} from '~/client/shared/models/playlist.model';
+import {UserModel} from '~/client/shared/models/user.model';
 import {BaseModel} from '~/client/shared/types/abstract/base.model';
-import {IStorageLocation, ITrack, ITrackDownloadInfo} from '~/client/shared/types/api';
+import {
+	IStorageLocation,
+	ITrack,
+	ITrackDownloadInfo,
+	ITrackShort,
+	TrackLikeActionEnum
+} from '~/client/shared/types/api';
 
 export class TrackModel extends BaseModel {
+	private static liked: ITrackShort[] = [];
+	private static userId?: number = undefined;
+
+	public static async setup() {
+		this.userId = UserModel.status?.account?.uid;
+		this.liked = await this.likes();
+	}
+
+	public static async addLike(trackId: string | number) {
+		await this.likeAction(TrackLikeActionEnum.ADD_MULTIPLE, trackId);
+		this.liked.push({
+			id: trackId,
+			albumId: '',
+			timestamp: ''
+		});
+	}
+
+	public static async removeLike(trackId: string | number) {
+		await this.likeAction(TrackLikeActionEnum.REMOVE, trackId);
+
+		const trackIndex = this.liked.findIndex(item => item.id === trackId);
+		if (trackIndex !== -1) {
+			this.liked.splice(trackIndex, 1);
+		}
+	}
+
+	private static likeAction(action: TrackLikeActionEnum, trackId: string | number) {
+		return super.request.post<'ok' | { revision: number }>(`/users/${this.userId}/likes/tracks/${action}`, {
+			query: {
+				trackIds: trackId
+			},
+			headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+		});
+	}
+
+	public static likes() {
+		return super.request.get<ITrackShort[]>(`/users/${this.userId}/likes/tracks`, {
+			unwrapper: 'result.library.tracks'
+		});
+	}
+
+	public static isLiked(trackId: string | number) {
+		return this.liked.findIndex(item => item.id === trackId) !== -1;
+	}
 
 	public static async byIds(ids: number[]) {
 		const formData = new FormData();

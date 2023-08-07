@@ -8,14 +8,6 @@ export class AppScreenVm extends BaseVm implements IInitializable {
 	}
 
 	public async init() {
-		const [accountStatus] = await Promise.all([
-			UserModel.account.status()
-		]);
-
-		const userId = accountStatus.account.uid;
-
-		this.userStore.setStatus(accountStatus);
-		UserModel.playlist.setup(userId);
-		UserModel.album.setup(userId);
+		await UserModel.init();
 	}
 }
