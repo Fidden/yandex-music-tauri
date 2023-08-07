@@ -1,5 +1,6 @@
 import {PendingService} from '#imports';
 import {injectable} from 'tsyringe';
+import {globalEmitter} from '~/client/shared/emitters/global.emitter';
 import {UserModel} from '~/client/shared/models/user.model';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
 import type {IPlaylist, ITrack} from '~/client/shared/types/api';
@@ -14,7 +15,7 @@ type PendingKeys = 'init';
 
 @injectable()
 export class PlaylistScreenVm extends BaseVm implements IInitializable {
-	private playlist?: IPlaylist;
+	public playlist?: IPlaylist;
 
 	constructor(
 		@injectDep(PendingService) public readonly pending: PendingService<PendingKeys>
@@ -37,11 +38,11 @@ export class PlaylistScreenVm extends BaseVm implements IInitializable {
 			return;
 		}
 
-		useToastStore().add('Ссылка скопирована');
+		globalEmitter.emit('toast:add', 'Ссылка скопирована');
 		navigator.clipboard.writeText(`https://music.yandex.ru/users/${this.playlist.owner.name}/playlists/${this.playlist.kind}`);
 	}
 
 	public shuffle() {
-		this.globalEmitter.emit('tracks-table:play-shuffle');
+		globalEmitter.emit('tracks-table:play-shuffle');
 	}
 }

@@ -14,13 +14,13 @@
 				Плейлист
 			</p>
 			<p :class="cnPlaylistScreen('header-title')">
-				{{ vm.playlist.title }}
+				{{ vm.playlist!.title }}
 			</p>
 
 			<div :class="cnPlaylistScreen('header-additional')">
-				<p><span>Составитель:</span> {{ vm.playlist.owner.name }}</p>
-				<p>{{ tracksCountHuman(vm.playlist.trackCount) }}</p>
-				<p>{{ convertDuration(vm.playlist.durationMs, true) }}</p>
+				<p><span>Составитель:</span> {{ vm.playlist!.owner.name }}</p>
+				<p>{{ tracksCountHuman(vm.playlist!.trackCount) }}</p>
+				<p>{{ convertDuration(vm.playlist!.durationMs, true) }}</p>
 			</div>
 
 			<p
@@ -53,7 +53,7 @@
 						/>
 					</MenuButton>
 					<MenuItems>
-						<MenuItem @click="globalEmitter.emit('tracks-table-play-shuffle')">
+						<MenuItem @click="vm.shuffle()">
 							Перемешать
 						</MenuItem>
 						<MenuItem @click="vm.copyLink()">
@@ -71,16 +71,15 @@ import {PlaylistScreenVm} from '~/client/screens/playlist-screen/playlist-screen
 import Button from '~/client/shared/components/button/button.vue';
 import Image from '~/client/shared/components/image.vue';
 import MatIcon from '~/client/shared/components/mat-icon.vue';
+import Menu from '~/client/shared/components/menu/menu.vue';
+import MenuButton from '~/client/shared/components/menu/menu__button.vue';
+import MenuItem from '~/client/shared/components/menu/menu__item.vue';
+import MenuItems from '~/client/shared/components/menu/menu__items.vue';
 import {PlayerVm} from '~/client/shared/components/player/player.vm';
 import {tracksCountHuman} from '~/client/shared/helpers/tracks-count-human';
 import {cnPlaylistScreen} from './playlist-screen.const';
-import Menu from '~/client/shared/components/menu/menu.vue';
-import MenuButton from '~/client/shared/components/menu/menu__button.vue';
-import MenuItems from '~/client/shared/components/menu/menu__items.vue';
-import MenuItem from '~/client/shared/components/menu/menu__item.vue';
 
 const vm = useVm(PlaylistScreenVm, true);
-const playerVm = useVm(PlayerVm, true);
 </script>
 
 <style lang="scss">
