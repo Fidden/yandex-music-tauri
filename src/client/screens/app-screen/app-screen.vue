@@ -2,11 +2,13 @@
 	<LayoutPage>
 		<slot/>
 		<Player/>
+		<Toasts/>
 	</LayoutPage>
 </template>
 
 <script lang="ts" setup>
 import Player from '~/client/shared/components/player/player.vue';
+import Toasts from '~/client/shared/components/toasts/toasts.vue';
 import LayoutPage from '~/client/shared/layouts/layout-page/layout-page.vue';
 </script>
 

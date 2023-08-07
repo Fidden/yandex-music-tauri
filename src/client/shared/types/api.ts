@@ -1079,19 +1079,19 @@ export interface IRestrictionEnum {
 
 	'name': string;
 
-	'possibleValues': IRestrictionEnumPossibleValues;
+	'possibleValues': IRestrictionPossibleValues;
 }
 
-export interface IRestrictionEnum2 {
+export interface IRestriction2 {
 
 	'type': string;
 
 	'name': string;
 
-	'possibleValues': IRestrictionEnum2PossibleValues;
+	'possibleValues': IRestriction2PossibleValues;
 }
 
-export interface IRestrictionEnum2PossibleValues {
+export interface IRestriction2PossibleValues {
 
 	'name': string;
 
@@ -1102,7 +1102,7 @@ export interface IRestrictionEnum2PossibleValues {
 	'serializedSeed': string;
 }
 
-export interface IRestrictionEnumPossibleValues {
+export interface IRestrictionPossibleValues {
 
 	'name': string;
 
@@ -1122,11 +1122,11 @@ export interface IRestrictions {
 
 export interface IRestrictions2 {
 
-	'diversity'?: IRestrictionEnum2;
+	'diversity'?: IRestriction2;
 
-	'moodEnergy'?: IRestrictionEnum2;
+	'moodEnergy'?: IRestriction2;
 
-	'language'?: IRestrictionEnum2;
+	'language'?: IRestriction2;
 }
 
 export interface IRotorData {
@@ -1347,7 +1347,7 @@ export interface ISendStationFeedbackRequest {
 
 	'trackId'?: string;
 
-	'totalPlayedSeconds'?: number;
+	'totalPlayedSeconds'?: string;
 }
 
 export enum SendStationFeedbackRequestTypeEnum {
@@ -1413,7 +1413,7 @@ export interface IStation {
 
 	'mtsFullImageUrl'?: string;
 
-	'idForFrom'?: string;
+	'idForFrom': string;
 
 	'restrictions'?: IRestrictions;
 

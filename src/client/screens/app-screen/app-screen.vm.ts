@@ -16,5 +16,6 @@ export class AppScreenVm extends BaseVm implements IInitializable {
 
 		this.userStore.setStatus(accountStatus);
 		UserModel.playlist.setup(userId);
+		UserModel.album.setup(userId);
 	}
 }

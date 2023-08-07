@@ -3,7 +3,27 @@ import {cropImage} from '~/client/shared/helpers/crop-image';
 import {UserModel} from '~/client/shared/models/user.model';
 import {PendingService} from '~/client/shared/services/pending.service';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
-import {IPopularTrack, ITrack} from '~/client/shared/types/api';
+import {
+	IPopularTrack,
+	IRotorSettings2,
+	IStation,
+	IStationResult,
+	ITrack,
+	SendStationFeedbackRequestTypeEnum
+} from '~/client/shared/types/api';
+
+export interface ICurrentStation {
+	tag: string;
+	type: string;
+	idForFrom: string;
+	batchId?: string;
+}
+
+export enum RepeatEnum {
+	NONE,
+	ONCE,
+	ALWAYS
+}
 
 type PendingKeys = 'track';
 
@@ -18,6 +38,12 @@ export class PlayerVm extends BaseVm {
 	public queue: Array<ITrack | IPopularTrack>;
 	public playedQueue: Array<ITrack | IPopularTrack>;
 	public playing: boolean;
+	public isStation: boolean;
+	public currentStation?: ICurrentStation;
+	public currentStationResult?: IStationResult;
+	private cachedTrackId?: number | string;
+	private repeat: RepeatEnum;
+	public isSettingsOpen: boolean;
 
 	constructor(
 		@injectDep(PendingService) public readonly pending: PendingService<PendingKeys>
@@ -32,6 +58,12 @@ export class PlayerVm extends BaseVm {
 		this.queue = [];
 		this.playedQueue = [];
 		this.playing = true;
+		this.isStation = false;
+		this.currentStation = undefined;
+		this.currentStationResult = undefined;
+		this.cachedTrackId = undefined;
+		this.repeat = RepeatEnum.NONE;
+		this.isSettingsOpen = false;
 	}
 
 	public setupAudioVolume() {
@@ -41,7 +73,7 @@ export class PlayerVm extends BaseVm {
 
 	@pending<PendingKeys>('track')
 	public async onTrackChange(trackId?: number) {
-		if (!this.audioRef || !trackId) {
+		if (!this.audioRef || !trackId || trackId === this.cachedTrackId) {
 			return;
 		}
 
@@ -52,9 +84,10 @@ export class PlayerVm extends BaseVm {
 		}
 
 		this.audioRef.currentTime = 0;
-		this.audioRef.pause();
+		this.pause();
 		this.audioRef.src = trackLink;
-		this.playing = true;
+		this.cachedTrackId = trackId;
+		this.play();
 
 		this.setMetaData();
 	}
@@ -99,9 +132,10 @@ export class PlayerVm extends BaseVm {
 		this.duration = this.audioRef!.duration;
 	}
 
-	public onTrackEnd() {
+	@pending<PendingKeys>('track')
+	public async onTrackEnd() {
 		if (this.time >= this.duration) {
-			this.next();
+			await this.next();
 		}
 	}
 
@@ -163,17 +197,37 @@ export class PlayerVm extends BaseVm {
 		this.queue = [];
 	}
 
-	public appendQueue(track: ITrack) {
-		this.queue.push(track);
+	public clearPlayedQueue() {
+		this.playedQueue = [];
 	}
 
-	public next() {
+	public appendQueue(track: ITrack | ITrack[]) {
+		if (Array.isArray(track)) {
+			this.queue = [...this.queue, ...track];
+		} else {
+			this.queue.push(track);
+		}
+	}
+
+	public async next(skip?: boolean) {
+		if (this.repeat !== RepeatEnum.NONE) {
+			this.audioRef!.currentTime = 0;
+			this.play();
+
+			if (this.repeat === RepeatEnum.ONCE) {
+				this.repeat = RepeatEnum.NONE;
+			}
+
+			return;
+		}
+
 		if (!this.canNext) {
 			return;
 		}
 
-		const playedTrack = this.queue.shift() as ITrack | IPopularTrack;
-		this.playedQueue.push(playedTrack);
+		this.isStation ?
+			await this.stationLoadNextChunk(skip) :
+			this.moveToPlayed();
 	}
 
 	public prev() {
@@ -183,6 +237,66 @@ export class PlayerVm extends BaseVm {
 
 		const playedTrack = this.playedQueue.pop() as ITrack | IPopularTrack;
 		this.queue.unshift(playedTrack);
+	}
+
+	public moveToPlayed() {
+		const playedTrack = this.queue.shift();
+		if (!playedTrack) {
+			return undefined;
+		}
+
+		this.playedQueue.push(playedTrack);
+		return playedTrack;
+	}
+
+	public async stationLoadNextChunk(skip: boolean = false, settingsChanged: boolean = false) {
+		if (!this.currentStation) {
+			return;
+		}
+
+		if (this.queue.length > 2 && !settingsChanged) {
+			this.moveToPlayed();
+			return;
+		}
+
+		if (!settingsChanged) {
+			await UserModel.rotor.station.feedback({
+				type: skip ? SendStationFeedbackRequestTypeEnum.SKIP : SendStationFeedbackRequestTypeEnum.TRACK_FINISHED,
+				currentStation: this.currentStation,
+				totalPlayedSeconds: this.time,
+				trackId: this.track?.id,
+				albumId: this.track?.albums?.at(0)?.id
+			});
+
+			this.moveToPlayed();
+		}
+
+		// get last six items from played queue to move tracks pointer
+		const lastPlayedQueue = this.playedQueue.slice(0, 6).map(item => item.id).toString();
+
+		/**
+		 * if we change stations.settings2 we need to append current track to played queue otherwise we use just last six items
+		 * Note: this made for prevent playing track from queue with old settings
+		 */
+		const trackIdBefore = settingsChanged ?
+			`${this.track?.id}` + lastPlayedQueue
+			: lastPlayedQueue;
+
+		const newTracks = await UserModel.rotor.station.tracks({
+			trackIdBefore,
+			currentStation: this.currentStation
+		});
+
+		if (settingsChanged) {
+			this.clearQueue();
+		}
+
+		this.appendQueue(newTracks.sequence.map(item => item.track));
+
+		UserModel.rotor.station.feedback({
+			type: SendStationFeedbackRequestTypeEnum.RADIO_STARTED,
+			currentStation: this.currentStation
+		});
 	}
 
 	public get track() {
@@ -195,5 +309,79 @@ export class PlayerVm extends BaseVm {
 
 	public get canNext() {
 		return this.queue.length - 1;
+	}
+
+	public async playStation(station: IStation) {
+		this.clearPlayedQueue();
+		this.clearQueue();
+
+		this.isStation = true;
+		this.currentStation = {
+			tag: station.id.tag,
+			type: station.id.type,
+			idForFrom: station.idForFrom
+		};
+
+		this.currentStationResult = await UserModel.rotor.station.info(this.currentStation);
+
+		const tracks = await UserModel.rotor.station.tracks({
+			trackIdBefore: this.playedQueue.at(this.playedQueue.length - 1)?.id,
+			currentStation: this.currentStation
+		});
+
+		this.currentStation.batchId = tracks.batchId;
+
+		this.setQueue(tracks.sequence.map(item => item.track));
+
+		UserModel.rotor.station.feedback({
+			type: SendStationFeedbackRequestTypeEnum.RADIO_STARTED,
+			currentStation: this.currentStation
+		});
+	}
+
+	public onRepeat() {
+		switch (this.repeat) {
+			case RepeatEnum.NONE: {
+				this.repeat = RepeatEnum.ALWAYS;
+				break;
+			}
+			case RepeatEnum.ALWAYS: {
+				this.repeat = RepeatEnum.ONCE;
+				break;
+			}
+			case RepeatEnum.ONCE: {
+				this.repeat = RepeatEnum.NONE;
+			}
+		}
+	}
+
+	public onSettingChange(key: keyof IRotorSettings2, value: string) {
+		if (!this.currentStationResult?.settings2) {
+			return;
+		}
+
+		if (this.currentStationResult.settings2[key] === value) {
+			switch (key) {
+				case 'diversity': {
+					this.currentStationResult.settings2[key] = 'default';
+					break;
+				}
+				case 'moodEnergy': {
+					this.currentStationResult.settings2[key] = 'all';
+					break;
+				}
+				case 'language': {
+					this.currentStationResult.settings2[key] = 'any';
+					break;
+				}
+			}
+			return;
+		}
+
+		this.currentStationResult.settings2[key] = value;
+	}
+
+	public settingsToggle() {
+		this.isSettingsOpen = !this.isSettingsOpen;
 	}
 }

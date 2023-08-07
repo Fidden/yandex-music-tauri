@@ -1,4 +1,4 @@
-import {Body, fetch, Part, Response, ResponseType} from '@tauri-apps/api/http';
+import {Body, fetch, Response, ResponseType} from '@tauri-apps/api/http';
 
 type RequestMethods = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD' | 'OPTIONS' | 'CONNECT' | 'TRACE';
 
@@ -27,21 +27,13 @@ class RequestError<T = any> extends Error {
 	}
 }
 
-interface RequestCache {
-	query?: RequestOptions['query'];
-	body?: RequestOptions['body'];
-	response: Response<unknown>;
-}
-
 export class RequestService {
 	private baseUrl?: string;
 	private headers?: Record<string, string>;
-	private cache: Record<string, RequestCache>;
 
 	constructor() {
 		this.baseUrl = '';
 		this.headers = {};
-		this.cache = {};
 	}
 
 	public create(options: CreateOptions) {
@@ -117,8 +109,12 @@ export class RequestService {
 			method: options?.method || 'GET'
 		};
 
-		if (options.body || options.formData) {
-			newOptions.body = Body.form((options.body || options.formData) as FormData | Record<string, Part>);
+		if (options.formData) {
+			newOptions.body = Body.form(options.formData);
+		}
+
+		if (options.body) {
+			newOptions.body = Body.json(options.body);
 		}
 
 		return newOptions;
