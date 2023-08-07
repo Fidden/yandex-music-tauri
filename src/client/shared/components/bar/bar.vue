@@ -47,6 +47,7 @@ watch(() => route.name, () => vm.updateCurrenRoute(route), {immediate: true});
 	top: 75px;
 	background: #161b23;
 	height: 100%;
+	z-index: 100;
 
 	&__line {
 		position: absolute;
