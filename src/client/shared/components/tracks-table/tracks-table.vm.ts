@@ -38,6 +38,7 @@ export class TracksTableVm extends BaseVm implements IInitializable {
 			name: '',
 			order: OrderValues.DEFAULT
 		};
+
 		this.filterOptions = [
 			{key: OrderValues.DEFAULT, value: 'По стандарту'},
 			{key: OrderValues.BY_NAME, value: 'Название'},
@@ -51,7 +52,7 @@ export class TracksTableVm extends BaseVm implements IInitializable {
 	}
 
 	public addToQueue(index: number, trackId?: string | number) {
-		if (trackId === this.playerVm.track?.id) {
+		if (trackId === this.playerVm.track?.id && trackId !== undefined && this.playerVm.track?.id !== undefined) {
 			this.playerVm.toggle();
 			return;
 		}

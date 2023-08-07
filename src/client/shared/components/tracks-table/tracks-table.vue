@@ -142,7 +142,7 @@ import Fragment from '~/client/shared/components/fragment.vue';
 import Image from '~/client/shared/components/image.vue';
 import {PlayerVm} from '~/client/shared/components/player/player.vm';
 import {TracksTableVm, TrackType} from '~/client/shared/components/tracks-table/tracks-table.vm';
-import {globalEmitter} from '~/client/shared/emitters/global-emitter';
+import {globalEmitter} from '~/client/shared/emitters/global.emitter';
 import {convertDuration} from '~/client/shared/helpers/convert-duration';
 import {AlbumTypeEnum} from '~/client/shared/types/api';
 import {cnTracksTable} from './tracks-table.const';
