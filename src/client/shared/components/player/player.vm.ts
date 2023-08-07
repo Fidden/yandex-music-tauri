@@ -6,6 +6,9 @@ import {BaseVm} from '~/client/shared/types/abstract/base.vm';
 import {
 	IPopularTrack,
 	IRotorSettings2,
+	IRotorSettings2DiversityEnum,
+	IRotorSettings2LanguageEnum,
+	IRotorSettings2MoodEnergyEnum,
 	IStation,
 	IStationResult,
 	ITrack,
@@ -27,6 +30,10 @@ export enum RepeatEnum {
 
 type PendingKeys = 'track';
 
+/**
+ * The view model for the player component.
+ * Contains the player state and methods for controlling the player.
+ */
 @singleton()
 export class PlayerVm extends BaseVm {
 	public loaded: boolean;
@@ -44,6 +51,7 @@ export class PlayerVm extends BaseVm {
 	private cachedTrackId?: number | string;
 	private repeat: RepeatEnum;
 	public isSettingsOpen: boolean;
+	public isTrackLiked: boolean;
 
 	constructor(
 		@injectDep(PendingService) public readonly pending: PendingService<PendingKeys>
@@ -64,13 +72,25 @@ export class PlayerVm extends BaseVm {
 		this.cachedTrackId = undefined;
 		this.repeat = RepeatEnum.NONE;
 		this.isSettingsOpen = false;
+		this.isTrackLiked = false;
 	}
 
+	/**
+	 * Sets up the audio volume.
+	 * Reads the volume value from the localStorage and sets it as the initial volume.
+	 * Updates the audio element's volume property based on the initial volume.
+	 */
 	public setupAudioVolume() {
 		this.volume = Number(localStorage.getItem('player.volume')) || 20;
 		this.audioRef!.volume = this.volume * 0.01;
 	}
 
+	/**
+	 * Handles the event when the track changes.
+	 *
+	 * @param trackId - The ID of the track being changed to.
+	 * @returns A promise that resolves when the method finishes executing.
+	 */
 	@pending<PendingKeys>('track')
 	public async onTrackChange(trackId?: number) {
 		if (!this.audioRef || !trackId || trackId === this.cachedTrackId) {
@@ -78,6 +98,8 @@ export class PlayerVm extends BaseVm {
 		}
 
 		this.loaded = false;
+		this.isTrackLiked = UserModel.track.isLiked(trackId);
+
 		const trackLink = await this.getTrackLink(trackId);
 		if (!trackLink) {
 			return;
@@ -92,6 +114,11 @@ export class PlayerVm extends BaseVm {
 		this.setMetaData();
 	}
 
+	/**
+	 * Updates the volume of the audio player and saves it to local storage.
+	 *
+	 * @param {number} volume - The new volume level (0-100).
+	 */
 	public onVolumeChange(volume: number) {
 		if (!this.audioRef) {
 			return;
@@ -101,6 +128,11 @@ export class PlayerVm extends BaseVm {
 		this.audioRef!.volume = volume * 0.01;
 	}
 
+	/**
+	 * Sets the current time of the audio to the specified time.
+	 * Calls when {@link PlayerVm#timeShallow} changes.
+	 * @param {number} time - The new current time in seconds.
+	 */
 	public onTimeShallowChange(time: number) {
 		if (!this.audioRef) {
 			return;
@@ -109,6 +141,9 @@ export class PlayerVm extends BaseVm {
 		this.audioRef!.currentTime = time;
 	}
 
+	/**
+	 * Updates the current playback time and informs the navigator.mediaSession about the playback progress.
+	 */
 	public onTimeUpdate() {
 		if (!this.audioRef) {
 			return;
@@ -123,6 +158,11 @@ export class PlayerVm extends BaseVm {
 	}
 
 
+	/**
+	 * Checks if the audio file is loaded and updates the necessary properties.
+	 * Throws an error if the sound file failed to load.
+	 * Callback for {@link PlayerVm#audioRef}'s `onloadeddata` event.
+	 */
 	public onDataLoad() {
 		if (!this.audioRef || this.audioRef!.readyState < 2) {
 			throw new Error('Failed to load sound file.');
@@ -132,13 +172,19 @@ export class PlayerVm extends BaseVm {
 		this.duration = this.audioRef!.duration;
 	}
 
-	@pending<PendingKeys>('track')
-	public async onTrackEnd() {
+	/**
+	 * Performs an action when the track ends.
+	 * If the current time is greater than or equal to the duration of the track, it moves to the next track.
+	 */
+	public onTrackEnd() {
 		if (this.time >= this.duration) {
-			await this.next();
+			this.next();
 		}
 	}
 
+	/**
+	 * Set metadata for media session
+	 */
 	public setMetaData() {
 		const track = this.track;
 		if (!track) {
@@ -163,6 +209,12 @@ export class PlayerVm extends BaseVm {
 		// });
 	}
 
+	/**
+	 * Pauses the audio playback.
+	 *
+	 * This method pauses the current audio playback if it is playing.
+	 * If no audio reference is set, the method does nothing.
+	 */
 	public pause() {
 		if (!this.audioRef) {
 			return;
@@ -172,6 +224,13 @@ export class PlayerVm extends BaseVm {
 		this.playing = false;
 	}
 
+	/**
+	 * Plays the audio.
+	 * @returns
+	 * The Promise object represents the completion of the play operation.
+	 * Resolves when the audio starts playing.
+	 * Rejects with an error if the play operation fails.
+	 */
 	public async play() {
 		if (!this.audioRef) {
 			return;
@@ -181,26 +240,55 @@ export class PlayerVm extends BaseVm {
 		this.playing = true;
 	}
 
+	/**
+	 * Toggles the current state of the player.
+	 * If the player is playing, it will be paused.
+	 * If the player is paused, it will be played.
+	 *
+	 * @returns A promise that resolves when the toggle operation is completed.
+	 */
 	public async toggle() {
 		this.playing ? this.pause() : await this.play();
 	}
 
+	/**
+	 * Retrieves the track link for a given track ID.
+	 *
+	 * @param trackId - The ID of the track.
+	 * @returns A promise that resolves to the track link.
+	 */
 	public async getTrackLink(trackId: number) {
 		return await UserModel.track.link(trackId);
 	}
 
+	/**
+	 * Sets the queue with the given array of tracks.
+	 *
+	 * @param tracks - An array of tracks to set as the queue.
+	 */
 	public setQueue(tracks: Array<ITrack | IPopularTrack>) {
 		this.queue = tracks;
 	}
 
+	/**
+	 * Clears the queue.
+	 */
 	public clearQueue() {
 		this.queue = [];
 	}
 
+	/**
+	 * Clears the played queue.
+	 */
 	public clearPlayedQueue() {
 		this.playedQueue = [];
 	}
 
+	/**
+	 * Appends one or multiple tracks to the queue.
+	 *
+	 * @param track - The track(s) to append to the queue.
+	 */
 	public appendQueue(track: ITrack | ITrack[]) {
 		if (Array.isArray(track)) {
 			this.queue = [...this.queue, ...track];
@@ -209,15 +297,13 @@ export class PlayerVm extends BaseVm {
 		}
 	}
 
+	/**
+	 * Handle logic for next button click and internal logic for switching track
+	 * @param skip - indicates that user skipped track
+	 */
 	public async next(skip?: boolean) {
 		if (this.repeat !== RepeatEnum.NONE) {
-			this.audioRef!.currentTime = 0;
-			this.play();
-
-			if (this.repeat === RepeatEnum.ONCE) {
-				this.repeat = RepeatEnum.NONE;
-			}
-
+			this.handleRepeat();
 			return;
 		}
 
@@ -230,6 +316,21 @@ export class PlayerVm extends BaseVm {
 			this.moveToPlayed();
 	}
 
+	/**
+	 * Handle internal repeat logic that calls before the next track
+	 */
+	private handleRepeat() {
+		this.audioRef!.currentTime = 0;
+		this.play();
+
+		if (this.repeat === RepeatEnum.ONCE) {
+			this.repeat = RepeatEnum.NONE;
+		}
+	}
+
+	/**
+	 * Handle action for previus button click
+	 */
 	public prev() {
 		if (!this.canPrev) {
 			return;
@@ -239,6 +340,10 @@ export class PlayerVm extends BaseVm {
 		this.queue.unshift(playedTrack);
 	}
 
+	/**
+	 * Move track from queue to played queue
+	 * @returns track
+	 */
 	public moveToPlayed() {
 		const playedTrack = this.queue.shift();
 		if (!playedTrack) {
@@ -249,6 +354,11 @@ export class PlayerVm extends BaseVm {
 		return playedTrack;
 	}
 
+	/**
+	 * Load next chunk of tracks for station
+	 * @param skip - is user skipped track
+	 * @param settingsChanged - is user changed station settings
+	 */
 	public async stationLoadNextChunk(skip: boolean = false, settingsChanged: boolean = false) {
 		if (!this.currentStation) {
 			return;
@@ -299,18 +409,35 @@ export class PlayerVm extends BaseVm {
 		});
 	}
 
+	/**
+	 * Syntax sugar for getting current track
+	 */
 	public get track() {
 		return this.queue?.at(0);
 	}
 
+	/**
+	 * Handle condition when we can't play prev track
+	 * @returns True if there is at least one track in the played queue.
+	 */
 	public get canPrev() {
 		return this.playedQueue.length;
 	}
 
+	/**
+	 * Handle condition when we can't play next track
+	 * @returns True if there is at least one track in the queue.
+	 */
 	public get canNext() {
 		return this.queue.length - 1;
 	}
 
+	/**
+	 * Plays the given station on the PlayStation.
+	 *
+	 * @param {IStation} station - The station to play.
+	 * @returns A promise that resolves once the station starts playing.
+	 */
 	public async playStation(station: IStation) {
 		this.clearPlayedQueue();
 		this.clearQueue();
@@ -339,6 +466,9 @@ export class PlayerVm extends BaseVm {
 		});
 	}
 
+	/**
+	 * Handle repeat button logic and changing repeat state.
+	 */
 	public onRepeat() {
 		switch (this.repeat) {
 			case RepeatEnum.NONE: {
@@ -355,33 +485,64 @@ export class PlayerVm extends BaseVm {
 		}
 	}
 
-	public onSettingChange(key: keyof IRotorSettings2, value: string) {
+	/**
+	 * Updates the setting value for a given key in the current station settings.
+	 *
+	 * @param key - The key of the setting to update.
+	 * @param value - The new value for the setting.
+	 */
+	public onSettingChange<Key extends keyof IRotorSettings2>(key: Key, value: IRotorSettings2[Key]) {
 		if (!this.currentStationResult?.settings2) {
 			return;
 		}
 
+		const defaultValues = {
+			diversity: IRotorSettings2DiversityEnum.DEFAULT,
+			moodEnergy: IRotorSettings2MoodEnergyEnum.ALL,
+			language: IRotorSettings2LanguageEnum.ANY
+		};
+
 		if (this.currentStationResult.settings2[key] === value) {
-			switch (key) {
-				case 'diversity': {
-					this.currentStationResult.settings2[key] = 'default';
-					break;
-				}
-				case 'moodEnergy': {
-					this.currentStationResult.settings2[key] = 'all';
-					break;
-				}
-				case 'language': {
-					this.currentStationResult.settings2[key] = 'any';
-					break;
-				}
+			if (defaultValues[key]) {
+				this.currentStationResult.settings2[key] = defaultValues[key];
+				return;
 			}
-			return;
 		}
 
 		this.currentStationResult.settings2[key] = value;
 	}
 
+	/**
+	 * Change station settings to default one.
+	 */
+	public clearSettings() {
+		if (!this.currentStationResult?.settings2) {
+			return;
+		}
+
+		this.currentStationResult.settings2.diversity = IRotorSettings2DiversityEnum.DEFAULT;
+		this.currentStationResult.settings2.moodEnergy = IRotorSettings2MoodEnergyEnum.ALL;
+		this.currentStationResult.settings2.language = IRotorSettings2LanguageEnum.ANY;
+	}
+
+	/**
+	 * Toggles the state of the settings.
+	 */
 	public settingsToggle() {
 		this.isSettingsOpen = !this.isSettingsOpen;
+	}
+
+
+	/**
+	 * Toggles the like status of a track.
+	 */
+	public toggleLike() {
+		const trackId = this.track?.id;
+		if (!trackId) {
+			return;
+		}
+
+		this.isTrackLiked ? UserModel.track.removeLike(trackId) : UserModel.track.addLike(trackId);
+		this.isTrackLiked = !this.isTrackLiked;
 	}
 }

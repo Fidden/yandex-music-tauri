@@ -7,7 +7,7 @@ import {StationsScreenVm} from '~/client/screens/stations-screen/stations-screen
 import StationsScreen from '~/client/screens/stations-screen/stations-screen.vue';
 
 const vm = useVm(StationsScreenVm);
-await vm.init();
+vm.init();
 </script>
 
 <style lang="scss">

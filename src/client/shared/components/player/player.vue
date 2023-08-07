@@ -58,7 +58,7 @@ watch(() => vm.currentStationResult?.settings2, async value => {
 	border-radius: 6px;
 	left: 68px;
 	bottom: 8px;
-	width: calc(100% - 76px);
+	width: calc(100% - 84px);
 	background: #242833;
 	z-index: 20;
 	gap: 8px;

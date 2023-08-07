@@ -5,10 +5,9 @@
         :time="vm.time"
     />
     <PlayerRange
-        v-memo="[Math.floor(vm.time)]"
         :max-value="vm.duration"
         :value="vm.time"
-        :step="0.01"
+        :step="0.05"
         @change="value => vm.timeShallow = value"
     />
     <PlayerTime

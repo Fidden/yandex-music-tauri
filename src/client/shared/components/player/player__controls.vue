@@ -1,9 +1,13 @@
 <template>
 	<div :class="cnPlayer('controls')">
-		<Button variant="text">
+		<Button
+			variant="text"
+			@click="vm.toggleLike()"
+		>
 			<MatIcon
 				name="favorite"
 				size="22px"
+				:fill="vm.isTrackLiked"
 			/>
 		</Button>
 		<div :class="cnPlayer('controls-container')">
@@ -110,6 +114,10 @@ const vm = useVm(PlayerVm, true);
 
 	&-repeat--active, &-settings--active {
 		color: var(--primary)
+	}
+
+	&-settings--active {
+		pointer-events: none;
 	}
 }
 </style>
