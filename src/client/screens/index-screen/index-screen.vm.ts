@@ -34,17 +34,20 @@ export class IndexScreenVm extends BaseVm implements IInitializable {
 
 	@pending<PendingKeys>('index-screen')
 	public async init() {
-		const favoritePlaylist = await UserModel.playlist.one(3, this.userStore.status!.account!.uid);
-		this.userPlaylists = await UserModel.playlist.list();
-		this.landingBlocks = await UserModel.landing.blocks([
-			LandingBlockEnum.NEW_PLAYLISTS,
-			LandingBlockEnum.NEW_RELEASES,
-			LandingBlockEnum.CHART,
-			LandingBlockEnum.PLAY_CONTEXTS,
-			LandingBlockEnum.PERSONAL_PLAYLISTS
+		const [favoritePlaylist, userPlaylists, landingBlocks] = await Promise.all([
+			UserModel.playlist.one(3),
+			UserModel.playlist.list(),
+			UserModel.landing.blocks([
+				LandingBlockEnum.NEW_PLAYLISTS,
+				LandingBlockEnum.NEW_RELEASES,
+				LandingBlockEnum.CHART,
+				LandingBlockEnum.PLAY_CONTEXTS,
+				LandingBlockEnum.PERSONAL_PLAYLISTS
+			])
 		]);
 
-		this.userPlaylists.unshift(favoritePlaylist);
+		this.userPlaylists = [favoritePlaylist, ...userPlaylists];
+		this.landingBlocks = landingBlocks;
 
 		for (let i = 0; i < this.userPlaylists.length; i += 6) {
 			const chunk = this.userPlaylists.slice(i, i + 6);
