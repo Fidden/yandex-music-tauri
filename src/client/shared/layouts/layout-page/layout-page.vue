@@ -4,7 +4,7 @@
 		<div
 			:ref="el => vm.layoutContentRef = el as HTMLDivElement"
 			:class="cnLayoutPage('content')"
-			@scroll="handleScroll"
+			@scroll="vm.onScroll($route)"
 		>
 			<Bar/>
 			<slot/>
@@ -23,33 +23,7 @@ const route = useRoute();
 const vm = useVm(LayoutPageVm);
 
 //TODO: убрать запоминание скрола если переход был сделан по клику на базовую ссылку ( в <Bar/> или на страницах карточек )
-watch(() => route.name, async (value) => {
-	if (!vm.layoutContentRef) {
-		return;
-	}
-
-	const routerName = String(value);
-	const offset = vm.scrollCache.get(routerName);
-	if (!offset) {
-		vm.layoutContentRef!.scrollTo(0, 0);
-		return;
-	}
-
-	await nextTick();
-
-	vm.layoutContentRef!.scrollTo({
-		top: offset
-	});
-});
-
-function handleScroll() {
-	const routeName = String(route.name);
-	if (!vm.layoutContentRef || vm.excludeRoutes.includes(routeName)) {
-		return;
-	}
-
-	vm.scrollCache.set(String(route.name), vm.layoutContentRef!.scrollTop);
-}
+watch(() => route.name, routeName => vm.onRouteChange(routeName as string));
 </script>
 
 <style lang="scss">
@@ -79,6 +53,7 @@ function handleScroll() {
 		padding: 45px 54px 104px 54px;
 		display: flex;
 		flex-direction: column;
+		overflow-x: hidden;
 
 		&::-webkit-scrollbar-thumb {
 			height: 30px;
