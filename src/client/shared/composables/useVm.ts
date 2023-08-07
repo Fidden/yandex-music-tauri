@@ -4,30 +4,8 @@
  */
 import {defineStore, getActivePinia, Store} from 'pinia';
 import {onDeactivated, onUnmounted} from 'vue';
+import {ModuleExt, PiniaStore} from '~/client/shared/types/store';
 
-interface ModuleExt {
-	_storeOptions?: {
-		initialState: NonNullable<any>,
-		getters: NonNullable<unknown>,
-		actions: NonNullable<unknown>
-	};
-}
-
-// magic, see https://github.com/Microsoft/TypeScript/issues/27024
-type Magic<X> = (<T>() => T extends X ? 1 : 2)
-type Magic2<X> = (<T>() => T extends X ? 1 : 2)
-
-type Actions<T extends Record<string, any>> = {
-	[P in keyof T as T[P] extends (...args: any[]) => any ? P : never]: T[P];
-};
-type Getters<T extends Record<string, any>> = {
-	[P in keyof T as Magic<Pick<T, P>> extends Magic2<Readonly<Pick<T, P>>> ? P : never]: T[P];
-};
-type States<T extends Record<string, any>> = Omit<{
-	[P in keyof T as Magic<Pick<T, P>> extends Magic2<Readonly<Pick<T, P>>> ? never : P]: T[P];
-}, keyof Actions<T>>;
-
-type PiniaStore<G extends Record<string, any>> = Store<string, States<G>, Getters<G>, Actions<G>>
 
 export function useVm<T extends (new (...args: any) => any), G extends InstanceType<T> = InstanceType<T>>(Module0: T, child = false, id?: string)
 	: G & Omit<PiniaStore<G>, keyof G> {
