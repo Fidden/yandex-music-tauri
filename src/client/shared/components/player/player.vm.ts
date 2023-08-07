@@ -48,10 +48,12 @@ export class PlayerVm extends BaseVm {
 	public isStation: boolean;
 	public currentStation?: ICurrentStation;
 	public currentStationResult?: IStationResult;
-	private cachedTrackId?: number | string;
-	private repeat: RepeatEnum;
 	public isSettingsOpen: boolean;
 	public isTrackLiked: boolean;
+	public highQuality: boolean;
+
+	private cachedTrackId?: number | string;
+	private repeat: RepeatEnum;
 
 	constructor(
 		@injectDep(PendingService) public readonly pending: PendingService<PendingKeys>
@@ -73,6 +75,7 @@ export class PlayerVm extends BaseVm {
 		this.repeat = RepeatEnum.NONE;
 		this.isSettingsOpen = false;
 		this.isTrackLiked = false;
+		this.highQuality = true;
 	}
 
 	/**
@@ -258,7 +261,7 @@ export class PlayerVm extends BaseVm {
 	 * @returns A promise that resolves to the track link.
 	 */
 	public async getTrackLink(trackId: number) {
-		return await UserModel.track.link(trackId);
+		return await UserModel.track.link(trackId, this.highQuality);
 	}
 
 	/**
@@ -544,5 +547,9 @@ export class PlayerVm extends BaseVm {
 
 		this.isTrackLiked ? UserModel.track.removeLike(trackId) : UserModel.track.addLike(trackId);
 		this.isTrackLiked = !this.isTrackLiked;
+	}
+
+	public toggleHighQuality() {
+		this.highQuality = !this.highQuality;
 	}
 }
