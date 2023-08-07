@@ -1,9 +1,10 @@
+import {PendingService} from '#imports';
+import {injectable} from 'tsyringe';
+import {globalEmitter} from '~/client/shared/emitters/global.emitter';
 import {UserModel} from '~/client/shared/models/user.model';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
 import {AlbumTypeEnum, IAlbum} from '~/client/shared/types/api';
 import {IInitializable} from '~/client/shared/types/initializable';
-import {injectable} from 'tsyringe';
-import {PendingService} from '#imports';
 
 interface InitArgs {
 	id: number;
@@ -37,5 +38,9 @@ export class AlbumScreenVm extends BaseVm implements IInitializable {
 
 	public get hasOneTrack() {
 		return this.isSingle || this.tracks?.length === 1;
+	}
+
+	public shuffle() {
+		globalEmitter.emit('tracks-table:play-shuffle');
 	}
 }
