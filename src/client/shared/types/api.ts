@@ -908,11 +908,6 @@ export interface IPlaylist {
 	'tracks': Array<ITrackItem>;
 }
 
-export interface ILikedPlaylist {
-	playlist: IPlaylist;
-	timestamp: Date;
-}
-
 export enum PlaylistVisibilityEnum {
 	PUBLIC = 'public',
 	PRIVATE = 'private'
@@ -1151,13 +1146,34 @@ export interface IRotorSettings {
 	'energy': number;
 }
 
+export enum IRotorSettings2LanguageEnum {
+	NON_RUSSIAN = 'non-russian',
+	RUSSIAN = 'russian',
+	ANY = 'any'
+}
+
+export enum IRotorSettings2MoodEnergyEnum {
+	ACTIVE = 'active',
+	FUN = 'fun',
+	CALM = 'calm',
+	SAD = 'sad',
+	ALL = 'all'
+}
+
+export enum IRotorSettings2DiversityEnum {
+	FAVORITE = 'favorite',
+	DISCOVER = 'discover',
+	POPULAR = 'popular',
+	DEFAULT = 'default'
+}
+
 export interface IRotorSettings2 {
 
-	'language': string;
+	'language': IRotorSettings2LanguageEnum;
 
-	'diversity': string;
+	'diversity': IRotorSettings2DiversityEnum;
 
-	'moodEnergy': string;
+	'moodEnergy': IRotorSettings2MoodEnergyEnum;
 }
 
 export interface ISearch {
@@ -1635,7 +1651,7 @@ export interface ITrackNormalization {
 
 export interface ITrackShort {
 
-	'id': string;
+	'id': string | number;
 
 	'albumId': string;
 
@@ -1757,3 +1773,9 @@ export interface IResponse<T> {
 	'invocationInfo': IInvocationInfo;
 	'result': T;
 }
+
+export enum TrackLikeActionEnum {
+	REMOVE = 'remove',
+	ADD_MULTIPLE = 'add-multiple',
+}
+
