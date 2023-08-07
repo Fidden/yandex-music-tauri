@@ -2,12 +2,10 @@
 	<TransitionGroup
 		name="toasts"
 		tag="ul"
-		:class="cnToasts(null, {
-			playerOpen: !!playerVm.track
-		})"
+		:class="cnToasts()"
 	>
 		<li
-			v-for="toast in toastStore.toasts"
+			v-for="toast in vm.toasts"
 			:key="toast.id"
 			:class="cnToasts('item')"
 		>
@@ -17,14 +15,22 @@
 </template>
 
 <script setup lang="ts">
-import {PlayerVm} from '~/client/shared/components/player/player.vm';
+import {globalEmitter} from '~/client/shared/emitters/global.emitter';
 import {cnToasts} from './toasts.const';
+import {ToastsVm} from './toasts.vm';
 
-const toastStore = useToastStore();
-const playerVm = useVm(PlayerVm, true);
+const vm = useVm(ToastsVm);
+
+globalEmitter.on('toast:add', (text) => {
+	vm.add(text);
+});
 </script>
 
 <style lang="scss">
+.player ~ .toasts {
+	bottom: 80px;
+}
+
 .toasts {
 	display: flex;
 	flex-direction: column;
@@ -44,11 +50,6 @@ const playerVm = useVm(PlayerVm, true);
 		font-size: 16px;
 		line-height: 18px;
 		font-weight: 400;
-		transition: 500ms;
-	}
-
-	&--playerOpen {
-		bottom: 80px;
 		transition: 500ms;
 	}
 }
