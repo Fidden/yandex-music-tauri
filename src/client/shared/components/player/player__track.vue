@@ -10,10 +10,11 @@
 			type="track"
 		/>
 		<div :class="cnPlayer('track-info')">
-			<p
+			<NuxtLink
 				v-if="vm.track?.title"
 				ref="trackTitleRef"
 				:class="cnPlayer('track-title')"
+				:to="{name: 'album-id', params: {id: vm.track.albums[0].id}}"
 			>
 				<span
 					ref="trackTitleTextRef"
@@ -23,7 +24,7 @@
 				>
 					{{ vm.track.title }}
 				</span>
-			</p>
+			</NuxtLink>
 
 			<p
 				v-if="vm.track?.artists?.length"
