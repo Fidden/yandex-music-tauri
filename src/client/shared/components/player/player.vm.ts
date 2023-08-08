@@ -96,6 +96,10 @@ export class PlayerVm extends BaseVm {
 	 */
 	@pending<PendingKeys>('track')
 	public async onTrackChange(trackId?: number) {
+		if (!this.track?.available) {
+			return this.queue.shift();
+		}
+
 		if (!this.audioRef || !trackId || trackId === this.cachedTrackId) {
 			return;
 		}
@@ -294,7 +298,7 @@ export class PlayerVm extends BaseVm {
 	 */
 	public appendQueue(track: ITrack | ITrack[]) {
 		if (Array.isArray(track)) {
-			this.queue = [...this.queue, ...track];
+			this.setQueue([...this.queue, ...track]);
 		} else {
 			this.queue.push(track);
 		}
