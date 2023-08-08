@@ -116,7 +116,7 @@ export class PlayerVm extends BaseVm {
 		this.pause();
 		this.audioRef.src = trackLink;
 		this.cachedTrackId = trackId;
-		this.play();
+		await this.play();
 
 		this.setMetaData();
 	}

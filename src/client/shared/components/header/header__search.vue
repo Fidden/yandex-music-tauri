@@ -4,7 +4,7 @@
 		:class="cnHeader('search')"
 	>
 		<input
-			v-model="vm.search"
+			v-debounce:400ms="val => vm.search = val"
 			:class="cnHeader('search-input')"
 			placeholder="Поиск"
 			type="text"

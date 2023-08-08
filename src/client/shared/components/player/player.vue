@@ -1,10 +1,10 @@
 <template>
-	<PlayerAudio/>
 	<Transition>
 		<div
 			v-if="vm.track"
 			:class="cnPlayer()"
 		>
+			<PlayerAudio/>
 			<PlayerSettings/>
 			<PlayerSeek/>
 			<PlayerBody>
