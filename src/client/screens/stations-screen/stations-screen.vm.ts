@@ -1,8 +1,13 @@
+import {injectable} from 'tsyringe';
 import {UserModel} from '~/client/shared/models/user.model';
+import {PendingService} from '~/client/shared/services/pending.service';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
 import {IDashboard, IStation, IStationResult} from '~/client/shared/types/api';
 import {IInitializable} from '~/client/shared/types/initializable';
 
+type PendingKeys = 'init';
+
+@injectable()
 export class StationsScreenVm extends BaseVm implements IInitializable {
 	public stationList?: IStationResult[];
 	public stationListSplitted: Record<string, IStation[]>;
@@ -10,7 +15,9 @@ export class StationsScreenVm extends BaseVm implements IInitializable {
 	public stationListSplittedKeys: string[];
 	public selectedKey: string;
 
-	constructor() {
+	constructor(
+		@injectDep(PendingService) public readonly pending: PendingService<PendingKeys>
+	) {
 		super();
 		this.stationDashboard = undefined;
 		this.stationList = undefined;
@@ -19,6 +26,7 @@ export class StationsScreenVm extends BaseVm implements IInitializable {
 		this.selectedKey = '';
 	}
 
+	@pending<PendingKeys>('init')
 	public async init() {
 		const [stationList, stationDashboard] = await Promise.all([
 			UserModel.rotor.station.list(),
