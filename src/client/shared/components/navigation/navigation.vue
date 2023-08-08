@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import {cnNavigation} from './navigation.const';
+
+const router = useRouter();
 </script>
 
 <template>
 	<div :class="cnNavigation()">
 		<button
+			:disabled="!router.options.history.state?.back"
 			:class="cnNavigation('button')"
 			@click="$router.back()"
 		>
@@ -14,7 +17,7 @@ import {cnNavigation} from './navigation.const';
 			/>
 		</button>
 		<button
-			disabled
+			:disabled="!router.options.history.state?.forward"
 			:class="cnNavigation('button')"
 			@click="$router.forward()"
 		>
@@ -53,7 +56,7 @@ import {cnNavigation} from './navigation.const';
 
 		&:disabled {
 			pointer-events: none;
-			opacity: 0.7;
+			opacity: 0.5;
 		}
 	}
 }
