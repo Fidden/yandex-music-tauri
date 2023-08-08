@@ -90,7 +90,7 @@ export class TrackModel extends BaseModel {
 		});
 	}
 
-	public static async link(trackId: number) {
+	public static async link(trackId: number, highQuality?: boolean) {
 		const downloadInfo = await this.downloadInfo(trackId);
 
 		const heightQuality = downloadInfo.sort((a, b) => {
@@ -101,7 +101,11 @@ export class TrackModel extends BaseModel {
 				return -1;
 			}
 			return 0;
-		})[0];
+		})?.at(highQuality ? 0 : -1);
+
+		if (!heightQuality) {
+			throw new Error('Track download info is not available.');
+		}
 
 		const storageLocations = await this.storageLocations(heightQuality?.downloadInfoUrl);
 
