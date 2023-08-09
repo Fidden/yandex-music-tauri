@@ -2,19 +2,26 @@
 	<article :class="cnSearchCardBest()">
 		<Image
 			:class="cnSearchCardBest('image')"
-			:src="imageSource"
-			:alt="title"
+			:src="vm.src"
+			:alt="vm.title"
 			crop="100x100"
 			width="100"
 			height="100"
 		/>
-		<h2 :class="cnSearchCardBest('title')">
-			{{ title }}
-		</h2>
+		<Component
+			:is="vm.link ? NuxtLink : 'h2'"
+			:to="vm.link?.payload"
+			:class="cnSearchCardBest('title')"
+		>
+			{{ vm.title }}
+		</Component>
 		<p :class="cnSearchCardBest('type')">
-			{{ typeHuman }}
+			{{ vm.typeHuman }}
 		</p>
-		<button :class="cnSearchCardBest('play')">
+		<button
+			:class="cnSearchCardBest('play')"
+			@click="vm.onPlay()"
+		>
 			<MatIcon
 				name="play_arrow"
 				fill
@@ -24,51 +31,21 @@
 </template>
 
 <script setup lang="ts">
+import {NuxtLink} from '#components';
 import Image from '~/client/shared/components/image.vue';
 import MatIcon from '~/client/shared/components/mat-icon.vue';
-import {BestResult} from '~/client/shared/types/api';
+import {SearchCardBestVm} from '~/client/shared/components/search-card-best/search-card-best.vm';
+import {BestResult, ObjectTypeEnum} from '~/client/shared/types/api';
 import {cnSearchCardBest} from './search-card-best.const';
 
 const props = defineProps<{
 	result: BestResult,
-	type: string;
+	type: ObjectTypeEnum;
 }>();
 
-const imageSource = computed(() => {
-	if ('cover' in props.result) {
-		return props.result.cover?.uri;
-	}
+const vm = useVm(SearchCardBestVm);
 
-	if ('ogImage' in props.result) {
-		return props.result.ogImage;
-	}
-});
-
-const title = computed(() => {
-	if ('title' in props.result) {
-		return props.result.title;
-	} else if ('name' in props.result) {
-		return props.result.name;
-	}
-
-	return props.result;
-});
-
-const typeHuman = computed(() => {
-	if (props.type === 'artist') {
-		return 'Артист';
-	} else if (props.type === 'podcast') {
-		return 'Подкаст';
-	} else if (props.type === 'album') {
-		return 'Альбом';
-	} else if (props.type === 'playlist') {
-		return 'Плейлист';
-	} else if (props.type === 'track') {
-		return 'Трек';
-	}
-
-	return props.type;
-});
+watch(props, newProps => vm.update(newProps), {deep: true, immediate: true});
 </script>
 
 <style lang="scss">
@@ -92,6 +69,15 @@ const typeHuman = computed(() => {
 	&__title {
 		font-size: 32px;
 		line-height: 28px;
+
+		&::before {
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			content: ' ';
+		}
 	}
 
 	&__type {

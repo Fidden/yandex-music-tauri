@@ -18,6 +18,7 @@
 
 <script setup lang="ts">
 import {watch} from '#imports';
+import {globalEmitter} from '~/client/shared/emitters/global.emitter';
 import {UserModel} from '~/client/shared/models/user.model';
 import {cnPlayer} from './player.const';
 import {PlayerVm} from './player.vm';
@@ -47,6 +48,10 @@ watch(() => vm.currentStationResult?.settings2, async value => {
 	await UserModel.rotor.station.settings2(vm.currentStation!, value!.diversity, value!.language, value!.moodEnergy);
 	await vm.stationLoadNextChunk(false, true);
 }, {deep: true});
+
+globalEmitter.on('player:set-queue', (tracks) => {
+	vm.setQueue(tracks);
+});
 </script>
 
 <style lang="scss">

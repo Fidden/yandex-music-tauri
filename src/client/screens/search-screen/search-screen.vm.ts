@@ -24,6 +24,7 @@ export class SearchScreenVm extends BaseVm {
 		this.search = await SearchModel.search(this.text);
 	}
 
+	@debounce(300)
 	public fetch() {
 		this.init();
 	}
