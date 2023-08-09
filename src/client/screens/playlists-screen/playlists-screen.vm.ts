@@ -22,6 +22,6 @@ export class PlaylistsScreenVm extends BaseVm {
 	@pending<PendingKeys>('init')
 	public async init() {
 		this.playlists = await UserModel.playlist.list();
-		this.playlistsLiked = await UserModel.playlist.likes();
+		this.playlistsLiked = await UserModel.playlist.liked();
 	}
 }

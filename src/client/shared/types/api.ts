@@ -118,7 +118,7 @@ export interface IAlbumLabelsInner {
 
 export interface IContext {
 	client: ClientTypeEnum;
-	context: SearchType;
+	context: ObjectTypeEnum;
 	contextItem: string;
 	payload: ContextItemData;
 }
@@ -1198,7 +1198,7 @@ export interface ISearch {
 
 	'podcast_episodes': ISearchPodcastEpisodes;
 
-	'type'?: SearchType;
+	'type'?: ObjectTypeEnum;
 
 	'page'?: number;
 
@@ -1325,7 +1325,7 @@ export interface ISearchTracksAllOf {
 	'results': Array<ITrack>;
 }
 
-export enum SearchType {
+export enum ObjectTypeEnum {
 	ARTIST = 'artist',
 	ALBUM = 'album',
 	TRACK = 'track',
@@ -1665,7 +1665,7 @@ export interface IAlbumShort {
 
 export interface IPlaylistShort {
 	playlist: IPlaylist;
-	timestamp?: Date;
+	timestamp?: string;
 }
 
 export interface ITracksList {
@@ -1774,7 +1774,7 @@ export interface IResponse<T> {
 	'result': T;
 }
 
-export enum TrackLikeActionEnum {
+export enum LikeActionEnum {
 	REMOVE = 'remove',
 	ADD_MULTIPLE = 'add-multiple',
 }

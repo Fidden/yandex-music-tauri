@@ -1,4 +1,5 @@
 import md5 from 'crypto-js/md5';
+import {LikeModel} from '~/client/shared/models/like.model';
 import {PlaylistModel} from '~/client/shared/models/playlist.model';
 import {UserModel} from '~/client/shared/models/user.model';
 import {BaseModel} from '~/client/shared/types/abstract/base.model';
@@ -7,7 +8,8 @@ import {
 	ITrack,
 	ITrackDownloadInfo,
 	ITrackShort,
-	TrackLikeActionEnum
+	LikeActionEnum,
+	ObjectTypeEnum
 } from '~/client/shared/types/api';
 
 export class TrackModel extends BaseModel {
@@ -19,31 +21,27 @@ export class TrackModel extends BaseModel {
 		this.liked = await this.likes();
 	}
 
-	public static async addLike(trackId: string | number) {
-		await this.likeAction(TrackLikeActionEnum.ADD_MULTIPLE, trackId);
-		this.liked.push({
-			id: trackId,
-			albumId: '',
-			timestamp: ''
-		});
+	public static async like(trackId: string | number) {
+		await LikeModel.action(
+			ObjectTypeEnum.TRACK,
+			LikeActionEnum.ADD_MULTIPLE,
+			trackId
+		);
+
+		this.liked.push({id: trackId, albumId: '', timestamp: ''});
 	}
 
-	public static async removeLike(trackId: string | number) {
-		await this.likeAction(TrackLikeActionEnum.REMOVE, trackId);
+	public static async dislike(trackId: string | number) {
+		await LikeModel.action(
+			ObjectTypeEnum.TRACK,
+			LikeActionEnum.REMOVE,
+			trackId
+		);
 
 		const trackIndex = this.liked.findIndex(item => item.id === trackId);
 		if (trackIndex !== -1) {
 			this.liked.splice(trackIndex, 1);
 		}
-	}
-
-	private static likeAction(action: TrackLikeActionEnum, trackId: string | number) {
-		return super.request.post<'ok' | { revision: number }>(`/users/${this.userId}/likes/tracks/${action}`, {
-			query: {
-				trackIds: trackId
-			},
-			headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-		});
 	}
 
 	public static likes() {

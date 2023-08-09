@@ -31,7 +31,7 @@
 			</p>
 
 			<div :class="cnPlaylistScreen('header-controls')">
-				<Button @click="vm.shuffle()">
+				<Button @click="vm.onShuffle()">
 					<MatIcon
 						fill
 						size="1.3em"
@@ -39,10 +39,16 @@
 					/>
 					Перемешать
 				</Button>
-				<Button variant="text">
-					<Icon
-						size="1.5rem"
-						name="ic:round-favorite-border"
+				<Button
+					variant="text"
+					:class="cnPlaylistScreen('header-like', {
+						active: vm.playlistIsLiked
+					})"
+					@click="vm.onLike()"
+				>
+					<MatIcon
+						name="favorite"
+						:fill="vm.playlistIsLiked"
 					/>
 				</Button>
 				<Menu>
@@ -53,10 +59,10 @@
 						/>
 					</MenuButton>
 					<MenuItems>
-						<MenuItem @click="vm.shuffle()">
+						<MenuItem @click="vm.onShuffle()">
 							Перемешать
 						</MenuItem>
-						<MenuItem @click="vm.copyLink()">
+						<MenuItem @click="vm.onShare()">
 							Поделиться
 						</MenuItem>
 					</MenuItems>
@@ -75,7 +81,6 @@ import Menu from '~/client/shared/components/menu/menu.vue';
 import MenuButton from '~/client/shared/components/menu/menu__button.vue';
 import MenuItem from '~/client/shared/components/menu/menu__item.vue';
 import MenuItems from '~/client/shared/components/menu/menu__items.vue';
-import {PlayerVm} from '~/client/shared/components/player/player.vm';
 import {tracksCountHuman} from '~/client/shared/helpers/tracks-count-human';
 import {cnPlaylistScreen} from './playlist-screen.const';
 
@@ -88,6 +93,10 @@ const vm = useVm(PlaylistScreenVm, true);
 	flex-direction: row;
 	gap: 20px;
 	height: 160px;
+
+	&-like--active {
+		color: var(--primary)
+	}
 
 	&-image {
 		border-radius: 6px;

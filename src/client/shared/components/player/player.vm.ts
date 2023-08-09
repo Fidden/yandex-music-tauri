@@ -442,10 +442,10 @@ export class PlayerVm extends BaseVm {
 	/**
 	 * Plays the given station on the PlayStation.
 	 *
-	 * @param {IStation} station - The station to play.
+	 * @param station - The station to play.
 	 * @returns A promise that resolves once the station starts playing.
 	 */
-	public async playStation(station: IStation) {
+	public async playStation(station: Pick<IStation, 'id' | 'idForFrom'>) {
 		this.clearPlayedQueue();
 		this.clearQueue();
 
@@ -549,7 +549,7 @@ export class PlayerVm extends BaseVm {
 			return;
 		}
 
-		this.isTrackLiked ? UserModel.track.removeLike(trackId) : UserModel.track.addLike(trackId);
+		this.isTrackLiked ? UserModel.track.dislike(trackId) : UserModel.track.like(trackId);
 		this.isTrackLiked = !this.isTrackLiked;
 	}
 
