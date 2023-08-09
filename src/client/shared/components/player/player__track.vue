@@ -20,7 +20,7 @@
 					ref="trackTitleTextRef"
 					:key="vm.track.title"
 					:class="cnPlayer('track-title-text')"
-					:style="{animationPlayState: trackAnimationPlayState}"
+					:style="{animationPlayState: trackAnimationPlayState, animationDuration: `${vm.track.title.length * 0.2}s`}"
 				>
 					{{ vm.track.title }}
 				</span>
@@ -35,7 +35,7 @@
 					ref="artistTitleTextRef"
 					:key="vm.track.artists.toString()"
 					:class="cnPlayer('track-artists-text')"
-					:style="{animationPlayState: artistAnimationPlayState}"
+					:style="{animationPlayState: artistAnimationPlayState, animationDuration: `${vm.track.artists.toString().length * 0.2}s`}"
 				>
 					<NuxtLink
 						v-for="artist in vm.track.artists"
