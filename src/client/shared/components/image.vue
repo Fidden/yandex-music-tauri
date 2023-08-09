@@ -4,12 +4,13 @@
 		:alt="alt"
 		:width="width"
 		:height="height"
-		loading="lazy"
+		:loading="platform.name === 'darwin' ? 'eager' : 'lazy'"
 	>
 </template>
 
 <script setup lang="ts">
 import {cropImage} from '~/client/shared/helpers/crop-image';
+import {platform} from '@tauri-apps/api/os';
 
 const props = defineProps<{
 	src: string | undefined;
