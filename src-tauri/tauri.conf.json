@@ -19,7 +19,10 @@
         "scope": [
           "https://api.music.yandex.net/*",
           "https://storage.mds.yandex.net/*",
-          "https://passport.yandex.ru/*"
+          "https://passport.yandex.ru/*",
+          "https://oauth.yandex.ru/*",
+          "https://mobileproxy.passport.yandex.net/*",
+          "https://oauth.mobile.yandex.net/*"
         ]
       }
     },

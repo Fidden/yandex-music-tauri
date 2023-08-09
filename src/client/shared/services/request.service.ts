@@ -68,7 +68,7 @@ export class RequestService {
 
 		// @ts-ignore
 		if (!res.ok || !unwrappedResult) {
-			console.error('[ERROR]:', res, options);
+			console.error('[ERROR]:', res, this.buildOptions(options));
 			throw new RequestError(res);
 		}
 

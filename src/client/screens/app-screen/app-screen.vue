@@ -1,15 +1,33 @@
 <template>
 	<LayoutPage>
-		<slot/>
+		<RouterView v-slot="{ Component }">
+			<KeepAlive
+				:include="[
+						'index',
+						'albums',
+						'artists',
+						'playlists',
+						'stations',
+						'tracks',
+						'search'
+					]"
+			>
+				<Component :is="Component"/>
+			</KeepAlive>
+		</RouterView>
 		<Player/>
 		<Toasts/>
 	</LayoutPage>
 </template>
 
 <script lang="ts" setup>
+import {AppScreenVm} from '~/client/screens/app-screen/app-screen.vm';
 import Player from '~/client/shared/components/player/player.vue';
 import Toasts from '~/client/shared/components/toasts/toasts.vue';
 import LayoutPage from '~/client/shared/layouts/layout-page/layout-page.vue';
+
+const vm = useVm(AppScreenVm);
+await vm.init();
 </script>
 
 <style lang="scss">
