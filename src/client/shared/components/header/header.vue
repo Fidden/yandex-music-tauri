@@ -2,8 +2,8 @@
 	<header
 		v-draggable
 		:class="cnHeader(null, {
-			revert: platformName === 'darwin'
-		})"
+		   revert: platformName === 'darwin'
+	    })"
 	>
 		<HeaderLogo/>
 		<HeaderSearch/>
@@ -55,15 +55,17 @@ watch(() => vm.search, value => {
 		.header__controls {
 			flex-direction: row-reverse;
 			align-items: center;
+			gap: 8px;
 
 			&-button {
 				border-radius: 50px;
-				width: 15px;
-				height: 15px;
+				width: 12px;
+				height: 12px;
 				flex-shrink: 0;
 				display: flex;
 				justify-content: center;
 				align-items: center;
+				padding: 0;
 
 				.mat-icon {
 					display: none;
@@ -71,17 +73,14 @@ watch(() => vm.search, value => {
 
 				&:nth-child(3) {
 					background: #FF5D5B;
-					border: 1px solid #CF544D;
 				}
 
 				&:nth-child(2) {
 					background: #FFBB39;
-					border: 1px solid #CFA64E;
 				}
 
 				&:nth-child(1) {
 					background: #00CD4E;
-					border: 1px solid #0EA642;
 				}
 			}
 		}
