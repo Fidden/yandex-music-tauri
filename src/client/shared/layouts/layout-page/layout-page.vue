@@ -1,12 +1,12 @@
 <template>
 	<div :class="cnLayoutPage()">
 		<Header/>
+		<Bar/>
 		<div
 			:ref="el => vm.layoutContentRef = el as HTMLDivElement"
 			:class="cnLayoutPage('content')"
 			@scroll="vm.onScroll($route)"
 		>
-			<Bar/>
 			<slot/>
 		</div>
 	</div>
