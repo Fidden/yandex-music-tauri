@@ -17,6 +17,7 @@
 					:key="key"
 					:class="cnPlayer('settings-list-item')"
 					:data-name="item?.name"
+					:data-count="item!.possibleValues.length"
 				>
 					<button
 						v-for="possible in item!.possibleValues"
@@ -92,6 +93,10 @@ const vm = useVm(PlayerVm, true);
 			border-radius: 20px;
 			position: relative;
 			gap: 8px;
+
+			&[data-count='0'] {
+				display: none;
+			}
 
 			&-button {
 				background: #151A22FF;

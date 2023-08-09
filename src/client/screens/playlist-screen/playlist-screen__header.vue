@@ -62,6 +62,9 @@
 						<MenuItem @click="vm.onShuffle()">
 							Перемешать
 						</MenuItem>
+						<MenuItem @click="vm.onWaveStart()">
+							Поток по плейлисту
+						</MenuItem>
 						<MenuItem @click="vm.onShare()">
 							Поделиться
 						</MenuItem>

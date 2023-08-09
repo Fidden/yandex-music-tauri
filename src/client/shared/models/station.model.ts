@@ -37,10 +37,13 @@ export class StationModel extends BaseModel {
 	}
 
 	public static tracks(data: IStationTracksData) {
+		const query: Record<string, any> = {};
+		if (data.trackIdBefore) {
+			query.queue = data.trackIdBefore;
+		}
+
 		return this.request.get<IStationTracksResult>(`rotor/station/${data.currentStation.type}:${data.currentStation.tag}/tracks`, {
-			query: {
-				queue: data.trackIdBefore
-			}
+			query
 		});
 	}
 

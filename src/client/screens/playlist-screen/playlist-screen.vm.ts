@@ -62,6 +62,16 @@ export class PlaylistScreenVm extends BaseVm implements IInitializable {
 		this.playlistIsLiked = !this.playlistIsLiked;
 	}
 
+	public onWaveStart() {
+		this.playerVm.playStation({
+			id: {
+				tag: `${this.playlist?.uid}_${this.playlist?.kind}`,
+				type: 'playlist'
+			},
+			idForFrom: ''
+		});
+	}
+
 	private get playerVm() {
 		return useVm(PlayerVm, true);
 	}
