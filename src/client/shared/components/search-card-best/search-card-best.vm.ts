@@ -1,3 +1,4 @@
+import {singleton} from 'tsyringe';
 import {RouteLocationRaw} from 'vue-router';
 import {globalEmitter} from '~/client/shared/emitters/global.emitter';
 import {UserModel} from '~/client/shared/models/user.model';
@@ -14,6 +15,7 @@ interface IAction {
 	payload: RouteLocationRaw;
 }
 
+@singleton()
 export class SearchCardBestVm extends BaseVm {
 	private result?: BestResult;
 	private type?: ObjectTypeEnum;
@@ -46,7 +48,7 @@ export class SearchCardBestVm extends BaseVm {
 			return undefined;
 		}
 
-		if ('cover' in this.result && 'uri' in this.result.cover) {
+		if ('cover' in this.result && typeof this.result.cover !== 'string') {
 			return this.result.cover?.uri;
 		}
 
@@ -106,7 +108,7 @@ export class SearchCardBestVm extends BaseVm {
 		}
 	}
 
-	public onPlay(): void {
+	public onPlay() {
 		switch (this.type) {
 			case ObjectTypeEnum.ARTIST:
 				return this.onPlayArtist();
@@ -135,9 +137,8 @@ export class SearchCardBestVm extends BaseVm {
 
 	private async onPlayPlaylist() {
 		const playlist = await UserModel.playlist.one((this.result as IPlaylist).kind, (this.result as IPlaylist).uid);
-		globalEmitter.emit('player:set-queue',
-			playlist.tracks
-		);
+		const tracks = playlist.tracks.map(item => item.track) as ITrack[];
+		globalEmitter.emit('player:set-queue', tracks);
 	}
 
 	private async onPlayTrack() {

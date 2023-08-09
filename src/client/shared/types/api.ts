@@ -332,11 +332,13 @@ export type ArtistId = number | string;
 
 export interface IBest {
 
-	'type'?: string;
+	'type'?: ObjectTypeEnum;
 
 	'text'?: string;
 
 	'result'?: BestResult;
+
+	searchRequestId: string;
 }
 
 export type BestResult = IAlbum | IArtist | IPlaylist | ITrack | IVideo;

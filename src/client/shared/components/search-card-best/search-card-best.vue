@@ -34,9 +34,9 @@
 import {NuxtLink} from '#components';
 import Image from '~/client/shared/components/image.vue';
 import MatIcon from '~/client/shared/components/mat-icon.vue';
-import {SearchCardBestVm} from '~/client/shared/components/search-card-best/search-card-best.vm';
 import {BestResult, ObjectTypeEnum} from '~/client/shared/types/api';
 import {cnSearchCardBest} from './search-card-best.const';
+import {SearchCardBestVm} from './search-card-best.vm';
 
 const props = defineProps<{
 	result: BestResult,
@@ -45,7 +45,7 @@ const props = defineProps<{
 
 const vm = useVm(SearchCardBestVm);
 
-watch(props, newProps => vm.update(newProps), {deep: true, immediate: true});
+watch(props, newProps => vm.update(newProps), {deep: true, immediate: true, flush: 'post'});
 </script>
 
 <style lang="scss">

@@ -3,14 +3,14 @@
 		<RouterView v-slot="{ Component }">
 			<KeepAlive
 				:include="[
-						'index',
-						'albums',
-						'artists',
-						'playlists',
-						'stations',
-						'tracks',
-						'search'
-					]"
+					'index',
+					'albums',
+					'artists',
+					'playlists',
+					'stations',
+					'tracks',
+					'search'
+				]"
 			>
 				<Component :is="Component"/>
 			</KeepAlive>

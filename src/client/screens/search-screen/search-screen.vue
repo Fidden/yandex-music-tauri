@@ -2,13 +2,13 @@
 	<main :class="cnSearchScreen()">
 		<ContentBlock
 			v-if="showOn('best')"
+			:key="vm.search?.searchRequestId"
 			:class="cnSearchScreen('best')"
 			title="Лучший результат"
 		>
 			<SearchCardBest
-				v-if="vm.search?.best?.result && vm.search?.best?.type"
-				:result="vm.search.best.result"
-				:type="vm.search.best.type"
+				:result="vm.search?.best?.result"
+				:type="vm.search?.best?.type"
 			/>
 			<TracksTable
 				v-if="vm.search?.tracks?.results?.length"
