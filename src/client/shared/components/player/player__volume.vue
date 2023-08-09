@@ -2,9 +2,7 @@
 	<div :class="cnPlayer('volume')">
 		<Button
 			variant="text"
-			:class="cnPlayer('volume-hq', {
-				active: vm.highQuality
-			})"
+			:class="cnPlayer('volume-hq')"
 			@click="vm.toggleHighQuality()"
 		>
 			<MatIcon
@@ -45,11 +43,6 @@ const vm = useVm(PlayerVm, true);
 
 	&-hq {
 		transition: 200ms;
-
-		&--active {
-			transition: 200ms;
-			color: var(--primary);
-		}
 	}
 }
 </style>
