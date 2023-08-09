@@ -46,7 +46,7 @@ export class SearchCardBestVm extends BaseVm {
 			return undefined;
 		}
 
-		if ('cover' in this.result) {
+		if ('cover' in this.result && 'uri' in this.result.cover) {
 			return this.result.cover?.uri;
 		}
 
