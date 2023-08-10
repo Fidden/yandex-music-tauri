@@ -1,9 +1,13 @@
+import {ResponseType} from '@tauri-apps/api/http';
+import base64 from 'crypto-js/enc-base64';
+import hmac from 'crypto-js/hmac-sha256';
 import md5 from 'crypto-js/md5';
 import {LikeModel} from '~/client/shared/models/like.model';
 import {PlaylistModel} from '~/client/shared/models/playlist.model';
 import {UserModel} from '~/client/shared/models/user.model';
 import {BaseModel} from '~/client/shared/types/abstract/base.model';
 import {
+	ILyricsTimestamp,
 	IStorageLocation,
 	ITrack,
 	ITrackDownloadInfo,
@@ -107,8 +111,40 @@ export class TrackModel extends BaseModel {
 
 		const storageLocations = await this.storageLocations(heightQuality?.downloadInfoUrl);
 
-		const sign = md5('XGRlBW9FXlekgbPrRHuSiA${storageLocations.path.slice(1)}${storageLocations.s}');
+		const sign = md5(`XGRlBW9FXlekgbPrRHuSiA${storageLocations.path.slice(1)}${storageLocations.s}`);
 
 		return `https://${storageLocations.host}/get-mp3/${sign}/${storageLocations.ts}${storageLocations.path}`;
+	}
+
+	public static lyrics(trackId: string | number) {
+		const timeStamp = Date.now().toString().slice(0, -3);
+		const sign = base64.stringify(
+			hmac(`${trackId}${timeStamp}`, 'p93jhgh689SBReK6ghtw62')
+		);
+
+		return super.request.get<ILyricsTimestamp>(`/tracks/${trackId}/lyrics`, {
+			query: {
+				format: 'LRC',
+				timeStamp,
+				sign
+			}
+		});
+	}
+
+
+	public static async lyricsText(trackId: string | number) {
+		const res = await this.lyrics(trackId);
+		const downloadUlr = res.downloadUrl;
+		const file = await super.request.get<string>(downloadUlr, {
+			unwrapper: null,
+			responseType: ResponseType.Text
+		});
+
+		return file
+			.split('\n')
+			.map(item => item
+				.replace('[', '')
+				.split('] ')
+			);
 	}
 }

@@ -763,6 +763,10 @@ export interface ILyrics {
 	'url'?: string;
 }
 
+export interface ILyricsTimestamp {
+	downloadUrl: string;
+}
+
 export interface IMenuItem {
 
 	'title'?: string;
