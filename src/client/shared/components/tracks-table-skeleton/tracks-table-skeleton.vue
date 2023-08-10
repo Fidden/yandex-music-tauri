@@ -5,7 +5,10 @@
 		tag="main"
 		:class="cnTracksTableSkeleton()"
 	>
-		<div :class="cnTracksTableSkeleton('filter')">
+		<div
+			v-if="!hideFilter"
+			:class="cnTracksTableSkeleton('filter')"
+		>
 			<Skeleton
 				width="215px"
 				height="40px"
@@ -17,6 +20,7 @@
 		</div>
 		<div :class="cnTracksTableSkeleton('body')">
 			<Skeleton
+				:class="cnTracksTableSkeleton('body-before')"
 				width="100%"
 				height="42px"
 			/>
@@ -63,11 +67,12 @@
 </template>
 
 <script setup lang="ts">
-import {cnTracksTableSkeleton} from './tracks-table-skeleton.const';
 import {Skeleton, SkeletonTheme} from 'vue-loading-skeleton';
+import {cnTracksTableSkeleton} from './tracks-table-skeleton.const';
 
 withDefaults(defineProps<{
-	tracksCount?: number
+	tracksCount?: number,
+	hideFilter?: boolean
 }>(), {
 	tracksCount: 10
 });
@@ -75,6 +80,8 @@ withDefaults(defineProps<{
 
 <style lang="scss">
 .tracks-table-skeleton {
+	overflow-y: hidden;
+
 	&__filter {
 		display: flex;
 		gap: 10px;

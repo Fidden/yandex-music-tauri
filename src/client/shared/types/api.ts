@@ -337,8 +337,6 @@ export interface IBest {
 	'text'?: string;
 
 	'result'?: BestResult;
-
-	searchRequestId: string;
 }
 
 export type BestResult = IAlbum | IArtist | IPlaylist | ITrack | IVideo;
@@ -1180,7 +1178,7 @@ export interface IRotorSettings2 {
 
 export interface ISearch {
 
-	'searchResultId'?: string;
+	'searchRequestId'?: string;
 
 	'text': string;
 

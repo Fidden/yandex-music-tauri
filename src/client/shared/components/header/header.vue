@@ -14,7 +14,9 @@
 
 <script lang="ts" setup>
 import {platform} from '@tauri-apps/api/os';
+import {useRoute, useRouter} from 'vue-router';
 import {HeaderVm} from '~/client/shared/components/header/header.vm';
+import {globalEmitter} from '~/client/shared/emitters/global.emitter';
 import {cnHeader} from './header.const';
 import HeaderControls from './header__controls.vue';
 import HeaderLogo from './header__logo.vue';
@@ -29,10 +31,15 @@ const vm = useVm(HeaderVm, true);
 vm.init(route.query?.text as string);
 
 watch(() => vm.search, value => {
-	router.push({
-		name: 'search',
-		query: {text: value}
-	});
+	if (!value || !value.length) {
+		return;
+	}
+
+	if (route.name !== 'search') {
+		router.push({name: 'search'});
+	}
+
+	globalEmitter.emit('search:text-change', value);
 });
 </script>
 

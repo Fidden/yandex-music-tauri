@@ -4,7 +4,7 @@
 		:class="cnHeader('search')"
 	>
 		<input
-			v-model="vm.search"
+			v-model.trim="vm.search"
 			:class="cnHeader('search-input')"
 			placeholder="Поиск"
 			type="text"

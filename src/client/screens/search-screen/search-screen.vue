@@ -1,31 +1,40 @@
 <template>
 	<main :class="cnSearchScreen()">
 		<ContentBlock
-			v-if="showOn('best')"
 			:key="vm.search?.searchRequestId"
 			:class="cnSearchScreen('best')"
 			title="Лучший результат"
+			:loading="vm.pending.get('init')"
 		>
-			<SearchCardBest
-				:result="vm.search?.best?.result"
-				:type="vm.search?.best?.type"
-			/>
-			<TracksTable
-				v-if="vm.search?.tracks?.results?.length"
-				hide-filter
-				:page-mode="false"
-				:tracks="vm.search.tracks.results"
-			/>
+			<template #default>
+				<SearchCardBest
+					v-if="vm.search?.best?.result && vm.search?.best?.type"
+					:result="vm.search?.best?.result"
+					:type="vm.search?.best?.type"
+				/>
+				<TracksTable
+					v-if="vm.search?.tracks?.results?.length"
+					hide-filter
+					:page-mode="false"
+					:tracks="vm.search.tracks.results"
+				/>
+			</template>
+			<template #fallback>
+				<SearchCardBestSkeleton/>
+				<TracksTableSkeleton
+					hide-filter
+				/>
+			</template>
 		</ContentBlock>
 
 		<ContentBlock
-			v-if="showOn('artists')"
 			title="Исполнители"
 			:class="cnSearchScreen('artists')"
 			:loading="vm.pending.get('init')"
 		>
 			<template #default>
 				<Swiper
+					v-if="vm.search?.artists?.results?.length"
 					:slides-per-view="'auto'"
 					:space-between="6"
 				>
@@ -56,13 +65,13 @@
 		</ContentBlock>
 
 		<ContentBlock
-			v-if="showOn('albums')"
 			title="Альбомы"
 			:class="cnSearchScreen('albums')"
 			:loading="vm.pending.get('init')"
 		>
 			<template #default>
 				<Swiper
+					v-if="vm.search?.albums?.results?.length"
 					:slides-per-view="'auto'"
 					:space-between="6"
 				>
@@ -93,13 +102,13 @@
 		</ContentBlock>
 
 		<ContentBlock
-			v-if="showOn('playlists')"
 			title="Плейлисты"
 			:class="cnSearchScreen('playlists')"
 			:loading="vm.pending.get('init')"
 		>
 			<template #default>
 				<Swiper
+					v-if="vm.search?.playlists?.results?.length"
 					:slides-per-view="'auto'"
 					:space-between="6"
 				>
@@ -130,13 +139,13 @@
 		</ContentBlock>
 
 		<ContentBlock
-			v-if="showOn('podcasts')"
 			:class="cnSearchScreen('podcasts')"
 			title="Подкасты"
 			:loading="vm.pending.get('init')"
 		>
 			<template #default>
 				<Swiper
+					v-if="vm.search?.podcasts?.results?.length"
 					:slides-per-view="'auto'"
 					:space-between="6"
 				>
@@ -177,22 +186,19 @@ import ArtistCard from '~/client/shared/components/artist-card/artist-card.vue';
 import ContentBlock from '~/client/shared/components/content-block/content-block.vue';
 import PlaylistCardSkeleton from '~/client/shared/components/playlist-card-skeleton/playlist-card-skeleton.vue';
 import PlaylistCard from '~/client/shared/components/playlist-card/playlist-card.vue';
+import SearchCardBestSkeleton from '~/client/shared/components/search-card-best-skeleton/search-card-best-skeleton.vue';
 import SearchCardBest from '~/client/shared/components/search-card-best/search-card-best.vue';
+import TracksTableSkeleton from '~/client/shared/components/tracks-table-skeleton/tracks-table-skeleton.vue';
 import TracksTable from '~/client/shared/components/tracks-table/tracks-table.vue';
-import {ISearch} from '~/client/shared/types/api';
+import {globalEmitter} from '~/client/shared/emitters/global.emitter';
 import {cnSearchScreen} from './search-screen.const';
 
 const vm = useVm(SearchScreenVm, true);
 
-const showOn = (key: keyof ISearch) => {
-	if (vm.pending.get('init')) {
-		return true;
-	}
-
-	if (!vm.pending.get('init') && vm.search) {
-		return vm.search[key]?.results?.length > 0 || Object.keys(vm.search[key]?.result || {}).length > 0;
-	}
-};
+globalEmitter.on('search:text-change', (text) => {
+	vm.text = text;
+	vm.fetch();
+});
 </script>
 
 <style lang="scss">
@@ -212,8 +218,12 @@ const showOn = (key: keyof ISearch) => {
 			grid-template-areas: "artist-search  tracks-table";
 		}
 
-		.tracks-table__before {
+		.tracks-table__before, .tracks-table-skeleton__body-before {
 			display: none;
+		}
+
+		.tracks-table-skeleton__body {
+			margin: 0;
 		}
 
 		.tracks-table__album {
