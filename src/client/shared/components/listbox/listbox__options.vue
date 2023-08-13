@@ -20,5 +20,6 @@ import {cnListbox} from '~/client/shared/components/listbox/listbox.const';
 	padding: 6px;
 	z-index: 100;
 	border-radius: 4px;
+	min-width: 100%;
 }
 </style>

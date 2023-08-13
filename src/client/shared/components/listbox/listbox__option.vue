@@ -2,7 +2,7 @@
 	<HLListboxOption
 		:class="cnListbox('option')"
 		:value="value"
-		:disabled="disabled"
+		:disabled="!!disabled"
 	>
 		<slot/>
 	</HLListboxOption>
@@ -12,7 +12,7 @@
 import {cnListbox} from './listbox.const';
 
 defineProps<{
-	value: any,
+	value?: any,
 	disabled?: boolean
 }>();
 </script>
@@ -23,10 +23,12 @@ defineProps<{
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+	justify-content: space-between;
 	padding: 0 10px;
 	font-size: 14px;
 	transition: 200ms;
 	cursor: pointer;
+	gap: 8px;
 
 	&:hover {
 		background: rgb(44, 53, 77);

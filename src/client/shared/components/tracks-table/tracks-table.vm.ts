@@ -5,7 +5,7 @@ import {IInitializable} from '~/client/shared/types/initializable';
 
 export type TrackType = ITrack | IPopularTrack;
 
-export enum OrderValues {
+export enum OrderKey {
 	DEFAULT,
 	BY_NAME,
 	BY_ARTIST,
@@ -18,12 +18,13 @@ interface InitArgs {
 
 interface IFilter {
 	name: string;
-	order: OrderValues;
+	orderBy: IFilterOption;
 }
 
 interface IFilterOption {
-	key: OrderValues,
-	value: string
+	key: OrderKey;
+	value: string;
+	sort?: 'asc' | 'desc';
 }
 
 export class TracksTableVm extends BaseVm implements IInitializable {
@@ -31,20 +32,21 @@ export class TracksTableVm extends BaseVm implements IInitializable {
 	public filter: IFilter;
 	public filterOptions: IFilterOption[];
 
+
 	constructor() {
 		super();
 		this.tracks = [];
+		this.filterOptions = [
+			{key: OrderKey.DEFAULT, value: 'По стандарту'},
+			{key: OrderKey.BY_NAME, value: 'Название', sort: 'asc'},
+			{key: OrderKey.BY_ARTIST, value: 'Артист', sort: 'asc'},
+			{key: OrderKey.BY_DURATION, value: 'Длительность', sort: 'asc'}
+		];
+
 		this.filter = {
 			name: '',
-			order: OrderValues.DEFAULT
+			orderBy: this.filterOptions[0]
 		};
-
-		this.filterOptions = [
-			{key: OrderValues.DEFAULT, value: 'По стандарту'},
-			{key: OrderValues.BY_NAME, value: 'Название'},
-			{key: OrderValues.BY_ARTIST, value: 'Артист'},
-			{key: OrderValues.BY_DURATION, value: 'Длительность'}
-		];
 	}
 
 	public init(args: InitArgs) {
@@ -72,14 +74,14 @@ export class TracksTableVm extends BaseVm implements IInitializable {
 	public get filteredTracks() {
 		let output = [...this.tracks];
 
-		switch (this.filter.order) {
-			case OrderValues.BY_ARTIST:
+		switch (this.filter.orderBy.key) {
+			case OrderKey.BY_ARTIST:
 				output.sort(this.compareArtists);
 				break;
-			case OrderValues.BY_DURATION:
+			case OrderKey.BY_DURATION:
 				output.sort(this.compareDuration);
 				break;
-			case OrderValues.BY_NAME:
+			case OrderKey.BY_NAME:
 				output.sort(this.compareName);
 				break;
 		}
@@ -93,16 +95,18 @@ export class TracksTableVm extends BaseVm implements IInitializable {
 			return filteredByName.indexOf(item) === -1;
 		}));
 
-		return output;
+		const needReverse = this.filter.orderBy.sort === 'asc' && this.filter.orderBy.key !== OrderKey.DEFAULT;
+
+		return needReverse ? output.reverse() : output;
 	}
 
 	private compareName(a: TrackType, b: TrackType) {
 		if (a.title > b.title) {
-			return 1;
+			return -1;
 		}
 
 		if (a.title < b.title) {
-			return -1;
+			return 1;
 		}
 
 		return 0;
@@ -114,11 +118,11 @@ export class TracksTableVm extends BaseVm implements IInitializable {
 		};
 
 		if (getArtistMappingName(a.artists) > getArtistMappingName(b.artists)) {
-			return 1;
+			return -1;
 		}
 
 		if (getArtistMappingName(a.artists) < getArtistMappingName(b.artists)) {
-			return -1;
+			return 1;
 		}
 
 		return 0;
@@ -141,6 +145,27 @@ export class TracksTableVm extends BaseVm implements IInitializable {
 	}
 
 	public get filterOrderValue() {
-		return this.filterOptions.find(item => item.key === this.filter.order)?.value;
+		return this.filterOptions.find(item => item.key === this.filter.orderBy.key)?.value;
+	}
+
+	public onFilterChange(option: IFilterOption) {
+		if (option?.sort === undefined) {
+			this.filter.orderBy = option;
+			return;
+		}
+
+		// if option.key equals to current option.key, then we need to change sort
+		if (option.key === this.filter.orderBy.key) {
+			option.sort = option.sort === 'asc' ? 'desc' : 'asc';
+		}
+		// otherwise we need to change option and set sort of previous option to 'asc'
+		else {
+			const prevOption = this.filterOptions.find(item => item.key === this.filter.orderBy.key);
+			if (prevOption?.sort) {
+				prevOption!.sort = 'asc';
+			}
+
+			this.filter.orderBy = option;
+		}
 	}
 }

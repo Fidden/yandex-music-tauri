@@ -13,7 +13,7 @@
 			/>
 		</div>
 
-		<Listbox v-model="vm.filter.order">
+		<Listbox v-model="vm.filter.orderBy.key">
 			<ListboxButton>
 				{{ vm.filterOrderValue }}
 			</ListboxButton>
@@ -21,9 +21,15 @@
 				<ListboxOption
 					v-for="item in vm.filterOptions"
 					:key="item.key"
-					:value="item.key"
+					:class="cnTracksTable('filter-option', [item.sort])"
+					@click="vm.onFilterChange(item)"
 				>
 					{{ item.value }}
+					<MatIcon
+						v-show="item.sort"
+						size="20px"
+						name="sort"
+					/>
 				</ListboxOption>
 			</ListboxOptions>
 		</Listbox>
@@ -35,6 +41,7 @@ import Listbox from '~/client/shared/components/listbox/listbox.vue';
 import ListboxButton from '~/client/shared/components/listbox/listbox__button.vue';
 import ListboxOption from '~/client/shared/components/listbox/listbox__option.vue';
 import ListboxOptions from '~/client/shared/components/listbox/listbox__options.vue';
+import MatIcon from '~/client/shared/components/mat-icon.vue';
 import {TracksTableVm} from '~/client/shared/components/tracks-table/tracks-table.vm';
 import {cnTracksTable} from './tracks-table.const';
 
@@ -47,6 +54,27 @@ const vm = useVm(TracksTableVm, true);
 	flex-direction: row;
 	align-items: center;
 	gap: 16px;
+
+	&-option {
+		.mat-icon {
+			opacity: 0;
+			transition: 200ms;
+		}
+
+		&:hover {
+			.mat-icon {
+				opacity: 1;
+				transition: 200ms;
+			}
+		}
+
+		&--desc {
+			.mat-icon {
+				transform: rotate(180deg);
+				transition: 200ms;
+			}
+		}
+	}
 
 	&-input {
 		position: relative;
