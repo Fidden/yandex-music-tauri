@@ -103,12 +103,6 @@ devDependencies:
   typescript:
     specifier: ^5.0.2
     version: 5.1.6
-  vue-devtool-flash-updates:
-    specifier: ^0.1.1
-    version: 0.1.1
-  vue-scroll-behavior:
-    specifier: ^0.3.0
-    version: 0.3.0
 
 packages:
 
@@ -7965,10 +7959,6 @@ packages:
       vue: 3.3.4
     dev: false
 
-  /vue-devtool-flash-updates@0.1.1:
-    resolution: {integrity: sha512-HIlHEbZMpCkcWYENURHYI+QBDR85KdFFoUsJvMf3zcBOHHsg2dnRzLbo/gmvQzeEaDTsnkrcs9/MO0AZ58NpLQ==}
-    dev: true
-
   /vue-devtools-stub@0.1.0:
     resolution: {integrity: sha512-RutnB7X8c5hjq39NceArgXg28WZtZpGc3+J16ljMiYnFhKvd8hITxSWQSQ5bvldxMDU6gG5mkxl1MTQLXckVSQ==}
     dev: true
@@ -8022,11 +8012,6 @@ packages:
     dependencies:
       '@vue/devtools-api': 6.5.0
       vue: 3.3.4
-    dev: true
-
-  /vue-scroll-behavior@0.3.0:
-    resolution: {integrity: sha512-wU0aN93uFEdg6eQNsW+SUsrAwV+2WsNS4pleACdUz3Aw4rNvZXqYMhKAFtbcAoaB51Bzqod+FWtVJ5qFr0KgbA==}
-    engines: {node: '>= 4.0.0', npm: '>= 3.0.0'}
     dev: true
 
   /vue-tauri-draggable@0.2.0:

@@ -113,7 +113,7 @@ watch(() => route.name, () => vm.updateCurrenRoute(route), {immediate: true});
 			}
 
 			&::after {
-				background-image: url('/plus.svg');
+				background-image: url('/logos/plus.svg');
 				position: absolute;
 				z-index: 0;
 				top: 50%;

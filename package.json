@@ -45,8 +45,6 @@
     "nuxt-icon": "^0.4.2",
     "sass": "^1.64.0",
     "tsyringe": "^4.8.0",
-    "typescript": "^5.0.2",
-    "vue-devtool-flash-updates": "^0.1.1",
-    "vue-scroll-behavior": "^0.3.0"
+    "typescript": "^5.0.2"
   }
 }

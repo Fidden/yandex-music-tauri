@@ -6,9 +6,11 @@ import {IInitializable} from '~/client/shared/types/initializable';
 export class LoginScreenVm extends BaseVm implements IInitializable {
 	public qrLink?: string;
 	public intervalId?: NodeJS.Timer;
+	public qrRef?: HTMLImageElement;
 
 	constructor() {
 		super();
+		this.qrRef = undefined;
 		this.qrLink = undefined;
 		this.intervalId = undefined;
 	}
