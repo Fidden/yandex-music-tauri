@@ -50,7 +50,7 @@ watch(() => route.name, routeName => vm.onRouteChange(routeName as string));
 		background: #1b202c;
 		overscroll-behavior: contain;
 		flex: 1;
-		padding: 45px 54px 104px 54px;
+		padding: 45px 54px 110px 54px;
 		display: flex;
 		flex-direction: column;
 		overflow-x: hidden;

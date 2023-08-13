@@ -1488,7 +1488,7 @@ export interface IStatus {
 
 	'account': IAccount;
 
-	'permissions': Permissions;
+	'permissions': IPermissions;
 
 	'subscription': ISubscription;
 
@@ -1783,3 +1783,19 @@ export enum LikeActionEnum {
 	ADD_MULTIPLE = 'add-multiple',
 }
 
+export interface IAccountFullInfo {
+	id: string;
+	login: string;
+	client_id: string;
+	display_name?: string;
+	real_name?: string;
+	first_name?: string;
+	last_name?: string;
+	sex?: string | null;
+	default_email?: string;
+	emails?: string[];
+	birthday?: string;
+	default_avatar_id?: string;
+	is_avatar_empty?: boolean;
+	psuid: string;
+}

@@ -17,4 +17,9 @@ globalEmitter.on('auth:success', (token) => {
 	screenState.value = ScreenStateEnum.APP;
 	BaseModel.updateToken(token);
 });
+
+globalEmitter.on('auth:logout', () => {
+	localStorage.removeItem('token');
+	screenState.value = ScreenStateEnum.LOGIN;
+});
 </script>

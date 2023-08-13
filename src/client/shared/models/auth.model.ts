@@ -23,6 +23,9 @@ export class AuthModel {
 			responseType: ResponseType.Text
 		});
 
+		console.log(res.data);
+		console.log(res.data.match(/"csrf_token" value="([^"]+)"/));
+
 		return res.data.match(/"csrf_token" value="([^"]+)"/)?.at(1);
 	}
 

@@ -23,7 +23,8 @@
           "https://oauth.yandex.ru/*",
           "https://mobileproxy.passport.yandex.net/*",
           "https://oauth.mobile.yandex.net/*",
-          "https://music-lyrics.*"
+          "https://music-lyrics.*",
+          "https://login.yandex.ru/*"
         ]
       }
     },

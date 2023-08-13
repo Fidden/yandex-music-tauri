@@ -4,14 +4,24 @@
 			v-for="(item, index) in vm.routes"
 			:key="index"
 			:class="cnBar('link', {
-				active: $route.name === item.to.name
+				active: $route.name === item.to.name,
+				[item.classModifier]: item.classModifier?.length
 			})"
 			@click="() => {
 				layoutVm.scrollCache.delete(item.to.name);
 				router.push(item.to)
 			}"
 		>
-			<MatIcon :name="item.icon"/>
+			<MatIcon
+				v-if="item.icon"
+				:name="item.icon"
+			/>
+			<Image
+				v-if="item.image"
+				:src="item.image.src"
+				:alt="item.image.alt"
+				:crop="item.image.crop"
+			/>
 		</button>
 		<div
 			:style="{top: vm.linePosition}"
@@ -23,6 +33,7 @@
 <script lang="ts" setup>
 import {useRoute} from 'vue-router';
 import {BarVm} from '~/client/shared/components/bar/bar.vm';
+import Image from '~/client/shared/components/image.vue';
 import MatIcon from '~/client/shared/components/mat-icon.vue';
 import {LayoutPageVm} from '~/client/shared/layouts/layout-page/layout-page.vm';
 import {cnBar} from './bar.const';
@@ -46,7 +57,7 @@ watch(() => route.name, () => vm.updateCurrenRoute(route), {immediate: true});
 	left: 0;
 	top: 75px;
 	background: #161b23;
-	height: 100%;
+	height: calc(100% - 80px);
 	z-index: 100;
 
 	&__line {
@@ -87,6 +98,34 @@ watch(() => route.name, () => vm.updateCurrenRoute(route), {immediate: true});
 				'GRAD' 200,
 				'opsz' 48 !important;
 				color: var(--primary);
+			}
+		}
+
+		&--profile {
+			overflow: hidden;
+			position: relative;
+			margin-top: auto;
+
+			> img {
+				border-radius: 9999px;
+				width: 30px;
+				height: 30px;
+			}
+
+			&::after {
+				background-image: url('/plus.svg');
+				position: absolute;
+				z-index: 0;
+				top: 50%;
+				left: 50%;
+				box-sizing: border-box;
+				width: 30px;
+				height: 30px;
+				content: "";
+				background-repeat: no-repeat;
+				background-position: 50%;
+				background-size: contain;
+				transform: translate(-50%,-50%) scale(1.208);
 			}
 		}
 

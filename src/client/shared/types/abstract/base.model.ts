@@ -1,7 +1,7 @@
 import {RequestService} from '~/client/shared/services/request.service';
 
 export abstract class BaseModel {
-	private static token?: string = localStorage.getItem('token');
+	private static token?: string | null = localStorage.getItem('token');
 
 	protected static request = new RequestService().create({
 		baseUrl: 'https://api.music.yandex.net',

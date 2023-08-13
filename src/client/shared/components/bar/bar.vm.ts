@@ -1,10 +1,17 @@
 import {singleton} from 'tsyringe';
 import {RouteLocationNormalizedLoaded} from 'vue-router';
+import {UserModel} from '~/client/shared/models/user.model';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
 
 export interface IBarRoute {
-	to: { name: string },
-	icon: string
+	to: { name: string };
+	icon?: string;
+	image?: {
+		src: string;
+		alt: string;
+		crop: string;
+	};
+	classModifier?: string;
 }
 
 const ROUTE_ITEM_HEIGHT = 50;
@@ -42,6 +49,15 @@ export class BarVm extends BaseVm {
 			{
 				to: {name: 'playlists'},
 				icon: 'playlist_play'
+			},
+			{
+				to: {name: 'profile'},
+				image: {
+					src: UserModel.avatarUrl,
+					alt: 'avatar',
+					crop: '100x100'
+				},
+				classModifier: 'profile'
 			}
 		];
 		this.cachedRouteIndex = 0;
@@ -58,8 +74,17 @@ export class BarVm extends BaseVm {
 		}
 
 		this.cachedRouteIndex = this.routeIndex;
+		const shouldChangeDirection = this.cachedRouteIndex > 5;
 
-		return `${this.cachedRouteIndex * ROUTE_ITEM_HEIGHT + ROUTE_ITEM_HALF_HEIGHT}px`;
+		const routeIndex = shouldChangeDirection
+			? (this.routes.length - 1) - this.cachedRouteIndex
+			: this.cachedRouteIndex;
+
+		const calculatedOffset = routeIndex * ROUTE_ITEM_HEIGHT + ROUTE_ITEM_HALF_HEIGHT;
+
+		return shouldChangeDirection
+			? `calc(100% - ${calculatedOffset}px)`
+			: `${calculatedOffset}px`;
 	}
 
 	public updateCurrenRoute(route: RouteLocationNormalizedLoaded) {
