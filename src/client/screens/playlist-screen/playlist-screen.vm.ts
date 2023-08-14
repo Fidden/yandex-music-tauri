@@ -17,20 +17,20 @@ type PendingKeys = 'init';
 @injectable()
 export class PlaylistScreenVm extends BaseVm implements IInitializable {
 	public playlist?: IPlaylist;
-	public playlistIsLiked: boolean;
+	public isLiked: boolean;
 
 	constructor(
 		@injectDep(PendingService) public readonly pending: PendingService<PendingKeys>
 	) {
 		super();
 		this.playlist = undefined;
-		this.playlistIsLiked = false;
+		this.isLiked = false;
 	}
 
 	@pending<PendingKeys>('init')
 	public async init(args: InitArgs) {
 		this.playlist = await UserModel.playlist.one(args.kind, args.uid);
-		this.playlistIsLiked = UserModel.playlist.isLiked(this.playlist?.kind, this.playlist.uid);
+		this.isLiked = UserModel.playlist.isLiked(this.playlist?.kind, this.playlist.uid);
 	}
 
 	public get tracks() {
@@ -55,11 +55,11 @@ export class PlaylistScreenVm extends BaseVm implements IInitializable {
 			return;
 		}
 
-		this.playlistIsLiked
+		this.isLiked
 			? UserModel.playlist.dislike(this.playlist)
 			: UserModel.playlist.like(this.playlist);
 
-		this.playlistIsLiked = !this.playlistIsLiked;
+		this.isLiked = !this.isLiked;
 	}
 
 	public onWaveStart() {

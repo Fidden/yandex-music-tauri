@@ -22,11 +22,11 @@
 
 <script setup lang="ts">
 import Image from '~/client/shared/components/image.vue';
-import type {IArtist} from '~/client/shared/types/api';
+import type {IArtist, IArtistShort} from '~/client/shared/types/api';
 import {cnArtistCard} from './artist-card.const';
 
 defineProps<{
-	artist: IArtist;
+	artist: IArtist | IArtistShort;
 }>();
 </script>
 

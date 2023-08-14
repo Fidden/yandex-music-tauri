@@ -2,8 +2,8 @@
 	<header :class="cnArtistScreen('header')">
 		<Image
 			:class="cnArtistScreen('header-image')"
-			:src="vm.briefInfo?.artist.cover?.uri"
-			:alt="vm.briefInfo?.artist.name"
+			:src="vm.briefInfo!.artist.cover?.uri"
+			:alt="vm.briefInfo!.artist.name"
 			width="160"
 			height="160"
 			crop="300x300"
@@ -14,19 +14,17 @@
 				Исполнитель
 			</p>
 			<p :class="cnArtistScreen('header-title')">
-				{{ vm.briefInfo.artist.name }}
+				{{ vm.briefInfo!.artist?.name }}
 			</p>
 
 			<div :class="cnArtistScreen('header-additional')">
-				<p v-if="vm.briefInfo?.stats?.lastMonthListeners ">
+				<p v-if="vm.lastMonthListeners">
 					<span>Слушателей:</span>
-					{{
-						vm.briefInfo.stats.lastMonthListeners.toLocaleString('ru')
-					}} в месяц
+					{{ vm.lastMonthListeners }} в месяц
 				</p>
 
-				<p v-if="vm.briefInfo?.artist?.likesCount">
-					{{ vm.briefInfo.artist.likesCount.toLocaleString('ru') }}
+				<p v-if="vm.likesCount">
+					{{ vm.likesCount }}
 					<span>лайков</span>
 				</p>
 			</div>
@@ -39,27 +37,51 @@
 					/>
 					Слушать
 				</Button>
-				<Button variant="text">
-					<Icon
-						size="1.5rem"
-						name="ic:round-favorite-border"
+				<Button
+					variant="text"
+					:class="cnPlaylistScreen('header-like', {
+						active: vm.isLiked
+					})"
+					@click="vm.onLike()"
+				>
+					<MatIcon
+						name="favorite"
+						:fill="vm.isLiked"
 					/>
 				</Button>
-
-				<Button variant="text">
-					<Icon
-						size="1.5rem"
-						name="ic:round-more-horiz"
-					/>
-				</Button>
+				<Menu>
+					<MenuButton>
+						<Icon
+							size="1.5rem"
+							name="ic:round-more-horiz"
+						/>
+					</MenuButton>
+					<MenuItems>
+						<MenuItem @click="vm.onShuffle()">
+							Перемешать
+						</MenuItem>
+						<MenuItem @click="vm.onWaveStart()">
+							Поток по артисту
+						</MenuItem>
+						<MenuItem @click="vm.onShare()">
+							Поделиться
+						</MenuItem>
+					</MenuItems>
+				</Menu>
 			</div>
 		</div>
 	</header>
 </template>
 
 <script setup lang="ts">
+import {cnPlaylistScreen} from '~/client/screens/playlist-screen/playlist-screen.const';
 import Button from '~/client/shared/components/button/button.vue';
 import Image from '~/client/shared/components/image.vue';
+import MatIcon from '~/client/shared/components/mat-icon.vue';
+import Menu from '~/client/shared/components/menu/menu.vue';
+import MenuButton from '~/client/shared/components/menu/menu__button.vue';
+import MenuItem from '~/client/shared/components/menu/menu__item.vue';
+import MenuItems from '~/client/shared/components/menu/menu__items.vue';
 import {cnArtistScreen} from './artist-screen.const';
 import {ArtistScreenVm} from './artist-screen.vm';
 

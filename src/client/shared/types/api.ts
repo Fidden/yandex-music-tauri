@@ -158,43 +158,50 @@ export interface IAlertButton {
 }
 
 export interface IArtist {
-
 	'composer': boolean;
-
 	'cover'?: ICover;
-
 	'decomposed'?: Array<object> | null;
-
 	'genres': Array<object>;
-
 	'id': ArtistId;
-
 	'name': string;
-
 	'various': boolean;
-
 	'popularTracks'?: Array<ITrack> | null;
-
 	'ticketsAvailable'?: boolean | null;
-
 	'regions'?: Array<string> | null;
-
 	likesCount?: number;
-
-	counts?: {
-		alsoAlbums?: number;
-		alsoTracks?: number;
-		directAlbums?: number;
-		tracks?: number;
-	};
-
-	ratings?: {
-		day?: number;
-		week?: number;
-		month?: number;
-	};
-
+	counts?: ICounts;
+	ratings?: IRatings;
 	links?: ILink[];
+}
+
+export interface IArtistShort {
+	id: string;
+	name: string;
+	various: boolean;
+	composer: boolean;
+	cover: ICover;
+	ogImage: string;
+	genres: string[];
+	counts: ICounts;
+	available: boolean;
+	disclaimers: any[];
+	ratings: IRatings;
+	links: ILink[];
+	ticketsAvailable: boolean;
+	noPicturesFromSearch?: boolean;
+}
+
+export interface IRatings {
+	day?: number;
+	week?: number;
+	month?: number;
+}
+
+export interface ICounts {
+	alsoAlbums?: number;
+	alsoTracks?: number;
+	directAlbums?: number;
+	tracks?: number;
 }
 
 export interface IArtistBrief {

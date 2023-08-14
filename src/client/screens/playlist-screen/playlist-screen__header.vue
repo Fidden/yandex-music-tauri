@@ -42,13 +42,13 @@
 				<Button
 					variant="text"
 					:class="cnPlaylistScreen('header-like', {
-						active: vm.playlistIsLiked
+						active: vm.isLiked
 					})"
 					@click="vm.onLike()"
 				>
 					<MatIcon
 						name="favorite"
-						:fill="vm.playlistIsLiked"
+						:fill="vm.isLiked"
 					/>
 				</Button>
 				<Menu>
