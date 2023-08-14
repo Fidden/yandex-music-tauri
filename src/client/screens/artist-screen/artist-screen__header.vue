@@ -39,7 +39,7 @@
 				</Button>
 				<Button
 					variant="text"
-					:class="cnPlaylistScreen('header-like', {
+					:class="cnArtistScreen('header-like', {
 						active: vm.isLiked
 					})"
 					@click="vm.onLike()"
@@ -74,7 +74,6 @@
 </template>
 
 <script setup lang="ts">
-import {cnPlaylistScreen} from '~/client/screens/playlist-screen/playlist-screen.const';
 import Button from '~/client/shared/components/button/button.vue';
 import Image from '~/client/shared/components/image.vue';
 import MatIcon from '~/client/shared/components/mat-icon.vue';
