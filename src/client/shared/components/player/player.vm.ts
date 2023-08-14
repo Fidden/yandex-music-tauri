@@ -531,6 +531,10 @@ export class PlayerVm extends BaseVm {
 	 * @returns A promise that resolves once the station starts playing.
 	 */
 	public async playStation(station: Pick<IStation, 'id' | 'idForFrom'>) {
+		if (this.currentStation?.tag === station.id.tag && this.currentStation?.type === station.id.type) {
+			return;
+		}
+
 		this.clearPlayedQueue();
 		this.clearQueue();
 
