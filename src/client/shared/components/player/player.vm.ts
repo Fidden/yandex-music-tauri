@@ -28,6 +28,10 @@ export enum RepeatEnum {
 	ALWAYS
 }
 
+const FADE_INTERVAL_DURATION_MS = 200;
+const FADE_DURATION_SEC = 10;
+const FADE_DURATION_MS = FADE_DURATION_SEC * 1000 - FADE_INTERVAL_DURATION_MS;
+
 type PendingKeys = 'track';
 
 /**
@@ -51,9 +55,15 @@ export class PlayerVm extends BaseVm {
 	public isSettingsOpen: boolean;
 	public isTrackLiked: boolean;
 	public highQuality: boolean;
+	private volumeBackup?: number;
 
 	private cachedTrackId?: number | string;
 	private repeat: RepeatEnum;
+	private fadeDelta: number;
+	private fadeInPoint: number;
+	private fadeOutPoint: number;
+	private needFadeIn: boolean;
+	private needFadeOut: boolean;
 
 	constructor(
 		@injectDep(PendingService) public readonly pending: PendingService<PendingKeys>
@@ -76,6 +86,11 @@ export class PlayerVm extends BaseVm {
 		this.isSettingsOpen = false;
 		this.isTrackLiked = false;
 		this.highQuality = true;
+		this.fadeDelta = 0;
+		this.fadeOutPoint = 0;
+		this.fadeInPoint = FADE_DURATION_SEC;
+		this.needFadeIn = false;
+		this.needFadeOut = false;
 	}
 
 	/**
@@ -112,6 +127,8 @@ export class PlayerVm extends BaseVm {
 			return;
 		}
 
+		this.needFadeIn = this.playedQueue.length > 0;
+		this.needFadeOut = true;
 		this.audioRef.currentTime = 0;
 		this.pause();
 		this.audioRef.src = trackLink;
@@ -125,14 +142,24 @@ export class PlayerVm extends BaseVm {
 	 * Updates the volume of the audio player and saves it to local storage.
 	 *
 	 * @param {number} volume - The new volume level (0-100).
+	 * @throws Will throw an error if the volume is not a number or outside ranged 0 to 100.
 	 */
 	public onVolumeChange(volume: number) {
+		if (volume < 0 || volume > 100) {
+			throw new Error('Volume must be a number between 0 and 100');
+		}
+
 		if (!this.audioRef) {
 			return;
 		}
 
+		const volumeScaleFactor = 0.01;
+		const scaledVolume = volume * volumeScaleFactor;
+
 		localStorage.setItem('player.volume', volume.toString());
-		this.audioRef!.volume = volume * 0.01;
+		this.audioRef.volume = scaledVolume;
+		this.volumeBackup = scaledVolume;
+		this.fadeDelta = Math.abs(scaledVolume / (FADE_DURATION_MS / FADE_INTERVAL_DURATION_MS));
 	}
 
 	/**
@@ -146,6 +173,8 @@ export class PlayerVm extends BaseVm {
 		}
 
 		this.audioRef!.currentTime = time;
+		this.needFadeIn = false;
+		this.needFadeOut = false;
 	}
 
 	/**
@@ -157,11 +186,66 @@ export class PlayerVm extends BaseVm {
 		}
 
 		this.time = this.audioRef!.currentTime;
+		this.fadeOut();
+		this.fadeIn();
+
 		navigator.mediaSession.setPositionState({
 			duration: this.duration,
 			position: this.time,
 			playbackRate: this.audioRef.playbackRate
 		});
+	}
+
+	/**
+	 * Fades out the audio by decreasing its volume gradually.
+	 *
+	 * @private
+	 *
+	 * @remarks
+	 * This method will only fade out the audio if the time, fadeOutPoint, and duration are greater than 0.
+	 * If the audio has already faded out or if the current time is before the fade out point, the method returns immediately without taking any action.
+	 */
+	private fadeOut() {
+		if (this.time <= 0 || this.fadeOutPoint <= 0 || this.duration <= 0) {
+			return;
+		}
+
+		if (!this.needFadeOut || this.time < this.fadeOutPoint) {
+			return;
+		}
+
+		const fadeInOutInterval = setInterval(() => {
+			if (this.audioRef!.volume <= 0.02) {
+				clearInterval(fadeInOutInterval);
+				return;
+			}
+
+			this.audioRef!.volume -= this.fadeDelta;
+		}, FADE_INTERVAL_DURATION_MS);
+
+		this.needFadeOut = false;
+	}
+
+
+	/**
+	 * Fades in the audio playback gradually.
+	 */
+	private fadeIn() {
+		if (!this.needFadeIn || this.time > this.fadeInPoint || this.audioRef!.volume === this.volumeBackup) {
+			return;
+		}
+
+		const fadeInInterval = setInterval(() => {
+			if (this.audioRef!.volume >= this.volumeBackup!) {
+				this.audioRef!.volume = this.volumeBackup!;
+				clearInterval(fadeInInterval);
+				return;
+			}
+
+			this.audioRef!.volume += this.fadeDelta;
+		}, FADE_INTERVAL_DURATION_MS);
+
+		this.needFadeIn = false;
 	}
 
 
@@ -177,6 +261,7 @@ export class PlayerVm extends BaseVm {
 
 		this.loaded = true;
 		this.duration = this.audioRef!.duration;
+		this.fadeOutPoint = this.duration - FADE_DURATION_SEC;
 	}
 
 	/**
