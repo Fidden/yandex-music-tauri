@@ -18,9 +18,7 @@
 			/>
 			<Image
 				v-if="item.image"
-				:src="item.image.src"
-				:alt="item.image.alt"
-				:crop="item.image.crop"
+				v-bind="item.image"
 			/>
 		</button>
 		<div
@@ -110,6 +108,8 @@ watch(() => route.name, () => vm.updateCurrenRoute(route), {immediate: true});
 				border-radius: 9999px;
 				width: 30px;
 				height: 30px;
+				background: #3e3f3a;
+				object-fit: scale-down;
 			}
 
 			&::after {

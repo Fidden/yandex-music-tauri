@@ -7,9 +7,10 @@ export interface IBarRoute {
 	to: { name: string };
 	icon?: string;
 	image?: {
-		src: string;
+		src: string | undefined;
 		alt: string;
 		crop: string;
+		placeholder?: string;
 	};
 	classModifier?: string;
 }
@@ -55,7 +56,8 @@ export class BarVm extends BaseVm {
 				image: {
 					src: UserModel.avatarUrl,
 					alt: 'avatar',
-					crop: '100x100'
+					crop: '100x100',
+					placeholder: '/img/placeholders/profile.svg'
 				},
 				classModifier: 'profile'
 			}

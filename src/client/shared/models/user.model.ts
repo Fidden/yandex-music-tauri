@@ -34,6 +34,10 @@ export class UserModel extends BaseModel {
 	}
 
 	public static get avatarUrl() {
+		if (!this.fullInfo?.default_avatar_id) {
+			return undefined;
+		}
+
 		return `https://avatars.yandex.net/get-yapic/${this.fullInfo?.default_avatar_id}/%%`;
 	}
 
