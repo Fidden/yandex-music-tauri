@@ -12,12 +12,26 @@
 		</Button>
 		<div :class="cnPlayer('controls-container')">
 			<Button
+				v-if="!vm.isStation"
+				variant="text"
+				:class="cnPlayer('controls-shuffle', {
+					active: vm.shuffleShallow
+				})"
+				@click="vm.onShuffleShallow()"
+			>
+				<MatIcon
+					size="1.5em"
+					name="shuffle"
+				/>
+			</Button>
+
+			<Button
 				v-if="vm.isStation"
 				variant="text"
 				:class="cnPlayer('controls-settings', {
 					active: vm.isSettingsOpen
 				})"
-				@click="vm.settingsToggle()"
+				@click="vm.onSettings()"
 			>
 				<MatIcon
 					size="1.5em"
@@ -112,7 +126,7 @@ const vm = useVm(PlayerVm, true);
 		}
 	}
 
-	&-repeat--active, &-settings--active {
+	&-repeat--active, &-settings--active, &-shuffle--active {
 		color: var(--primary)
 	}
 

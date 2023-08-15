@@ -57,9 +57,11 @@ export class PlayerVm extends BaseVm {
 	public isTrackLiked: boolean;
 	public highQuality: boolean;
 	public showLyrics: boolean;
-	public lyrics?: [number, string][];
+	public lyricsTuple?: [number, string][];
 	public lyricsItemsRef: HTMLLIElement[];
 	public repeat: RepeatEnum;
+	public shuffle: boolean;
+	public shuffleShallow: boolean;
 
 	private volumeBackup?: number;
 	private cachedTrackId?: number | string;
@@ -97,11 +99,13 @@ export class PlayerVm extends BaseVm {
 		this.fadeInPoint = FADE_DURATION_SEC;
 		this.needFadeIn = false;
 		this.needFadeOut = false;
-		this.lyrics = undefined;
+		this.lyricsTuple = undefined;
 		this.showLyrics = false;
 		this.lyricsPreventScroll = false;
 		this.lyricsAnimationScroll = false;
 		this.lyricsItemsRef = [];
+		this.shuffle = false;
+		this.shuffleShallow = false;
 	}
 
 	/**
@@ -130,13 +134,14 @@ export class PlayerVm extends BaseVm {
 			return;
 		}
 
+		this.shuffle = this.shuffleShallow;
 		this.loaded = false;
 		this.showLyrics = false;
 		this.isTrackLiked = UserModel.track.isLiked(trackId);
 
-		if (this.track.lyricsAvailable) {
+		if (this.track.lyricsInfo.hasAvailableSyncLyrics) {
 			UserModel.track.lyricsText(trackId)
-				.then(lyrics => this.lyrics = lyrics);
+				.then(lyrics => this.lyricsTuple = lyrics);
 		}
 
 		const trackLink = await this.getTrackLink(trackId);
@@ -215,8 +220,6 @@ export class PlayerVm extends BaseVm {
 
 	/**
 	 * Fades out the audio by decreasing its volume gradually.
-	 *
-	 * @private
 	 *
 	 * @remarks
 	 * This method will only fade out the audio if the time, fadeOutPoint, and duration are greater than 0.
@@ -524,7 +527,10 @@ export class PlayerVm extends BaseVm {
 	 * Syntax sugar for getting current track
 	 */
 	public get track() {
-		return this.queue?.at(0);
+		return this.queue?.at(this.shuffle
+			? Math.floor(Math.random() * this.queue.length - 1)
+			: 0
+		);
 	}
 
 	/**
@@ -630,7 +636,7 @@ export class PlayerVm extends BaseVm {
 	/**
 	 * Change station settings to default one.
 	 */
-	public clearSettings() {
+	public onClearSettings() {
 		if (!this.currentStationResult?.settings2) {
 			return;
 		}
@@ -643,10 +649,14 @@ export class PlayerVm extends BaseVm {
 	/**
 	 * Toggles the state of the settings.
 	 */
-	public settingsToggle() {
+	public onSettings() {
 		this.isSettingsOpen = !this.isSettingsOpen;
 	}
 
+
+	public onShuffleShallow() {
+		this.shuffleShallow = !this.shuffleShallow;
+	}
 
 	/**
 	 * Toggles the like status of a track.
@@ -664,7 +674,7 @@ export class PlayerVm extends BaseVm {
 	/**
 	 * Toggles the value of the high quality property.
 	 */
-	public toggleHighQuality() {
+	public onHighQuality() {
 		this.highQuality = !this.highQuality;
 	}
 
@@ -708,14 +718,16 @@ export class PlayerVm extends BaseVm {
 	 * using a timeout callback.
 	 */
 	public lyricsScroll() {
-		if (this.lyricsPreventScroll) {
+		if (this.lyricsPreventScroll || !this.lyricsItemsRef?.length) {
 			return;
 		}
 
 		this.lyricsItemsRef?.forEach(item => {
-			item.getAttribute('data-active') === 'true'
-				? item.scrollIntoView({behavior: 'instant', block: 'center'})
-				: void 0;
+			if (!item || item.getAttribute('data-active') !== 'true') {
+				return;
+			}
+
+			item.scrollIntoView({behavior: 'smooth', block: 'center'});
 		});
 
 		this.lyricsAnimationScroll = true;

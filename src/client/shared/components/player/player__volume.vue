@@ -3,7 +3,7 @@
 		<Button
 			variant="text"
 			:class="cnPlayer('volume-hq')"
-			:disabled="!vm.track?.lyricsAvailable"
+			:disabled="!vm.track?.lyricsAvailable || !vm.lyricsTuple?.length"
 			@click="vm.toggleLyrics()"
 		>
 			<MatIcon
@@ -15,7 +15,7 @@
 		<Button
 			variant="text"
 			:class="cnPlayer('volume-hq')"
-			@click="vm.toggleHighQuality()"
+			@click="vm.onHighQuality()"
 		>
 			<MatIcon
 				size="26px"

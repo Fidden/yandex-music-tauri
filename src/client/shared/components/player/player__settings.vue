@@ -2,7 +2,7 @@
 	<Transition name="settings">
 		<section
 			v-if="vm.currentStationResult && vm.isStation && vm.isSettingsOpen"
-			v-click-outside="() => vm.settingsToggle()"
+			v-click-outside="() => vm.onSettings()"
 			:class="cnPlayer('settings')"
 		>
 			<h3 :class="cnPlayer('settings-title')">
@@ -41,7 +41,7 @@
 			</ul>
 			<Button
 				:class="cnPlayer('settings-reset')"
-				@click="vm.clearSettings()"
+				@click="vm.onClearSettings()"
 			>
 				Сбросить
 			</Button>
