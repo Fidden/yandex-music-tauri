@@ -44,6 +44,11 @@ export default defineNuxtConfig({
 		host: 'localhost',
 		port: 1420
 	},
+	vite: {
+		build: {
+			minify: 'terser'
+		}
+	},
 	vue,
 	hooks: {
 		'modules:done': () => {

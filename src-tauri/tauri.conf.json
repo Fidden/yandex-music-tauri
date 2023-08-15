@@ -7,8 +7,8 @@
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "YandexMusic",
-    "version": "0.0.1"
+    "productName": "Yandex Music",
+    "version": "0.0.2"
   },
   "tauri": {
     "allowlist": {
@@ -42,7 +42,7 @@
       "category": "Music"
     },
     "security": {
-      "csp": ""
+      "csp": null
     },
     "windows": [
       {
