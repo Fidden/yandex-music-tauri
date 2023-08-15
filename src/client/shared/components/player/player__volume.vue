@@ -3,6 +3,18 @@
 		<Button
 			variant="text"
 			:class="cnPlayer('volume-hq')"
+			:disabled="!vm.track?.lyricsAvailable"
+			@click="vm.toggleLyrics()"
+		>
+			<MatIcon
+				size="22px"
+				name="type_specimen"
+				:fill="vm.showLyrics"
+			/>
+		</Button>
+		<Button
+			variant="text"
+			:class="cnPlayer('volume-hq')"
 			@click="vm.toggleHighQuality()"
 		>
 			<MatIcon

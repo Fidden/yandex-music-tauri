@@ -4,7 +4,9 @@
 		<Bar/>
 		<div
 			:ref="el => vm.layoutContentRef = el as HTMLDivElement"
-			:class="cnLayoutPage('content')"
+			:class="cnLayoutPage('content', {
+				hideScroll: vm.hideScroll
+			})"
 			@scroll="vm.onScroll($route)"
 		>
 			<slot/>
@@ -16,6 +18,7 @@
 import {useRoute} from 'vue-router';
 import Bar from '~/client/shared/components/bar/bar.vue';
 import Header from '~/client/shared/components/header/header.vue';
+import {globalEmitter} from '~/client/shared/emitters/global.emitter';
 import {LayoutPageVm} from '~/client/shared/layouts/layout-page/layout-page.vm';
 import {cnLayoutPage} from './layout-page.const';
 
@@ -24,6 +27,8 @@ const vm = useVm(LayoutPageVm);
 
 //TODO: убрать запоминание скрола если переход был сделан по клику на базовую ссылку ( в <Bar/> или на страницах карточек )
 watch(() => route.name, routeName => vm.onRouteChange(routeName as string));
+
+globalEmitter.on('player:lyrics-toggle', (open) => vm.hideScroll = open);
 </script>
 
 <style lang="scss">
@@ -57,6 +62,10 @@ watch(() => route.name, routeName => vm.onRouteChange(routeName as string));
 
 		&::-webkit-scrollbar-thumb {
 			height: 30px;
+		}
+
+		&--hideScroll {
+			overflow: hidden;
 		}
 	}
 }

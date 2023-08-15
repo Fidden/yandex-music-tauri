@@ -132,7 +132,7 @@ export class TrackModel extends BaseModel {
 	}
 
 
-	public static async lyricsText(trackId: string | number) {
+	public static async lyricsText(trackId: string | number): Promise<[number, string][]> {
 		const res = await this.lyrics(trackId);
 		const downloadUlr = res.downloadUrl;
 		const file = await super.request.get<string>(downloadUlr, {
@@ -140,11 +140,20 @@ export class TrackModel extends BaseModel {
 			responseType: ResponseType.Text
 		});
 
+		const stringTimeToSeconds = (time: string) => {
+			const [minutes, seconds, ms] = time
+				.replace('.', ':')
+				.split(':');
+
+			return Number(minutes) * 60 + Number(seconds) + Number(ms) / 1000;
+		};
+
 		return file
 			.split('\n')
 			.map(item => item
 				.replace('[', '')
 				.split('] ')
-			);
+				.map((item, index) => index === 0 ? stringTimeToSeconds(item) : item)
+			) as [number, string][]; // [time, text]
 	}
 }

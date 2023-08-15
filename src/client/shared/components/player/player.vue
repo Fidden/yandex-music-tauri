@@ -1,4 +1,5 @@
 <template>
+	<PlayerLyrics/>
 	<Transition>
 		<div
 			v-if="vm.track"
@@ -17,7 +18,6 @@
 </template>
 
 <script setup lang="ts">
-import {watch} from '#imports';
 import {globalEmitter} from '~/client/shared/emitters/global.emitter';
 import {UserModel} from '~/client/shared/models/user.model';
 import {cnPlayer} from './player.const';
@@ -25,20 +25,13 @@ import {PlayerVm} from './player.vm';
 import PlayerAudio from './player__audio.vue';
 import PlayerBody from './player__body.vue';
 import PlayerControls from './player__controls.vue';
+import PlayerLyrics from './player__lyrics.vue';
 import PlayerSeek from './player__seek.vue';
 import PlayerSettings from './player__settings.vue';
 import PlayerTrack from './player__track.vue';
 import PlayerVolume from './player__volume.vue';
 
 const vm = useVm(PlayerVm);
-
-navigator.mediaSession.setActionHandler('previoustrack', () => {
-	vm.prev();
-});
-
-navigator.mediaSession.setActionHandler('nexttrack', () => {
-	vm.next();
-});
 
 watch(() => vm.currentStationResult?.settings2, async value => {
 	if (!vm.playedQueue) {

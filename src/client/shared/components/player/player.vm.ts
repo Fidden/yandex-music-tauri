@@ -1,4 +1,5 @@
 import {singleton} from 'tsyringe';
+import {globalEmitter} from '~/client/shared/emitters/global.emitter';
 import {cropImage} from '~/client/shared/helpers/crop-image';
 import {UserModel} from '~/client/shared/models/user.model';
 import {PendingService} from '~/client/shared/services/pending.service';
@@ -55,15 +56,20 @@ export class PlayerVm extends BaseVm {
 	public isSettingsOpen: boolean;
 	public isTrackLiked: boolean;
 	public highQuality: boolean;
-	private volumeBackup?: number;
+	public showLyrics: boolean;
+	public lyrics?: [number, string][];
+	public lyricsItemsRef: HTMLLIElement[];
+	public repeat: RepeatEnum;
 
+	private volumeBackup?: number;
 	private cachedTrackId?: number | string;
-	private repeat: RepeatEnum;
 	private fadeDelta: number;
 	private fadeInPoint: number;
 	private fadeOutPoint: number;
 	private needFadeIn: boolean;
 	private needFadeOut: boolean;
+	private lyricsPreventScroll: boolean;
+	private lyricsAnimationScroll: boolean;
 
 	constructor(
 		@injectDep(PendingService) public readonly pending: PendingService<PendingKeys>
@@ -91,6 +97,31 @@ export class PlayerVm extends BaseVm {
 		this.fadeInPoint = FADE_DURATION_SEC;
 		this.needFadeIn = false;
 		this.needFadeOut = false;
+		this.lyrics = undefined;
+		this.showLyrics = false;
+		this.lyricsPreventScroll = false;
+		this.lyricsAnimationScroll = false;
+		this.lyricsItemsRef = [];
+
+		this.registerMediaSession();
+	}
+
+	private registerMediaSession() {
+		navigator.mediaSession.setActionHandler('previoustrack', () => {
+			this.prev();
+		});
+
+		navigator.mediaSession.setActionHandler('nexttrack', () => {
+			this.next();
+		});
+
+		navigator.mediaSession.setActionHandler('pause', () => {
+			this.pause();
+		});
+
+		navigator.mediaSession.setActionHandler('pause', () => {
+			this.play();
+		});
 	}
 
 	/**
@@ -120,7 +151,13 @@ export class PlayerVm extends BaseVm {
 		}
 
 		this.loaded = false;
+		this.showLyrics = false;
 		this.isTrackLiked = UserModel.track.isLiked(trackId);
+
+		if (this.track.lyricsAvailable) {
+			UserModel.track.lyricsText(trackId)
+				.then(lyrics => this.lyrics = lyrics);
+		}
 
 		const trackLink = await this.getTrackLink(trackId);
 		if (!trackLink) {
@@ -272,6 +309,8 @@ export class PlayerVm extends BaseVm {
 		if (this.time >= this.duration) {
 			this.next();
 		}
+
+		this.lyricsScroll();
 	}
 
 	/**
@@ -642,7 +681,67 @@ export class PlayerVm extends BaseVm {
 		this.isTrackLiked = !this.isTrackLiked;
 	}
 
+	/**
+	 * Toggles the value of the high quality property.
+	 */
 	public toggleHighQuality() {
 		this.highQuality = !this.highQuality;
+	}
+
+	/**
+	 * Toggles the visibility of lyrics and emits an event signaling the change.
+	 */
+	public toggleLyrics() {
+		this.showLyrics = !this.showLyrics;
+		globalEmitter.emit('player:lyrics-toggle', this.showLyrics);
+	}
+
+	/**
+	 * Prevents scrolling of lyrics.
+	 *
+	 * @remarks If user scroll lyrics manually then this method will
+	 * prevent auto scrolling for 7 seconds.
+	 */
+	public onLyricsScroll() {
+		if (this.lyricsAnimationScroll) {
+			return;
+		}
+
+		this.lyricsPreventScroll = true;
+
+		setTimeout(() => {
+			this.lyricsPreventScroll = false;
+		}, 7000);
+	}
+
+	/**
+	 * Scrolls the lyrics into view.
+	 *
+	 * If the `lyricsPreventScroll` property is set to `true`, the method will return without scrolling.
+	 *
+	 * For each item in the `lyricsItemsRef` array, if the `data-active` attribute is set to 'true',
+	 * it will scroll that item into view using smooth scrolling and center alignment. Otherwise, it
+	 * will do nothing.
+	 *
+	 * After scrolling, the `lyricsAnimationScroll` property is set to `true` to indicate that
+	 * a scroll animation is in progress. This property will be set to `false` after 1000ms
+	 * using a timeout callback.
+	 */
+	public lyricsScroll() {
+		if (this.lyricsPreventScroll) {
+			return;
+		}
+
+		this.lyricsItemsRef?.forEach(item => {
+			item.getAttribute('data-active') === 'true'
+				? item.scrollIntoView({behavior: 'smooth', block: 'center'})
+				: void 0;
+		});
+
+		this.lyricsAnimationScroll = true;
+
+		setTimeout(() => {
+			this.lyricsAnimationScroll = false;
+		}, 1000);
 	}
 }

@@ -8,6 +8,7 @@ export type GlobalEvents = {
 	'auth:logout': void,
 	'player:set-queue': ITrack[],
 	'search:text-change': string,
+	'player:lyrics-toggle': boolean,
 }
 
 export const globalEmitter = mitt<GlobalEvents>();
