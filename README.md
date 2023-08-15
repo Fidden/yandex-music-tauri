@@ -41,7 +41,7 @@ Install dependencies
 Start the server
 
 ```bash
-  pnpm run dev
+  pnpm tauri run dev
 ```
 
 ## Screenshots
