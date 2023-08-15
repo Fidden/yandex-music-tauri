@@ -1,6 +1,5 @@
-import {createResolver} from '@nuxt/kit';
+import {addPlugin, createResolver} from '@nuxt/kit';
 import {headlessui} from './@configs/headlessui';
-import {hooks} from './@configs/hooks';
 import {imports} from './@configs/imports';
 import {runtimeConfig} from './@configs/runtimeConfig';
 import {vue} from './@configs/vue';
@@ -46,7 +45,14 @@ export default defineNuxtConfig({
 		port: 1420
 	},
 	vue,
-	hooks,
+	hooks: {
+		'modules:done': () => {
+			addPlugin(resolver.resolve('./src/plugins-manual/pinia.plugin'));
+		},
+		'nitro:build:before': (nitro) => {
+			nitro.options.moduleSideEffects.push('reflect-metadata');
+		}
+	},
 	imports,
 	runtimeConfig,
 	headlessui,
