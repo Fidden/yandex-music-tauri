@@ -15,7 +15,7 @@
 					:class="cnPlayer('lyrics-item')"
 					:data-index="index"
 					:data-active="item[0] < vm.time && vm.lyrics?.at(index + 1)?.at(0) > vm.time"
-					@click="vm.timeShallow = item[0]"
+					@click="vm.audioRef!.currentTime = item[0]"
 				>
 					{{ item[1] }}
 				</li>
@@ -25,10 +25,14 @@
 </template>
 
 <script setup lang="ts">
+import {useRoute} from 'vue-router';
 import {PlayerVm} from '~/client/shared/components/player/player.vm';
 import {cnPlayer} from './player.const';
 
+const route = useRoute();
 const vm = useVm(PlayerVm, true);
+
+watch(() => route.name, () => vm.showLyrics = false);
 </script>
 
 <style lang="scss">
@@ -60,13 +64,12 @@ const vm = useVm(PlayerVm, true);
 		text-align: center;
 		font-size: 28px;
 		line-height: 52px;
-		opacity: 0.5;
+		opacity: 0.3;
 		transition: 200ms;
 		cursor: pointer;
 
 		&[data-active="true"] {
 			color: white;
-			font-weight: 500;
 			opacity: 1;
 			transition: 200ms;
 		}

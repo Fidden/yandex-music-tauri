@@ -734,7 +734,7 @@ export class PlayerVm extends BaseVm {
 
 		this.lyricsItemsRef?.forEach(item => {
 			item.getAttribute('data-active') === 'true'
-				? item.scrollIntoView({behavior: 'smooth', block: 'center'})
+				? item.scrollIntoView({behavior: 'instant', block: 'center'})
 				: void 0;
 		});
 
