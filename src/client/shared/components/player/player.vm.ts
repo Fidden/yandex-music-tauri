@@ -102,26 +102,6 @@ export class PlayerVm extends BaseVm {
 		this.lyricsPreventScroll = false;
 		this.lyricsAnimationScroll = false;
 		this.lyricsItemsRef = [];
-
-		this.registerMediaSession();
-	}
-
-	private registerMediaSession() {
-		navigator.mediaSession.setActionHandler('previoustrack', () => {
-			this.prev();
-		});
-
-		navigator.mediaSession.setActionHandler('nexttrack', () => {
-			this.next();
-		});
-
-		navigator.mediaSession.setActionHandler('pause', () => {
-			this.pause();
-		});
-
-		navigator.mediaSession.setActionHandler('pause', () => {
-			this.play();
-		});
 	}
 
 	/**

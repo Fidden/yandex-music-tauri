@@ -45,6 +45,22 @@ watch(() => vm.currentStationResult?.settings2, async value => {
 globalEmitter.on('player:set-queue', (tracks) => {
 	vm.setQueue(tracks);
 });
+
+navigator.mediaSession.setActionHandler('previoustrack', () => {
+	vm.prev();
+});
+
+navigator.mediaSession.setActionHandler('nexttrack', () => {
+	vm.next();
+});
+
+navigator.mediaSession.setActionHandler('pause', () => {
+	vm.pause();
+});
+
+navigator.mediaSession.setActionHandler('pause', () => {
+	vm.play();
+});
 </script>
 
 <style lang="scss">
