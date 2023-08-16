@@ -139,7 +139,7 @@ export class PlayerVm extends BaseVm {
 		this.showLyrics = false;
 		this.isTrackLiked = UserModel.track.isLiked(trackId);
 
-		if (this.track.lyricsInfo.hasAvailableSyncLyrics) {
+		if (this.track?.lyricsInfo?.hasAvailableSyncLyrics) {
 			UserModel.track.lyricsText(trackId)
 				.then(lyrics => this.lyricsTuple = lyrics);
 		}
