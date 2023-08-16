@@ -34,7 +34,7 @@ export class UserModel extends BaseModel {
 	}
 
 	public static get avatarUrl() {
-		if (!this.fullInfo?.default_avatar_id) {
+		if (this.fullInfo?.is_avatar_empty) {
 			return undefined;
 		}
 
