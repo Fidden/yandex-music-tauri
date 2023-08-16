@@ -244,10 +244,12 @@ export class PlayerVm extends BaseVm {
 			// if audiRef.volume third digit is zero then clear interval
 			if (this.audioRef!.volume.toString().charAt(2) === '0') {
 				clearInterval(fadeInOutInterval);
+				console.log('fadeOut cleared');
 				return;
 			}
 
 			this.audioRef!.volume -= this.fadeDelta;
+			console.log('fadedOut', this.audioRef!.volume);
 		}, FADE_INTERVAL_DURATION_MS);
 
 		this.needFadeOut = false;
