@@ -20,8 +20,7 @@ export class AlbumsScreenVm extends BaseVm implements IInitializable {
 
 	@pending('init')
 	public async init() {
-		const userAlbums = await UserModel.album.liked();
-		const userAlbumsIds = userAlbums.map(item => item.id);
+		const userAlbumsIds = UserModel.album._liked.map(item => item.id);
 		this.albums = await UserModel.album.albums(userAlbumsIds);
 	}
 }

@@ -13,7 +13,7 @@ import {
 
 export class ArtistModel extends BaseModel {
 	private static userId?: number = undefined;
-	private static _liked: IArtistShort[] = [];
+	public static _liked: IArtistShort[] = [];
 
 	public static async setup() {
 		this.userId = UserModel.status?.account?.uid;

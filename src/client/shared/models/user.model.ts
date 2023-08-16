@@ -22,12 +22,11 @@ export class UserModel extends BaseModel {
 		this.status = status;
 		this.fullInfo = fullInfo;
 
-		this.album.setup();
-
 		await Promise.all([
 			this.playlist.setup(),
 			this.track.setup(),
-			this.artist.setup()
+			this.artist.setup(),
+			this.album.setup()
 		]);
 
 		return this;

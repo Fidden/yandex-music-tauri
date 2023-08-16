@@ -5,7 +5,7 @@ import {IPlaylist, IPlaylistShort, LikeActionEnum, ObjectTypeEnum} from '~/clien
 
 export class PlaylistModel extends BaseModel {
 	private static _userId?: number = undefined;
-	private static _liked: IPlaylistShort[] = [];
+	public static _liked: IPlaylistShort[] = [];
 
 	public static async setup() {
 		this._userId = UserModel.status?.account?.uid;
