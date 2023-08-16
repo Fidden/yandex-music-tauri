@@ -8,6 +8,7 @@ import {UserModel} from '~/client/shared/models/user.model';
 import {BaseModel} from '~/client/shared/types/abstract/base.model';
 import {
 	ILyricsTimestamp,
+	IPlaylist,
 	IStorageLocation,
 	ITrack,
 	ITrackDownloadInfo,
@@ -17,12 +18,12 @@ import {
 } from '~/client/shared/types/api';
 
 export class TrackModel extends BaseModel {
-	private static liked: ITrackShort[] = [];
+	private static _liked: ITrackShort[] = [];
 	private static userId?: number = undefined;
 
 	public static async setup() {
 		this.userId = UserModel.status?.account?.uid;
-		this.liked = await this.likes();
+		this._liked = await this.liked();
 	}
 
 	public static async like(trackId: string | number) {
@@ -32,7 +33,7 @@ export class TrackModel extends BaseModel {
 			trackId
 		);
 
-		this.liked.push({id: trackId, albumId: '', timestamp: ''});
+		this._liked.push({id: trackId, albumId: '', timestamp: ''});
 	}
 
 	public static async dislike(trackId: string | number) {
@@ -42,23 +43,23 @@ export class TrackModel extends BaseModel {
 			trackId
 		);
 
-		const trackIndex = this.liked.findIndex(item => item.id === trackId);
+		const trackIndex = this._liked.findIndex(item => item.id === trackId);
 		if (trackIndex !== -1) {
-			this.liked.splice(trackIndex, 1);
+			this._liked.splice(trackIndex, 1);
 		}
 	}
 
-	public static likes() {
+	public static liked() {
 		return super.request.get<ITrackShort[]>(`/users/${this.userId}/likes/tracks`, {
 			unwrapper: 'result.library.tracks'
 		});
 	}
 
 	public static isLiked(trackId: string | number) {
-		return this.liked.findIndex(item => item.id === trackId) !== -1;
+		return this._liked.findIndex(item => item.id === trackId) !== -1;
 	}
 
-	public static async byIds(ids: number[]) {
+	public static async byIds(ids: (number | string)[]) {
 		const formData = new FormData();
 		formData.append('trackIds', ids.toString());
 
@@ -71,13 +72,27 @@ export class TrackModel extends BaseModel {
 	}
 
 	public static async userList() {
-		const playlistsKinds = (await PlaylistModel.list()).map(item => item.kind);
-		// append user-favorite kind
-		playlistsKinds.push(3);
+		const sortByCreatedTimestamp = (a: IPlaylist, b: IPlaylist) => {
+			if (a.created < b.created) {
+				return 1;
+			}
 
+			if (a.created > b.created) {
+				return -1;
+			}
+
+			return 0;
+		};
+
+		const playlistsList = (await PlaylistModel.list()).sort(sortByCreatedTimestamp);
+		const playlistsKinds = playlistsList.map(item => item.kind);
 		const playlistsWithTracks = await PlaylistModel.byKinds(playlistsKinds);
 		const tracks = playlistsWithTracks.map(item => item.tracks).flat();
-		const trackIds = tracks.map(item => item.id);
+
+		const trackIds = [
+			...this._liked.map(item => item.id),
+			...tracks.map(item => item.id)
+		];
 
 		return this.byIds(trackIds);
 	}
