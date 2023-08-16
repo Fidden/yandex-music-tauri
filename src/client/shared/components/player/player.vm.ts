@@ -197,6 +197,12 @@ export class PlayerVm extends BaseVm {
 		this.audioRef!.currentTime = time;
 		this.needFadeIn = false;
 		this.needFadeOut = false;
+
+		setTimeout(() => {
+			if (this.cachedTrackId === this.track?.id) {
+				this.needFadeOut = true;
+			}
+		}, 4000);
 	}
 
 	/**
@@ -235,7 +241,8 @@ export class PlayerVm extends BaseVm {
 		}
 
 		const fadeInOutInterval = setInterval(() => {
-			if (this.audioRef!.volume <= 0.02) {
+			// if audiRef.volume third digit is zero then clear interval
+			if (this.audioRef!.volume.toString().charAt(2) === '0') {
 				clearInterval(fadeInOutInterval);
 				return;
 			}
