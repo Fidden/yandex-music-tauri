@@ -1,14 +1,5 @@
-<script setup lang="ts">
-import {cnChartScreen} from '~/client/screens/chart-screen/chart-screen.const';
-import {ChartScreenVm} from '~/client/screens/chart-screen/chart-screen.vm';
-import ContentBlock from '~/client/shared/components/content-block/content-block.vue';
-import TracksTableSkeleton from '~/client/shared/components/tracks-table-skeleton/tracks-table-skeleton.vue';
-import TracksTable from '~/client/shared/components/tracks-table/tracks-table.vue';
-
-const vm = useVm(ChartScreenVm, true);
-</script>
-
 <template>
+	<Navigation/>
 	<ContentBlock
 		:class="cnChartScreen()"
 		title="Чарт"
@@ -25,6 +16,17 @@ const vm = useVm(ChartScreenVm, true);
 		</template>
 	</ContentBlock>
 </template>
+
+<script setup lang="ts">
+import Navigation from '~/client/shared/components/navigation/navigation.vue';
+import {cnChartScreen} from './chart-screen.const';
+import {ChartScreenVm} from './chart-screen.vm';
+import ContentBlock from '~/client/shared/components/content-block/content-block.vue';
+import TracksTableSkeleton from '~/client/shared/components/tracks-table-skeleton/tracks-table-skeleton.vue';
+import TracksTable from '~/client/shared/components/tracks-table/tracks-table.vue';
+
+const vm = useVm(ChartScreenVm, true);
+</script>
 
 <style lang="scss">
 .chart-screen {
