@@ -1,5 +1,5 @@
 import {BaseModel} from '~/client/shared/types/abstract/base.model';
-import {ILandingResult, LandingBlockEnum} from '~/client/shared/types/api';
+import {IFullChartResult, ILandingResult, LandingBlockEnum} from '~/client/shared/types/api';
 
 export class LandingModel extends BaseModel {
 
@@ -17,5 +17,9 @@ export class LandingModel extends BaseModel {
 		return super.request.get<{ uid: string; kind: string }[]>('/landing3/new-playlists', {
 			unwrapper: 'result.newPlaylists'
 		});
+	}
+
+	public static async chartFull() {
+		return super.request.get<IFullChartResult>('/landing3/chart');
 	}
 }

@@ -3,6 +3,7 @@
 		:class="cnIndexScreen('chart')"
 		title="Чарт"
 		subtitle="Треки, популярные на Яндекс Музыке прямо сейчас"
+		:to="{name: 'chart'}"
 	>
 		<ChartTrack
 			v-for="(entity, index) in vm.chart?.entities"
