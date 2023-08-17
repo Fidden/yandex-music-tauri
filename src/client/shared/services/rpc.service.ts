@@ -1,43 +1,28 @@
-import RPC, {Client} from 'discord-rpc';
+import {invoke} from '@tauri-apps/api/tauri';
+import {singleton} from 'tsyringe';
+import {cropImage} from '~/client/shared/helpers/crop-image';
 import {IPopularTrack, ITrack} from '~/client/shared/types/api';
 
-export enum RpcActivityType {
-	NONE,
-	TRACK
-}
-
-interface RpcActivity {
-	type: RpcActivityType,
-	track?: ITrack | IPopularTrack;
-}
-
-// TODO: rewrite lib, send "beacon" instead "fetch" cuz we dont care about rpc answer
+@singleton()
 export class RpcService {
-	private client: Client;
+	private interval?: NodeJS.Timer;
 
 	constructor() {
-		RPC.register(this.runtimeConfig.public.discordRpcClientId as string);
-		this.client = new RPC.Client({transport: 'ipc'});
+		this.interval = undefined;
 	}
 
-	public setActivity(activity: RpcActivity) {
-		if (activity.type === RpcActivityType.NONE) {
-			this.client.setActivity({
-				details: 'Ничего не слушает',
-				largeImageKey: 'yandex-rpc'
+	public set(track: ITrack | IPopularTrack) {
+		this.interval = setInterval(() => {
+			invoke('set_discord_rpc', {
+				state: track.artists.map(item => item?.name).toString(),
+				details: track.title.toString(),
+				largeImage: cropImage(track.ogImage || track.coverUri, 200, 200),
+				smallImage: 'yandex-rpc'
 			});
-		}
-
-
-		this.client.setActivity({
-			details: `Слушает: ${activity.track?.title}`,
-			state: activity.track?.artists.toString(),
-			largeImageKey: activity.track?.ogImage,
-			smallImageKey: 'yandex-rpc'
-		});
+		}, 14e3);
 	}
 
-	private get runtimeConfig() {
-		return useRuntimeConfig();
+	public reset() {
+		clearInterval(this.interval);
 	}
 }

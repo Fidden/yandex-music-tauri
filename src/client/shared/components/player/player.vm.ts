@@ -3,6 +3,7 @@ import {globalEmitter} from '~/client/shared/emitters/global.emitter';
 import {cropImage} from '~/client/shared/helpers/crop-image';
 import {UserModel} from '~/client/shared/models/user.model';
 import {PendingService} from '~/client/shared/services/pending.service';
+import {RpcService} from '~/client/shared/services/rpc.service';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
 import {
 	IPopularTrack,
@@ -74,7 +75,8 @@ export class PlayerVm extends BaseVm {
 	private lyricsAnimationScroll: boolean;
 
 	constructor(
-		@injectDep(PendingService) public readonly pending: PendingService<PendingKeys>
+		@injectDep(PendingService) public readonly pending: PendingService<PendingKeys>,
+		@injectDep(RpcService) private readonly rpc: RpcService
 	) {
 		super();
 		this.loaded = false;
@@ -134,6 +136,7 @@ export class PlayerVm extends BaseVm {
 			return;
 		}
 
+		this.rpc.reset();
 		this.shuffle = this.shuffleShallow;
 		this.loaded = false;
 		this.showLyrics = false;
@@ -158,6 +161,7 @@ export class PlayerVm extends BaseVm {
 		await this.play();
 
 		this.setMetaData();
+		this.rpc.set(this.track);
 	}
 
 	/**
@@ -324,10 +328,6 @@ export class PlayerVm extends BaseVm {
 			]
 		});
 
-		// this.rpc.setActivity({
-		// 	type: RpcActivityType.TRACK,
-		// 	track
-		// });
 	}
 
 	/**
