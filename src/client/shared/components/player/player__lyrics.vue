@@ -50,7 +50,7 @@ watch(() => route.name, () => {
 	height: calc(100% - 75px);
 	background: #1b202c;
 	z-index: 10;
-	padding: 20px 0;
+	padding: 20px 0 120px 0;
 
 	&-list {
 		list-style-type: none;
