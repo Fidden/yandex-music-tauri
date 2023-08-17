@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import {IChartItem} from '~/client/shared/types/api';
+import MatIcon from '~/client/shared/components/mat-icon.vue';
+import {ChartProgressEnum} from '~/client/shared/types/api';
 import {cnChartTrack} from './chart-track.const';
 
 defineProps<{
 	number: number;
-	progress: IChartItem['chart']['progress']
+	progress: ChartProgressEnum
 }>();
 </script>
 
@@ -13,7 +14,13 @@ defineProps<{
 		<p :class="cnChartTrack('position-number')">
 			{{ number }}
 		</p>
-		<div :class="cnChartTrack('position-progress', [progress])"/>
+		<div :class="cnChartTrack('position-progress', [progress])">
+			<MatIcon
+				name="change_history"
+				fill
+				size="8px"
+			/>
+		</div>
 	</div>
 </template>
 
@@ -31,9 +38,31 @@ defineProps<{
 	}
 
 	&-progress {
-		height: 2px;
-		width: 7px;
-		background: #777;
+		display: flex;
+		flex-direction: column;
+
+		&--same {
+			height: 2px;
+			width: 7px;
+			background: #777;
+
+			.mat-icon {
+				display: none;
+			}
+		}
+
+		&--up {
+			.mat-icon {
+				color: #51cf66;
+			}
+		}
+
+		&--down {
+			.mat-icon {
+				transform: rotate(180deg);
+				color: #f33;
+			}
+		}
 	}
 }
 </style>
