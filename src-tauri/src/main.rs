@@ -3,21 +3,25 @@
 // SPDX-License-Identifier: MIT
 
 #![cfg_attr(
-    all(not(debug_assertions), target_os = "windows"),
-    windows_subsystem = "windows"
+all(not(debug_assertions), target_os = "windows"),
+windows_subsystem = "windows"
 )]
 
-use discord_rpc_client::Client;
+use discord_rich_presence::{
+    activity::{Activity}, DiscordIpcClient, DiscordIpc,
+};
 use tauri::Manager;
 use window_shadows::set_shadow;
 
 fn main() {
     tauri::Builder::default()
         .setup(move |app| {
-            let mut drpc = Client::new(978250588540272651);
+            let mut drpc = DiscordIpcClient::new("978250588540272651").expect("failed to create client");
             let window = app.get_window("main").unwrap();
             set_shadow(&window, true).expect("Unsupported platform!");
-            drpc.start();
+            drpc
+                .connect()
+                .expect("failed to connect to Discord, please try again or relaunch Discord app");
             app.manage(std::sync::Mutex::new(drpc));
             Ok(())
         })
@@ -28,21 +32,15 @@ fn main() {
 
 #[tauri::command(async)]
 fn set_discord_rpc(
-    drpc: tauri::State<std::sync::Mutex<discord_rpc_client::Client>>,
+    drpc: tauri::State<std::sync::Mutex<DiscordIpcClient>>,
     state: String,
     details: String,
     large_image: String,
     small_image: String,
 ) {
     let mut drpc = drpc.lock().unwrap();
-    drpc.set_activity(|act| {
-        act
-            .state(state)
-            .details(details)
-            .assets(|a| a
-                .large_image(large_image)
-                .small_image(small_image)
-            )
-    })
-        .expect("Failed to set activity");
+    let activity: Activity = Activity::new().details(&details);
+
+    drpc.set_activity(activity)
+        .expect("client set activity");
 }

@@ -13,11 +13,11 @@
   },
   "dependencies": {
     "@tauri-apps/api": "^1.4.0",
-    "@vueuse/core": "^10.2.1",
+    "@vueuse/core": "^10.3.0",
     "crypto-js": "^4.1.1",
     "discord-rpc": "^4.0.1",
     "nuxt-swiper": "^1.2.0",
-    "pinia": "^2.1.4",
+    "pinia": "^2.1.6",
     "reflect-metadata": "^0.1.13",
     "remove": "^0.1.5",
     "vue-debounce": "^4.0.0",
@@ -27,7 +27,7 @@
     "vue3-bem": "^1.0.8"
   },
   "devDependencies": {
-    "@nuxt/devtools": "^0.7.1",
+    "@nuxt/devtools": "^0.7.6",
     "@nuxt/image": "1.0.0-rc.1",
     "@nuxtjs/eslint-module": "^4.1.0",
     "@nuxtjs/fontaine": "^0.4.1",
@@ -35,15 +35,15 @@
     "@tauri-apps/cli": "^1.4.0",
     "@types/crypto-js": "^4.1.1",
     "@types/discord-rpc": "^4.0.5",
-    "@typescript-eslint/eslint-plugin": "^6.1.0",
-    "@typescript-eslint/parser": "^6.1.0",
-    "eslint": "^8.45.0",
-    "eslint-plugin-vue": "^9.15.1",
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "@typescript-eslint/parser": "^6.4.0",
+    "eslint": "^8.47.0",
+    "eslint-plugin-vue": "^9.17.0",
     "mitt": "^3.0.1",
     "nuxt": "^3.6.5",
     "nuxt-headlessui": "^1.1.4",
     "nuxt-icon": "^0.4.2",
-    "sass": "^1.64.0",
+    "sass": "^1.66.0",
     "tsyringe": "^4.8.0",
     "typescript": "^5.0.2"
   }
