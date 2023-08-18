@@ -1,7 +1,5 @@
 import useBem from 'vue3-bem';
-import {OrderKey} from '~/client/shared/components/tracks-table/tracks-table.vm';
-import {IFilterOption} from '~/client/shared/types/filter';
-
+import {IFilterOption, OrderKey} from '~/client/shared/types/filter';
 
 export const cnTracksTable = useBem('tracks-table');
 
