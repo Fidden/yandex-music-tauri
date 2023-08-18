@@ -2,6 +2,7 @@
 	<NuxtLink
 		:class="cnAlbumCard()"
 		:to="{name: 'album-id', params: {id: album.id}}"
+		:data-id="album.id"
 	>
 		<div :class="cnAlbumCard('image')">
 			<Image

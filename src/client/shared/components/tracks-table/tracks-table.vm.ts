@@ -1,30 +1,14 @@
 import {PlayerVm} from '~/client/shared/components/player/player.vm';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
 import {IArtist, IPopularTrack, ITrack} from '~/client/shared/types/api';
+import {IFilter, IFilterOption, OrderKey} from '~/client/shared/types/filter';
 import {IInitializable} from '~/client/shared/types/initializable';
+import {FILTER_OPTIONS} from './tracks-table.const';
 
 export type TrackType = ITrack | IPopularTrack;
 
-export enum OrderKey {
-	DEFAULT,
-	BY_NAME,
-	BY_ARTIST,
-	BY_DURATION
-}
-
 interface InitArgs {
 	tracks: TrackType[];
-}
-
-interface IFilter {
-	name: string;
-	orderBy: IFilterOption;
-}
-
-interface IFilterOption {
-	key: OrderKey;
-	value: string;
-	sort?: 'asc' | 'desc';
 }
 
 export class TracksTableVm extends BaseVm implements IInitializable {
@@ -36,16 +20,11 @@ export class TracksTableVm extends BaseVm implements IInitializable {
 	constructor() {
 		super();
 		this.tracks = [];
-		this.filterOptions = [
-			{key: OrderKey.DEFAULT, value: 'По стандарту'},
-			{key: OrderKey.BY_NAME, value: 'Название', sort: 'asc'},
-			{key: OrderKey.BY_ARTIST, value: 'Артист', sort: 'asc'},
-			{key: OrderKey.BY_DURATION, value: 'Длительность', sort: 'asc'}
-		];
+		this.filterOptions = FILTER_OPTIONS;
 
 		this.filter = {
 			name: '',
-			orderBy: this.filterOptions[0]
+			orderBy: FILTER_OPTIONS[0]
 		};
 	}
 
