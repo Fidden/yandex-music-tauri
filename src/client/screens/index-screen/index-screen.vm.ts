@@ -5,6 +5,7 @@ import {PendingService} from '~/client/shared/services/pending.service';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
 import {
 	IAlbum,
+	IChartItem,
 	IContext,
 	IGeneratedPlaylistLandingBlock,
 	ILandingBlock,
@@ -69,5 +70,14 @@ export class IndexScreenVm extends BaseVm implements IInitializable {
 
 	public get playContexts(): ILandingBlock<ILandingBlockItem<IContext>> | undefined {
 		return this.landingBlocks?.blocks?.find(item => item.type === LandingBlockEnum.PLAY_CONTEXTS);
+	}
+
+	public get chart(): ILandingBlock<ILandingBlockItem<IChartItem>> | undefined {
+		return this.landingBlocks?.blocks.find(item => item.type === LandingBlockEnum.CHART);
+	}
+
+	public chartTracksFromIndex(index: number) {
+		const tracks = this.chart?.entities.map(item => item.data.track)!;
+		return [...tracks?.slice(index), ...tracks?.slice(0, index)];
 	}
 }

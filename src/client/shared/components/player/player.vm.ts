@@ -3,6 +3,7 @@ import {globalEmitter} from '~/client/shared/emitters/global.emitter';
 import {cropImage} from '~/client/shared/helpers/crop-image';
 import {UserModel} from '~/client/shared/models/user.model';
 import {PendingService} from '~/client/shared/services/pending.service';
+import {RpcService} from '~/client/shared/services/rpc.service';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
 import {
 	IPopularTrack,
@@ -31,7 +32,7 @@ export enum RepeatEnum {
 
 const FADE_INTERVAL_DURATION_MS = 200;
 const FADE_DURATION_SEC = 10;
-const FADE_DURATION_MS = FADE_DURATION_SEC * 1000 - FADE_INTERVAL_DURATION_MS;
+const FADE_DURATION_MS = FADE_DURATION_SEC * 1000 - FADE_INTERVAL_DURATION_MS * 3;
 
 type PendingKeys = 'track';
 
@@ -74,7 +75,8 @@ export class PlayerVm extends BaseVm {
 	private lyricsAnimationScroll: boolean;
 
 	constructor(
-		@injectDep(PendingService) public readonly pending: PendingService<PendingKeys>
+		@injectDep(PendingService) public readonly pending: PendingService<PendingKeys>,
+		@injectDep(RpcService) private readonly rpc: RpcService
 	) {
 		super();
 		this.loaded = false;
@@ -134,12 +136,13 @@ export class PlayerVm extends BaseVm {
 			return;
 		}
 
+		this.rpc.reset();
 		this.shuffle = this.shuffleShallow;
 		this.loaded = false;
 		this.showLyrics = false;
 		this.isTrackLiked = UserModel.track.isLiked(trackId);
 
-		if (this.track.lyricsInfo.hasAvailableSyncLyrics) {
+		if (this.track?.lyricsInfo?.hasAvailableSyncLyrics) {
 			UserModel.track.lyricsText(trackId)
 				.then(lyrics => this.lyricsTuple = lyrics);
 		}
@@ -158,6 +161,7 @@ export class PlayerVm extends BaseVm {
 		await this.play();
 
 		this.setMetaData();
+		this.rpc.set(this.track);
 	}
 
 	/**
@@ -197,6 +201,12 @@ export class PlayerVm extends BaseVm {
 		this.audioRef!.currentTime = time;
 		this.needFadeIn = false;
 		this.needFadeOut = false;
+
+		setTimeout(() => {
+			if (this.cachedTrackId === this.track?.id) {
+				this.needFadeOut = true;
+			}
+		}, 4000);
 	}
 
 	/**
@@ -235,7 +245,8 @@ export class PlayerVm extends BaseVm {
 		}
 
 		const fadeInOutInterval = setInterval(() => {
-			if (this.audioRef!.volume <= 0.02) {
+			// if audiRef.volume third digit is zero then clear interval
+			if (this.audioRef!.volume.toString().charAt(2) === '0') {
 				clearInterval(fadeInOutInterval);
 				return;
 			}
@@ -317,10 +328,6 @@ export class PlayerVm extends BaseVm {
 			]
 		});
 
-		// this.rpc.setActivity({
-		// 	type: RpcActivityType.TRACK,
-		// 	track
-		// });
 	}
 
 	/**

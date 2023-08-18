@@ -57,7 +57,7 @@ const vm = useVm(IndexScreenVm, true);
 .index-screen__user-playlists {
 	.content-block__body {
 		display: flex;
-		height: 119px;
+		height: fit-content;
 	}
 
 	&-chunk {

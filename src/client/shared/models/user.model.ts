@@ -22,19 +22,18 @@ export class UserModel extends BaseModel {
 		this.status = status;
 		this.fullInfo = fullInfo;
 
-		this.album.setup();
-
 		await Promise.all([
 			this.playlist.setup(),
 			this.track.setup(),
-			this.artist.setup()
+			this.artist.setup(),
+			this.album.setup()
 		]);
 
 		return this;
 	}
 
 	public static get avatarUrl() {
-		if (!this.fullInfo?.default_avatar_id) {
+		if (this.fullInfo?.is_avatar_empty) {
 			return undefined;
 		}
 

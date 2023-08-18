@@ -4,9 +4,11 @@ import {IAlbum, IAlbumShort} from '~/client/shared/types/api';
 
 export class AlbumModel extends BaseModel {
 	public static userId?: number = undefined;
+	public static _liked: IAlbumShort[] = [];
 
-	public static setup() {
+	public static async setup() {
 		this.userId = UserModel.status?.account?.uid;
+		this._liked = await this.liked();
 	}
 
 	public static async liked() {

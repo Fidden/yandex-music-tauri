@@ -4,12 +4,14 @@
 		<IndexScreenPersonal/>
 		<IndexScreenNewReleases/>
 		<IndexScreenNewPlaylists/>
+		<IndexScreenChart/>
 		<IndexScreenPlayContext/>
 	</main>
 </template>
 
 <script lang="ts" setup>
 import {cnIndexScreen} from './index-screen.const';
+import IndexScreenChart from './index-screen__chart.vue';
 import IndexScreenNewPlaylists from './index-screen__new-playlists.vue';
 import IndexScreenNewReleases from './index-screen__new-releases.vue';
 import IndexScreenPersonal from './index-screen__personal.vue';

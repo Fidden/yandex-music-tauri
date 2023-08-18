@@ -19,6 +19,6 @@ export class ArtistsScreenVm extends BaseVm {
 
 	@pending<PendingKeys>('init')
 	public async init() {
-		this.artists = await UserModel.artist.liked();
+		this.artists = UserModel.artist._liked;
 	}
 }

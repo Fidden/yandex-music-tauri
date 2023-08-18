@@ -1594,7 +1594,7 @@ export interface ITrack {
 
 	'lyricsAvailable': boolean;
 
-	lyricsInfo: ILyricsInfo;
+	lyricsInfo?: ILyricsInfo;
 
 	'major': ITrackMajor;
 
