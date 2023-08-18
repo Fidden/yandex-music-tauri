@@ -29,12 +29,14 @@
 				<StationsScreenFilter/>
 			</template>
 			<template #default>
-				<StationCard
-					v-for="station in vm.stationListByKey"
-					:key="station?.idForFrom"
-					:station="station"
-					size="sm"
-				/>
+				<Fragment v-if="vm.stationListByKey?.length">
+					<StationCard
+						v-for="station in vm.stationListByKey"
+						:key="station?.idForFrom"
+						:station="station"
+						size="sm"
+					/>
+				</Fragment>
 			</template>
 			<template #fallback>
 				<StationCardSkeleton
@@ -49,6 +51,7 @@
 
 <script setup lang="ts">
 import ContentBlock from '~/client/shared/components/content-block/content-block.vue';
+import Fragment from '~/client/shared/components/fragment.vue';
 import Navigation from '~/client/shared/components/navigation/navigation.vue';
 import StationCardSkeleton from '~/client/shared/components/station-card-skeleton/station-card-skeleton.vue';
 import StationCard from '~/client/shared/components/station-card/station-card.vue';

@@ -86,6 +86,10 @@ export class StationsScreenVm extends BaseVm implements IInitializable {
 	}
 
 	public get stationListByKey() {
+		if (!this.selectedKey) {
+			return undefined;
+		}
+
 		return this.stationListSplitted[this.selectedKey];
 	}
 }

@@ -101,6 +101,7 @@ export class RequestService {
 
 	private buildOptions(options: RequestOptions) {
 		const newOptions: RequestOptions = {
+			responseType: ResponseType.JSON,
 			...options,
 			headers: {
 				...this.headers,

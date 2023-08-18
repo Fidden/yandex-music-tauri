@@ -10,6 +10,6 @@ export class AppScreenVm extends BaseVm implements IInitializable {
 	}
 
 	public async init() {
-		await UserModel.init();
+		return UserModel.init();
 	}
 }
