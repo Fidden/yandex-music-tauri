@@ -70,10 +70,12 @@ const selectedWidth = computed(() => {
 		z-index: 5;
 		border-radius: 15px;
 		left: 0;
+		overflow: hidden;
 
 		&--selected {
 			background: var(--primary);
 			z-index: 10;
+			max-width: calc(100% - 2px);
 		}
 	}
 
