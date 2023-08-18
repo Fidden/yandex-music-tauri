@@ -1,4 +1,5 @@
 import {PlayerVm} from '~/client/shared/components/player/player.vm';
+import {FILTER_OPTIONS} from '~/client/shared/components/tracks-table/tracks-table.const';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
 import {IArtist, IPopularTrack, ITrack} from '~/client/shared/types/api';
 import {IInitializable} from '~/client/shared/types/initializable';
@@ -36,16 +37,11 @@ export class TracksTableVm extends BaseVm implements IInitializable {
 	constructor() {
 		super();
 		this.tracks = [];
-		this.filterOptions = [
-			{key: OrderKey.DEFAULT, value: 'По стандарту'},
-			{key: OrderKey.BY_NAME, value: 'Название', sort: 'asc'},
-			{key: OrderKey.BY_ARTIST, value: 'Артист', sort: 'asc'},
-			{key: OrderKey.BY_DURATION, value: 'Длительность', sort: 'asc'}
-		];
+		this.filterOptions = FILTER_OPTIONS;
 
 		this.filter = {
 			name: '',
-			orderBy: this.filterOptions[0]
+			orderBy: FILTER_OPTIONS[0]
 		};
 	}
 

@@ -1,9 +1,12 @@
-import mitt from 'mitt';
 import useBem from 'vue3-bem';
+import {OrderKey} from '~/client/shared/components/tracks-table/tracks-table.vm';
 
-export type TracksTableEvents = {
-	'play-shuffle': void;
-}
 
 export const cnTracksTable = useBem('tracks-table');
-export const emTracksTable = () => mitt<TracksTableEvents>();
+
+export const FILTER_OPTIONS = [
+	{key: OrderKey.DEFAULT, value: 'По стандарту'},
+	{key: OrderKey.BY_NAME, value: 'Название', sort: 'asc'},
+	{key: OrderKey.BY_ARTIST, value: 'Артист', sort: 'asc'},
+	{key: OrderKey.BY_DURATION, value: 'Длительность', sort: 'asc'}
+];
