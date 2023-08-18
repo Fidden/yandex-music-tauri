@@ -1,5 +1,4 @@
 import {PlayerVm} from '~/client/shared/components/player/player.vm';
-import {FILTER_OPTIONS} from '~/client/shared/components/tracks-table/tracks-table.const';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
 import {IArtist, IPopularTrack, ITrack} from '~/client/shared/types/api';
 import {IFilter, IFilterOption, OrderKey} from '~/client/shared/types/filter';

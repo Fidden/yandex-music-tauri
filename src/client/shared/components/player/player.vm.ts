@@ -218,8 +218,6 @@ export class PlayerVm extends BaseVm {
 		}
 
 		this.time = this.audioRef!.currentTime;
-		this.fadeOut();
-		this.fadeIn();
 
 		navigator.mediaSession.setPositionState({
 			duration: this.duration,
@@ -227,58 +225,6 @@ export class PlayerVm extends BaseVm {
 			playbackRate: this.audioRef.playbackRate
 		});
 	}
-
-	/**
-	 * Fades out the audio by decreasing its volume gradually.
-	 *
-	 * @remarks
-	 * This method will only fade out the audio if the time, fadeOutPoint, and duration are greater than 0.
-	 * If the audio has already faded out or if the current time is before the fade out point, the method returns immediately without taking any action.
-	 */
-	private fadeOut() {
-		if (this.time <= 0 || this.fadeOutPoint <= 0 || this.duration <= 0) {
-			return;
-		}
-
-		if (!this.needFadeOut || this.time < this.fadeOutPoint) {
-			return;
-		}
-
-		const fadeInOutInterval = setInterval(() => {
-			// if audiRef.volume third digit is zero then clear interval
-			if (this.audioRef!.volume.toString().charAt(2) === '0') {
-				clearInterval(fadeInOutInterval);
-				return;
-			}
-
-			this.audioRef!.volume -= this.fadeDelta;
-		}, FADE_INTERVAL_DURATION_MS);
-
-		this.needFadeOut = false;
-	}
-
-
-	/**
-	 * Fades in the audio playback gradually.
-	 */
-	private fadeIn() {
-		if (!this.needFadeIn || this.time > this.fadeInPoint || this.audioRef!.volume === this.volumeBackup) {
-			return;
-		}
-
-		const fadeInInterval = setInterval(() => {
-			if (this.audioRef!.volume >= this.volumeBackup!) {
-				this.audioRef!.volume = this.volumeBackup!;
-				clearInterval(fadeInInterval);
-				return;
-			}
-
-			this.audioRef!.volume += this.fadeDelta;
-		}, FADE_INTERVAL_DURATION_MS);
-
-		this.needFadeIn = false;
-	}
-
 
 	/**
 	 * Checks if the audio file is loaded and updates the necessary properties.

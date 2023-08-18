@@ -1,23 +1,18 @@
-import {PendingService} from '#imports';
 import {injectable} from 'tsyringe';
 import {UserModel} from '~/client/shared/models/user.model';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
 import type {IArtistShort} from '~/client/shared/types/api';
 
-type PendingKeys = 'init';
 
 @injectable()
 export class ArtistsScreenVm extends BaseVm {
 	public artists: IArtistShort[];
 
-	constructor(
-		@injectDep(PendingService) public readonly pending: PendingService<PendingKeys>
-	) {
+	constructor() {
 		super();
 		this.artists = [];
 	}
 
-	@pending<PendingKeys>('init')
 	public async init() {
 		this.artists = UserModel.artist._liked;
 	}
