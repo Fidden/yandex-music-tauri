@@ -1,4 +1,3 @@
-import {injectable} from 'tsyringe';
 import {UserModel} from '~/client/shared/models/user.model';
 import {PendingService} from '~/client/shared/services/pending.service';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
@@ -7,7 +6,7 @@ import {IInitializable} from '~/client/shared/types/initializable';
 
 type PendingKeys = 'init';
 
-@injectable()
+@ViewModel()
 export class StationsScreenVm extends BaseVm implements IInitializable {
 	public stationList?: IStationResult[];
 	public stationListSplitted: Record<string, IStation[]>;

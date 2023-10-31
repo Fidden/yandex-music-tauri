@@ -3,11 +3,10 @@ import {BaseVm} from '~/client/shared/types/abstract/base.vm';
 import type {IAlbum} from '~/client/shared/types/api';
 import {IInitializable} from '~/client/shared/types/initializable';
 import {PendingService} from '#imports';
-import {injectable} from 'tsyringe';
 
 type PendingKeys = 'init';
 
-@injectable()
+@ViewModel()
 export class AlbumsScreenVm extends BaseVm implements IInitializable {
 	public albums: IAlbum[];
 

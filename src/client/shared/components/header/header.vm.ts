@@ -1,7 +1,6 @@
-import {injectable} from 'tsyringe';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
 
-@injectable()
+@ViewModel()
 export class HeaderVm extends BaseVm {
 	public search: string;
 

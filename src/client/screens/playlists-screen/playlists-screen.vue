@@ -49,7 +49,7 @@ import PlaylistCard from '~/client/shared/components/playlist-card/playlist-card
 import {cnPlaylistsScreen} from './playlists-screen.const';
 import PlaylistCardSkeleton from '~/client/shared/components/playlist-card-skeleton/playlist-card-skeleton.vue';
 
-const vm = useVm(PlaylistsScreenVm, true);
+const vm = useChildVm(PlaylistsScreenVm);
 </script>
 
 <style lang="scss">

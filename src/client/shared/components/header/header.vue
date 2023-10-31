@@ -27,7 +27,7 @@ const router = useRouter();
 const route = useRoute();
 const platformName = await platform();
 
-const vm = useVm(HeaderVm, true);
+const vm = useChildVm(HeaderVm);
 vm.init(route.query?.text as string);
 
 watch(() => vm.search, value => {

@@ -84,7 +84,7 @@ import MenuItems from '~/client/shared/components/menu/menu__items.vue';
 import {cnArtistScreen} from './artist-screen.const';
 import {ArtistScreenVm} from './artist-screen.vm';
 
-const vm = useVm(ArtistScreenVm, true);
+const vm = useChildVm(ArtistScreenVm);
 </script>
 
 <style lang="scss">

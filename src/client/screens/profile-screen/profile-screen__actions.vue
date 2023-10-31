@@ -34,7 +34,7 @@
 import {cnProfileScreen} from './profile-screen.const';
 import {ProfileScreenVm} from './profile-screen.vm';
 
-const vm = useVm(ProfileScreenVm, true);
+const vm = useChildVm(ProfileScreenVm);
 </script>
 
 

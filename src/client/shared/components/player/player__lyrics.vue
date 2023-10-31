@@ -31,7 +31,7 @@ import {globalEmitter} from '~/client/shared/emitters/global.emitter';
 import {cnPlayer} from './player.const';
 
 const route = useRoute();
-const vm = useVm(PlayerVm, true);
+const vm = useChildVm(PlayerVm);
 
 watch(() => route.name, () => {
 	globalEmitter.emit('player:lyrics-toggle', false);

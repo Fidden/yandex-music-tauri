@@ -16,7 +16,7 @@ import {cnPlaylistScreen} from './playlist-screen.const';
 import {PlaylistScreenVm} from './playlist-screen.vm';
 import PlaylistScreenHeader from './playlist-screen__header.vue';
 
-const vm = useVm(PlaylistScreenVm, true);
+const vm = useChildVm(PlaylistScreenVm);
 </script>
 
 <style lang="scss">

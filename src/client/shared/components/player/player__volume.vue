@@ -42,7 +42,7 @@ import {PlayerVm} from '~/client/shared/components/player/player.vm';
 import {cnPlayer} from './player.const';
 import PlayerRange from './player__range.vue';
 
-const vm = useVm(PlayerVm, true);
+const vm = useChildVm(PlayerVm);
 </script>
 
 <style lang="scss">

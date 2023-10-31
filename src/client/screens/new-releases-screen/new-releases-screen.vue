@@ -18,7 +18,7 @@ import ContentBlock from '~/client/shared/components/content-block/content-block
 import Navigation from '~/client/shared/components/navigation/navigation.vue';
 import {cnNewReleasesScreen} from './new-releases-screen.const';
 
-const vm = useVm(NewReleasesScreenVm, true);
+const vm = useChildVm(NewReleasesScreenVm);
 </script>
 
 <style lang="scss">

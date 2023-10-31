@@ -21,7 +21,7 @@ import ContentBlock from '~/client/shared/components/content-block/content-block
 import {globalEmitter} from '~/client/shared/emitters/global.emitter';
 import {cnIndexScreen} from './index-screen.const';
 
-const vm = useVm(IndexScreenVm, true);
+const vm = useChildVm(IndexScreenVm);
 </script>
 
 <style lang="scss">

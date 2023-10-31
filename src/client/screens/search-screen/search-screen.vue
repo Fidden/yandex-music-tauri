@@ -193,7 +193,7 @@ import TracksTable from '~/client/shared/components/tracks-table/tracks-table.vu
 import {globalEmitter} from '~/client/shared/emitters/global.emitter';
 import {cnSearchScreen} from './search-screen.const';
 
-const vm = useVm(SearchScreenVm, true);
+const vm = useChildVm(SearchScreenVm);
 
 globalEmitter.on('search:text-change', (text) => {
 	vm.text = text;

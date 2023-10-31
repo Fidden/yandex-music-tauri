@@ -54,7 +54,7 @@ import Button from '~/client/shared/components/button/button.vue';
 import {PlayerVm} from '~/client/shared/components/player/player.vm';
 import {cnPlayer} from './player.const';
 
-const vm = useVm(PlayerVm, true);
+const vm = useChildVm(PlayerVm);
 </script>
 
 <style lang="scss">

@@ -28,7 +28,7 @@ import ArtistCard from '~/client/shared/components/artist-card/artist-card.vue';
 import ContentBlock from '~/client/shared/components/content-block/content-block.vue';
 import {cnArtistsScreen} from './artists-screen.const';
 
-const vm = useVm(ArtistsScreenVm, true);
+const vm = useChildVm(ArtistsScreenVm);
 </script>
 
 <style lang="scss">

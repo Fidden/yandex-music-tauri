@@ -1,5 +1,3 @@
-import {singleton} from 'tsyringe';
-
 interface CacheServiceOptions {
 	key: string;
 	expire?: number;
@@ -11,7 +9,6 @@ interface CacheRecord {
 	data: unknown;
 }
 
-@singleton()
 export class CacheService {
 	private records: Map<string, CacheRecord>;
 

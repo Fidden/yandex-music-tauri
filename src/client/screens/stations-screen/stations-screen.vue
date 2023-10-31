@@ -56,7 +56,7 @@ import {cnStationsScreen} from './stations-screen.const';
 import {StationsScreenVm} from './stations-screen.vm';
 import StationsScreenFilter from './stations-screen__filter.vue';
 
-const vm = useVm(StationsScreenVm, true);
+const vm = useChildVm(StationsScreenVm);
 </script>
 
 

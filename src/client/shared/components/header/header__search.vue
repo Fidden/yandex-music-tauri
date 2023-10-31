@@ -16,7 +16,7 @@
 import {HeaderVm} from '~/client/shared/components/header/header.vm';
 import {cnHeader} from './header.const';
 
-const vm = useVm(HeaderVm, true);
+const vm = useChildVm(HeaderVm);
 </script>
 
 <style lang="scss">

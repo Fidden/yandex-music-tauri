@@ -45,7 +45,7 @@ import MatIcon from '~/client/shared/components/mat-icon.vue';
 import {TracksTableVm} from '~/client/shared/components/tracks-table/tracks-table.vm';
 import {cnTracksTable} from './tracks-table.const';
 
-const vm = useVm(TracksTableVm, true);
+const vm = useChildVm(TracksTableVm);
 </script>
 
 <style lang="scss">

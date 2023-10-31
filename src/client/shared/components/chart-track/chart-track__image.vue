@@ -35,7 +35,7 @@ defineProps<{
 	trackId: string;
 }>();
 
-const playerVm = useVm(PlayerVm, true);
+const playerVm = useChildVm(PlayerVm);
 </script>
 
 <style lang="scss">

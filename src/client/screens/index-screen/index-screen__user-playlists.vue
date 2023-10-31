@@ -48,9 +48,9 @@ import {IndexScreenVm} from '~/client/screens/index-screen/index-screen.vm';
 import ContentBlock from '~/client/shared/components/content-block/content-block.vue';
 import UserPlaylistSkeleton from '~/client/shared/components/user-playlist-skeleton/user-playlist-skeleton.vue';
 import UserPlaylist from '~/client/shared/components/user-playlist/user-playlist.vue';
-import {useVm} from '~/client/shared/composables/useVm';
 
-const vm = useVm(IndexScreenVm, true);
+
+const vm = useChildVm(IndexScreenVm);
 </script>
 
 <style lang="scss">

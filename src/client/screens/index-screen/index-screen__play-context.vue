@@ -51,7 +51,7 @@ import {IAlbum, IArtist, IGeneratedPlaylistLandingBlock, IPlaylist, ObjectTypeEn
 import {cnIndexScreen} from './index-screen.const';
 import {IndexScreenVm} from './index-screen.vm';
 
-const vm = useVm(IndexScreenVm, true);
+const vm = useChildVm(IndexScreenVm);
 </script>
 
 <style lang="scss">

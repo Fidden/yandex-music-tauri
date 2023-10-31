@@ -1,4 +1,3 @@
-import {injectable} from 'tsyringe';
 import {pending} from '~/client/shared/decorators/pending.decorator';
 import {UserModel} from '~/client/shared/models/user.model';
 import {PendingService} from '~/client/shared/services/pending.service';
@@ -18,7 +17,7 @@ import {IInitializable} from '~/client/shared/types/initializable';
 
 type PendingKeys = 'index-screen';
 
-@injectable()
+@ViewModel()
 export class IndexScreenVm extends BaseVm implements IInitializable {
 	public userPlaylists: IPlaylist[];
 	public userPlaylistsChunks: IPlaylist[][];

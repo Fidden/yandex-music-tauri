@@ -21,7 +21,7 @@ import Navigation from '~/client/shared/components/navigation/navigation.vue';
 import PlaylistCard from '~/client/shared/components/playlist-card/playlist-card.vue';
 import {cnNewPlaylistsScreen} from './new-playlists-screen.const';
 
-const vm = useVm(NewPlaylistsScreenVm, true);
+const vm = useChildVm(NewPlaylistsScreenVm);
 </script>
 
 <style lang="scss">

@@ -1,5 +1,4 @@
 import {PendingService} from '#imports';
-import {injectable} from 'tsyringe';
 import {UserModel} from '~/client/shared/models/user.model';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
 import {IFullChartResult} from '~/client/shared/types/api';
@@ -7,7 +6,7 @@ import {IInitializable} from '~/client/shared/types/initializable';
 
 type PendingKeys = 'init';
 
-@injectable()
+@ViewModel()
 export class ChartScreenVm extends BaseVm implements IInitializable {
 	public chart: IFullChartResult;
 

@@ -25,7 +25,7 @@ import {cnTracksScreen} from './tracks-screen.const';
 import {TracksScreenVm} from './tracks-screen.vm';
 import TracksTableSkeleton from '~/client/shared/components/tracks-table-skeleton/tracks-table-skeleton.vue';
 
-const vm = useVm(TracksScreenVm, true);
+const vm = useChildVm(TracksScreenVm);
 </script>
 
 <style lang="scss">

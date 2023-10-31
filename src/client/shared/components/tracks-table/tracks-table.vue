@@ -1,6 +1,7 @@
 <template>
 	<TracksTableFilter v-if="!hideFilter"/>
 	<RecycleScroller
+		:key="route.fullPath"
 		:page-mode="pageMode"
 		:item-size="50"
 		:items="vm.filteredTracks"
@@ -137,6 +138,7 @@
 </template>
 
 <script setup lang="ts">
+import {useRoute} from 'vue-router';
 import ArtistsLinks from '~/client/shared/components/artists-links/artists-links.vue';
 import Fragment from '~/client/shared/components/fragment.vue';
 import Image from '~/client/shared/components/image.vue';
@@ -160,8 +162,9 @@ const props = withDefaults(defineProps<{
 });
 
 const vm = useVm(TracksTableVm);
-const playerVm = useVm(PlayerVm, true);
+const playerVm = useChildVm(PlayerVm);
 const isPodcast = props.type === AlbumTypeEnum.PODCAST;
+const route = useRoute();
 
 watch(() => props.tracks, tracks => vm.init({tracks}), {immediate: true});
 

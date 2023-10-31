@@ -23,7 +23,7 @@ import PlayerRange from '~/client/shared/components/player/player__range.vue';
 import PlayerTime from '~/client/shared/components/player/player__time.vue';
 import {cnPlayer} from './player.const';
 
-const vm = useVm(PlayerVm, true);
+const vm = useChildVm(PlayerVm);
 </script>
 
 <style lang="scss">

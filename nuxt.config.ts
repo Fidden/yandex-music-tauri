@@ -1,10 +1,8 @@
-import {addPlugin, createResolver} from '@nuxt/kit';
 import {headlessui} from './@configs/headlessui';
 import {imports} from './@configs/imports';
 import {runtimeConfig} from './@configs/runtimeConfig';
 import {vue} from './@configs/vue';
-
-export const resolver = createResolver(import.meta.url);
+import {fontMetrics} from './@configs/fontMetrics';
 
 export default defineNuxtConfig({
 	app: {
@@ -32,11 +30,12 @@ export default defineNuxtConfig({
 		}
 	},
 	modules: [
-		'nuxt-icon',
-		'nuxt-swiper',
-		'nuxt-headlessui',
 		'@nuxtjs/eslint-module',
-		'@nuxtjs/fontaine'
+		'@nuxtjs/fontaine',
+		'nuxt-icon',
+		'nuxt-mvvm',
+		'nuxt-swiper',
+		'nuxt-headlessui'
 	],
 	ssr: false,
 	srcDir: 'src',
@@ -44,24 +43,9 @@ export default defineNuxtConfig({
 		host: 'localhost',
 		port: 1420
 	},
-	vite: {
-		build: {
-			minify: 'terser'
-		}
-	},
 	vue,
-	hooks: {
-		'modules:done': () => {
-			addPlugin(resolver.resolve('./src/plugins-manual/pinia.plugin'));
-		},
-		'nitro:build:before': (nitro) => {
-			nitro.options.moduleSideEffects.push('reflect-metadata');
-		}
-	},
 	imports,
-	runtimeConfig,
 	headlessui,
-	fontMetrics: {
-		fonts: ['Rubik']
-	}
+	fontMetrics,
+	runtimeConfig
 });

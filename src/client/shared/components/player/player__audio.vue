@@ -13,7 +13,7 @@
 import {watchOnce} from '@vueuse/core';
 import {PlayerVm} from '~/client/shared/components/player/player.vm';
 
-const vm = useVm(PlayerVm, true);
+const vm = useChildVm(PlayerVm);
 
 watch(() => [vm.track?.id, vm.audioRef], ([trackId]) => vm.onTrackChange(trackId), {
 	immediate: true

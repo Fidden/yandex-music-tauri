@@ -95,7 +95,7 @@ import MatIcon from '~/client/shared/components/mat-icon.vue';
 import {PlayerVm, RepeatEnum} from '~/client/shared/components/player/player.vm';
 import {cnPlayer} from './player.const';
 
-const vm = useVm(PlayerVm, true);
+const vm = useChildVm(PlayerVm);
 </script>
 
 <style lang="scss">

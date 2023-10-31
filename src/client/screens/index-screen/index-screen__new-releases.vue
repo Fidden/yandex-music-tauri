@@ -42,7 +42,7 @@ import AlbumCard from '~/client/shared/components/album-card/album-card.vue';
 import ContentBlock from '~/client/shared/components/content-block/content-block.vue';
 import {cnIndexScreen} from './index-screen.const';
 
-const vm = useVm(IndexScreenVm, true);
+const vm = useChildVm(IndexScreenVm);
 </script>
 
 <style lang="scss">

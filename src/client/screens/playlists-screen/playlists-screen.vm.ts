@@ -1,12 +1,11 @@
 import {UserModel} from '~/client/shared/models/user.model';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
 import type {IPlaylistShort, IPlaylist} from '~/client/shared/types/api';
-import {injectable} from 'tsyringe';
 import {PendingService} from '#imports';
 
 type PendingKeys = 'init';
 
-@injectable()
+@ViewModel()
 export class PlaylistsScreenVm extends BaseVm {
 	public playlists?: IPlaylist[];
 	public playlistsLiked?: IPlaylistShort[];

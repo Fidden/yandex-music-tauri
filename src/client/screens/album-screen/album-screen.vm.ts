@@ -1,5 +1,4 @@
 import {PendingService} from '#imports';
-import {injectable} from 'tsyringe';
 import {globalEmitter} from '~/client/shared/emitters/global.emitter';
 import {UserModel} from '~/client/shared/models/user.model';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
@@ -12,7 +11,7 @@ interface InitArgs {
 
 type PendingKeys = 'init';
 
-@injectable()
+@ViewModel()
 export class AlbumScreenVm extends BaseVm implements IInitializable {
 	public album?: IAlbum;
 

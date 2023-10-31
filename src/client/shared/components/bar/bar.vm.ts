@@ -1,4 +1,3 @@
-import {singleton} from 'tsyringe';
 import {RouteLocationNormalizedLoaded} from 'vue-router';
 import {UserModel} from '~/client/shared/models/user.model';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
@@ -18,7 +17,7 @@ export interface IBarRoute {
 const ROUTE_ITEM_HEIGHT = 50;
 const ROUTE_ITEM_HALF_HEIGHT = ROUTE_ITEM_HEIGHT / 2;
 
-@singleton()
+@ViewModel()
 export class BarVm extends BaseVm {
 	public routes: IBarRoute[];
 	public cachedRouteIndex: number;

@@ -1,12 +1,11 @@
 import {PendingService} from '#imports';
-import {injectable} from 'tsyringe';
 import {UserModel} from '~/client/shared/models/user.model';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
 import type {IArtistShort} from '~/client/shared/types/api';
 
 type PendingKeys = 'init';
 
-@injectable()
+@ViewModel()
 export class ArtistsScreenVm extends BaseVm {
 	public artists: IArtistShort[];
 

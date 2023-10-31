@@ -1,5 +1,4 @@
 import {PendingService} from '#imports';
-import {injectable} from 'tsyringe';
 import {PlayerVm} from '~/client/shared/components/player/player.vm';
 import {globalEmitter} from '~/client/shared/emitters/global.emitter';
 import {UserModel} from '~/client/shared/models/user.model';
@@ -14,7 +13,7 @@ interface InitArgs {
 
 type PendingKeys = 'init';
 
-@injectable()
+@ViewModel()
 export class PlaylistScreenVm extends BaseVm implements IInitializable {
 	public playlist?: IPlaylist;
 	public isLiked: boolean;
@@ -73,6 +72,6 @@ export class PlaylistScreenVm extends BaseVm implements IInitializable {
 	}
 
 	private get playerVm() {
-		return useVm(PlayerVm, true);
+		return useChildVm(PlayerVm);
 	}
 }

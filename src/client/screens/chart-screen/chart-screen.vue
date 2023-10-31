@@ -25,7 +25,7 @@ import ContentBlock from '~/client/shared/components/content-block/content-block
 import TracksTableSkeleton from '~/client/shared/components/tracks-table-skeleton/tracks-table-skeleton.vue';
 import TracksTable from '~/client/shared/components/tracks-table/tracks-table.vue';
 
-const vm = useVm(ChartScreenVm, true);
+const vm = useChildVm(ChartScreenVm);
 </script>
 
 <style lang="scss">

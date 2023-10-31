@@ -78,7 +78,7 @@ import {tracksCountHuman} from '~/client/shared/helpers/tracks-count-human';
 import {cnAlbumScreen} from './album-screen.const';
 import {AlbumScreenVm} from './album-screen.vm';
 
-const vm = useVm(AlbumScreenVm, true);
+const vm = useChildVm(AlbumScreenVm);
 const albumType = albumTypeHelper.get(vm.album?.type);
 </script>
 

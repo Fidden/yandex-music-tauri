@@ -68,6 +68,6 @@ export class ArtistScreenVm extends BaseVm implements IInitializable {
 	}
 
 	private get playerVm() {
-		return useVm(PlayerVm, true);
+		return useChildVm(PlayerVm);
 	}
 }

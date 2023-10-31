@@ -147,7 +147,7 @@ import TracksTable from '~/client/shared/components/tracks-table/tracks-table.vu
 import {cnArtistScreen} from './artist-screen.const';
 import ArtistScreenHeader from './artist-screen__header.vue';
 
-const vm = useVm(ArtistScreenVm, true);
+const vm = useChildVm(ArtistScreenVm);
 </script>
 
 <style lang="scss">

@@ -43,7 +43,7 @@ import PersonalPlaylistCard from '~/client/shared/components/personal-playlist-c
 import PlaylistCard from '~/client/shared/components/playlist-card/playlist-card.vue';
 import {IAlbum, IArtist, IGeneratedPlaylistLandingBlock, IPlaylist, ObjectTypeEnum} from '~/client/shared/types/api';
 
-const vm = useVm(PlayContextScreenVm, true);
+const vm = useChildVm(PlayContextScreenVm);
 </script>
 
 <style lang="scss">

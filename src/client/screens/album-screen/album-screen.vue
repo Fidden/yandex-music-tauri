@@ -19,7 +19,7 @@ import TracksTable from '~/client/shared/components/tracks-table/tracks-table.vu
 import {cnAlbumScreen} from './album-screen.const';
 import {AlbumScreenVm} from './album-screen.vm';
 
-const vm = useVm(AlbumScreenVm, true);
+const vm = useChildVm(AlbumScreenVm);
 </script>
 
 <style lang="scss">

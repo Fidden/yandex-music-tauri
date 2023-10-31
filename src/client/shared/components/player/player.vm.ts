@@ -1,4 +1,3 @@
-import {singleton} from 'tsyringe';
 import {globalEmitter} from '~/client/shared/emitters/global.emitter';
 import {cropImage} from '~/client/shared/helpers/crop-image';
 import {UserModel} from '~/client/shared/models/user.model';
@@ -40,7 +39,7 @@ type PendingKeys = 'track';
  * The view model for the player component.
  * Contains the player state and methods for controlling the player.
  */
-@singleton()
+@ViewModel()
 export class PlayerVm extends BaseVm {
 	public loaded: boolean;
 	public volume: number;

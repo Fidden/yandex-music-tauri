@@ -40,7 +40,7 @@ import ContentBlock from '~/client/shared/components/content-block/content-block
 import PersonalPlaylistCard from '~/client/shared/components/personal-playlist-card/personal-playlist-card.vue';
 import PlaylistCardSkeleton from '~/client/shared/components/playlist-card-skeleton/playlist-card-skeleton.vue';
 
-const vm = useVm(IndexScreenVm, true);
+const vm = useChildVm(IndexScreenVm);
 </script>
 
 <style lang="scss">

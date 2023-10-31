@@ -87,7 +87,7 @@ import MenuItems from '~/client/shared/components/menu/menu__items.vue';
 import {tracksCountHuman} from '~/client/shared/helpers/tracks-count-human';
 import {cnPlaylistScreen} from './playlist-screen.const';
 
-const vm = useVm(PlaylistScreenVm, true);
+const vm = useChildVm(PlaylistScreenVm);
 </script>
 
 <style lang="scss">

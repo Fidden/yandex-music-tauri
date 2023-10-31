@@ -1,9 +1,7 @@
 import {invoke} from '@tauri-apps/api/tauri';
-import {singleton} from 'tsyringe';
 import {cropImage} from '~/client/shared/helpers/crop-image';
 import {IPopularTrack, ITrack} from '~/client/shared/types/api';
 
-@singleton()
 export class RpcService {
 	private interval?: NodeJS.Timer;
 

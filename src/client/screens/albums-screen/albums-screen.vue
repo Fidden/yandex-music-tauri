@@ -28,7 +28,7 @@ import {cnAlbumsScreen} from './albums-screen.const';
 import {AlbumsScreenVm} from './albums-screen.vm';
 import AlbumCardSkeleton from '~/client/shared/components/album-card-skeleton/album-card-skeleton.vue';
 
-const vm = useVm(AlbumsScreenVm, true);
+const vm = useChildVm(AlbumsScreenVm);
 </script>
 
 <style lang="scss">

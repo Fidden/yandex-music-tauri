@@ -1,8 +1,7 @@
-import {injectable} from 'tsyringe';
 import {RouteLocationNormalizedLoaded} from 'vue-router';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
 
-@injectable()
+@ViewModel()
 export class LayoutPageVm extends BaseVm {
 	public layoutContentRef: HTMLDivElement | null;
 	public scrollCache: Map<string, number>;

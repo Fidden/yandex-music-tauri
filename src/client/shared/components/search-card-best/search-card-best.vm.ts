@@ -1,4 +1,3 @@
-import {singleton} from 'tsyringe';
 import {RouteLocationRaw} from 'vue-router';
 import {globalEmitter} from '~/client/shared/emitters/global.emitter';
 import {UserModel} from '~/client/shared/models/user.model';
@@ -15,7 +14,7 @@ interface IAction {
 	payload: RouteLocationRaw;
 }
 
-@singleton()
+@ViewModel()
 export class SearchCardBestVm extends BaseVm {
 	private result?: BestResult;
 	private type?: ObjectTypeEnum;

@@ -40,7 +40,7 @@ const route = useRoute();
 const router = useRouter();
 
 const vm = useVm(BarVm);
-const layoutVm = useVm(LayoutPageVm, true);
+const layoutVm = useChildVm(LayoutPageVm);
 
 watch(() => route.name, () => vm.updateCurrenRoute(route), {immediate: true});
 </script>

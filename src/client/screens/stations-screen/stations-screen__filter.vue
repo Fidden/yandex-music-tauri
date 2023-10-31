@@ -22,7 +22,7 @@ import {cnStationsScreen} from './stations-screen.const';
 import {StationsScreenVm} from './stations-screen.vm';
 import StationsScreenFilterSkeleton from './stations-screen__filter-skeleton.vue';
 
-const vm = useVm(StationsScreenVm, true);
+const vm = useChildVm(StationsScreenVm);
 </script>
 
 <style lang="scss">

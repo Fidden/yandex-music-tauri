@@ -16,7 +16,7 @@
 import {ProfileScreenVm} from '~/client/screens/profile-screen/profile-screen.vm';
 import {cnProfileScreen} from './profile-screen.const';
 
-const vm = useVm(ProfileScreenVm, true);
+const vm = useChildVm(ProfileScreenVm);
 </script>
 
 <style lang="scss">

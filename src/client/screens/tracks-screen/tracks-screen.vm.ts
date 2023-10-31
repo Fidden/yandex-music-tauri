@@ -1,4 +1,3 @@
-import {injectable} from 'tsyringe';
 import {UserModel} from '~/client/shared/models/user.model';
 import {BaseVm} from '~/client/shared/types/abstract/base.vm';
 import {ITrack} from '~/client/shared/types/api';
@@ -7,7 +6,7 @@ import {PendingService} from '#imports';
 
 type PendingKeys = 'init';
 
-@injectable()
+@ViewModel()
 export class TracksScreenVm extends BaseVm implements IInitializable {
 	public tracksLists: ITrack[];
 

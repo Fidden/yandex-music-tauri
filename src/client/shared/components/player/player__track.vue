@@ -57,7 +57,7 @@ import {cnPlayer} from './player.const';
 
 const INFO_BLOCK_WIDTH = 130;
 
-const vm = useVm(PlayerVm, true);
+const vm = useChildVm(PlayerVm);
 
 const trackTitleRef = ref<HTMLParagraphElement | null>(null);
 const trackTitleTextRef = ref<HTMLSpanElement | null>(null);
